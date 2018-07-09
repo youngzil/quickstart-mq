@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>org.quickstart</groupId>
-  <artifactId>quickstart-mq-pulsar</artifactId>
+  <artifactId>quickstart-pulsar</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>quickstart-mq-pulsar</name>
   <url>http://maven.apache.org</url>

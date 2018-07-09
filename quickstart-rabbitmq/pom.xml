@@ -2,7 +2,6 @@
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
 	<parent>
 		<groupId>org.quickstart</groupId>
 		<artifactId>quickstart-mq</artifactId>
@@ -11,30 +10,29 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>quickstart-mq-zeromq</artifactId>
+	<artifactId>quickstart-rabbitmq</artifactId>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}-${project.version}</name>
 	<url>http://maven.apache.org</url>
-	<description>Demo project for Spring Boot Admin</description>
+	<description>Demo project for XXX</description>
+
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<rabbitmq.version>4.3.0</rabbitmq.version>
+		<!-- <rabbitmq.version>5.0.0</rabbitmq.version> -->
 	</properties>
-	
+
+
 	<dependencies>
 
 		<dependency>
-			<groupId>org.zeromq</groupId>
-			<artifactId>jeromq</artifactId>
-			<version>0.3.6</version>
-			<!-- <version>0.4.2</version> -->
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>${rabbitmq.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.zeromq</groupId>
-			<artifactId>jzmq</artifactId>
-			<version>3.1.0</version>
-		</dependency>
+
 
 	</dependencies>
+
 </project>

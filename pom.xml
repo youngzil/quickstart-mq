@@ -24,21 +24,21 @@
 	</dependencies>
 
 	<modules>
-		<module>quickstart-mq-activemq</module>
-		<module>quickstart-mq-apollo</module>
-		<module>quickstart-mq-artemis</module>
-		<module>quickstart-mq-mqtt</module>
-		<module>quickstart-mq-zeromq</module>
-		<module>quickstart-mq-rabbitmq</module>
-		<module>quickstart-mq-rocketmq</module>
-		<module>quickstart-mq-openmessaging</module>
-		<module>quickstart-mq-openmq</module>
-		<module>quickstart-mq-hivemq</module>
-		<module>quickstart-mq-jafka</module>
-		<module>quickstart-mq-kafka</module>
-		<module>quickstart-mq-pulsar</module>
-		<module>quickstart-mq-msgframe-v1</module>
-		<module>quickstart-mq-msgframe-v2</module>
+		<module>quickstart-activemq</module>
+		<module>quickstart-apollo</module>
+		<module>quickstart-artemis</module>
+		<module>quickstart-mqtt</module>
+		<module>quickstart-zeromq</module>
+		<module>quickstart-rabbitmq</module>
+		<module>quickstart-rocketmq</module>
+		<module>quickstart-openmessaging</module>
+		<module>quickstart-openmq</module>
+		<module>quickstart-hivemq</module>
+		<module>quickstart-jafka</module>
+		<module>quickstart-kafka</module>
+		<module>quickstart-pulsar</module>
+		<module>quickstart-msgframe-v1</module>
+		<module>quickstart-msgframe-v2</module>
 	</modules>
 
 </project>

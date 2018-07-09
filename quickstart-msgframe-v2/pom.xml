@@ -9,7 +9,7 @@
 		<relativePath>..</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>quickstart-mq-msgframe-v2</artifactId>
+	<artifactId>quickstart-msgframe-v2</artifactId>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}-${project.version}</name>
 	<url>http://maven.apache.org</url>
