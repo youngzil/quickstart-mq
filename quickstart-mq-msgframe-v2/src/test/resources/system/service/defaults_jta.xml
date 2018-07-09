@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="GB2312"?>
+
+<!--
+全局默认配置信息
+-->
+<defaults>
+  <!--中心的类型和实现类的对应关系-->
+  <center>
+  <property name="RegionId" value=" com.ai.comframe.client.DefaultCenterImpl"/>
+  </center>
+  <!--默认代理调用方式.默认采用pojo的模式进行调用，采用的实现类为配置的实现类-->
+  <proxy invoke="pojo" type="primitive">
+    <clazz name="com.ai.appframe2.complex.service.impl.LocalServiceInvokeImpl"/>
+  </proxy>
+  <!--默认事务信息.默认采用Required的方式进行事务操作，采用的实现类为配置的实现类-->  
+  <transaction type="Required">
+ <!-- 混合型事务 -->
+ <!--  <clazz name="com.ai.appframe2.complex.transaction.impl.JtaJoinLocalTransactionImpl"/> -->
+ <!-- 使用NT全局事务 -->
+ <!--   <clazz name="com.ai.appframe2.complex.transaction.impl.NoTransactionImpl"> 
+	      <property name="java.naming.factory.initial"    value="com.ibm.websphere.naming.WsnInitialContextFactory"/>
+	      <property name="java.naming.factory.url.pkgs"   value="com.ibm.ws.naming"/>
+	      <property name="java.naming.provider.url"       value="iiop://10.11.20.125:9100"/>
+	      <property name="java.naming.security.principal" value="admin"/>
+	      <property name="java.naming.security.credentials" value="admin"/>
+	      <property name="DEFAULT_USER_TRANSACTION_NAME" value="java:comp/Usertransaction"/>
+	  </clazz>
+  -->    
+ <!-- 使用JTA全局事务 -->
+    <clazz name="com.ai.appframe2.complex.transaction.impl.JtaTransactionImpl">
+      <property name="java.naming.factory.initial"    value="com.ibm.websphere.naming.WsnInitialContextFactory"/>
+      <property name="java.naming.factory.url.pkgs"   value="com.ibm.ws.naming"/>
+      <property name="java.naming.provider.url"       value="iiop://10.11.20.125:9100"/>
+      <property name="java.naming.security.principal" value="admin"/>
+      <property name="java.naming.security.credentials" value="admin"/>
+      <property name="DEFAULT_USER_TRANSACTION_NAME" value="jta/usertransaction"/>
+	</clazz>
+
+    <!--映射每个服务模块对应的事务数据源，可以具体到类名-->
+    <mapping>
+      <!--平台自带-->
+      <property name="com.ai.appframe2.complex.self.service.base" value="base"/>
+      <property name="com.ai.appframe2.complex.self.service.check" value="base"/>
+    
+      <!--comframe-->
+      <property name="com.ai.comframe.config" value="base"/>    
+      <property name="com.ai.comframe.autoform" value="base"/>
+       <property name="com.ai.comframe.client" value="base"/>
+      
+    </mapping>
+  </transaction>
+  <!--默认数据源信息-->
+  <datasource>
+    <!-- 本地多数据源 -->
+    <clazz name="com.ai.appframe2.complex.datasource.impl.JtaLocalMutilDataSourceImpl">
+      <property name="tableName" value="cfg_db_acct"/>
+    </clazz>
+     
+     <!-- 使用JNDI数据源 -->
+     
+     <!--
+      <pool name="base" type="jndi" primary="true">     
+       <property name="name" value="jndi/comframe_wps"/>
+       <property name="factory" value="com.ibm.websphere.naming.WsnInitialContextFactory"/>
+	   <property name="url" value="iiop://10.11.20.125:9100"/>   
+	   <property name="username" value="comframe_wps"/>
+	   <property name="password" value="password"/>
+    </pool>
+     -->
+      
+    <pool name="base" type="jndi" primary="true">     
+       <property name="name" value="jndi/base"/>
+       <property name="factory" value="com.ibm.websphere.naming.WsnInitialContextFactory"/>
+	   <property name="url" value="iiop://10.11.20.125:9100"/>   
+	   <property name="username" value="base"/>
+	   <property name="password" value="base"/>
+    </pool>
+     
+      <pool name="comframe" type="jndi">     
+       <property name="name" value="jndi/comframe_wps"/>
+       <property name="factory" value="com.ibm.websphere.naming.WsnInitialContextFactory"/>
+	   <property name="url" value="iiop://10.11.20.125:9100"/>   
+	   <property name="username" value="comframe_wps"/>
+	   <property name="password" value="password"/>
+    </pool>
+    
+    <!-- 使用连接池配置 -->
+     <!-- 
+     <pool name="base" primary="true"> 
+      <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+      <property name="url" value="jdbc:oracle:thin:@10.11.20.126:1521:orcl1"/>
+      <property name="username" value="comframe_wps"/>
+      <property name="password" value="password"/>      
+      <property name="initialSize" value="5"/>
+      <property name="maxActive" value="8"/>
+      <property name="maxIdle" value="8"/>  
+    </pool>  
+    <pool name="comframe">
+      <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+      <property name="url" value="jdbc:oracle:thin:@10.11.20.126:1521:orcl1"/>
+      <property name="username" value="comframe_wps"/>
+      <property name="password" value="password"/> 
+      <property name="initialSize" value="0"/>
+      <property name="maxActive" value="8"/>
+      <property name="maxIdle" value="8"/>
+    </pool>
+    -->
+    
+    <mapping>
+      <!--平台自带-->
+      <property name="com.ai.appframe2.complex.self.dao.base" value="base"/>
+      <property name="com.ai.appframe2.complex.self.service.check" value="base"/>
+      <!--comframe-->
+      <property name="com.ai.comframe.config" value="base"/>
+      <property name="com.ai.comframe.client" value="base"/>    
+      <property name="com.ai.comframe.autoform" value="base"/>
+      
+        
+    </mapping>
+  </datasource>
+  <!--包含的服务配置文件-->
+  <include type="sv" classpath="system/service/appframe-service.xml"/>
+  <include type="sv" classpath="system/service/comframe-wrap-service.xml"/>
+</defaults>

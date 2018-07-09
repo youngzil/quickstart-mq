@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<parent>
+		<groupId>org.quickstart</groupId>
+		<artifactId>quickstart-mq</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath> <!-- lookup parent from repository -->
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>quickstart-mq-openmq</artifactId>
+	<packaging>jar</packaging>
+	<name>${project.artifactId}-${project.version}</name>
+	<url>http://maven.apache.org</url>
+	<description>Demo project for XXX</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<glassfish.mq>5.1</glassfish.mq>
+		<!-- <glassfish.mq>5.0</glassfish.mq> -->
+		<!-- <glassfish.mq>4.5.2</glassfish.mq> -->
+		<sun.messaging.mq>4.4.2</sun.messaging.mq>
+
+		<!-- <glassfish-embedded.version>5.0</glassfish-embedded.version> -->
+		<glassfish-embedded.version>4.0</glassfish-embedded.version>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.glassfish.mq</groupId>
+			<artifactId>imq</artifactId>
+			<version>${glassfish.mq}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.messaging.mq</groupId>
+			<artifactId>imq</artifactId>
+			<version>${sun.messaging.mq}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.main.extras</groupId>
+			<artifactId>glassfish-embedded-all</artifactId>
+			<version>${glassfish-embedded.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.20</version>
+			<scope>provided</scope>
+		</dependency>
+
+
+	</dependencies>
+
+</project>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.asiainfo.com/msgframe"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.asiainfo.com/msgframe">
+
+	<element name="msgframeCfg" type="tns:msgframeCfg"></element>
+
+
+
+
+	<!-- <complexType name="logPersistence"> -->
+	<!-- <sequence> -->
+	<!-- <element name="isLogPersistence" type="boolean"></element> -->
+	<!-- <element name="logType"> -->
+	<!-- <simpleType> -->
+	<!-- <restriction base="string"> -->
+	<!-- <enumeration value="file"></enumeration> -->
+	<!-- <enumeration value="db"></enumeration> -->
+	<!-- </restriction> -->
+	<!-- </simpleType> -->
+	<!-- </element> -->
+	<!-- </sequence> -->
+	<!-- </complexType> -->
+
+	<complexType name="subscribes">
+		<sequence>
+			<element name="subscribe" maxOccurs="unbounded" minOccurs="1">
+				<complexType>
+					<sequence>
+						<element name="implclass" maxOccurs="unbounded" minOccurs="0">
+							<simpleType>
+								<restriction base="string">
+									<whiteSpace value="collapse"></whiteSpace>
+								</restriction>
+							</simpleType>
+						</element>
+					</sequence>
+					<!-- 把消费模式放到每个订阅标签中 add by guozq5 20161209 -->
+					<attribute name="consumeType" default="push">
+						<simpleType>
+							<restriction base="string">
+								<enumeration value="push"></enumeration>
+								<enumeration value="pull"></enumeration>
+							</restriction>
+						</simpleType>
+					</attribute>
+					<!--add by guozq5 20170907 添加事务开关 -->
+					<attribute name="isTrans" type="boolean" default="false"></attribute>
+					<!-- 把拉消息的间隔放到每个订阅标签中 add by guozq5 20161209 -->
+					<attribute name="pullNextDelayTimeMillis" default="100">
+						<simpleType>
+							<restriction base="int">
+								<maxExclusive value="300000"></maxExclusive>
+								<minExclusive value="10"></minExclusive>
+							</restriction>
+						</simpleType>
+					</attribute>
+					<!-- 把拉消息的数目放到每个订阅标签中 add by guozq5 20161209 -->
+					<attribute name="maxNums" default="10">
+						<simpleType>
+							<restriction base="int">
+								<maxExclusive value="1000"></maxExclusive>
+								<minExclusive value="1"></minExclusive>
+							</restriction>
+						</simpleType>
+					</attribute>
+					<attribute name="maxReconsumeTimes" default="6">
+						<simpleType>
+							<restriction base="int">
+								<maxExclusive value="100"></maxExclusive>
+								<minExclusive value="1"></minExclusive>
+							</restriction>
+						</simpleType>
+					</attribute>
+					<attribute name="subDestination" use="required">
+						<simpleType>
+							<restriction base="string">
+								<whiteSpace value="collapse"></whiteSpace>
+							</restriction>
+						</simpleType>
+					</attribute>
+					<attribute name="tag" default="*">
+						<simpleType>
+							<restriction base="string">
+								<whiteSpace value="collapse"></whiteSpace>
+							</restriction>
+						</simpleType>
+					</attribute>
+					<attribute name="processThreadNums" type="int" default="20"></attribute>
+				</complexType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="destinations">
+
+		<sequence>
+			<element name="queue" maxOccurs="unbounded" minOccurs="0"
+				type="tns:destination">
+			</element>
+			<element name="topic" type="tns:destination" maxOccurs="unbounded"
+				minOccurs="0"></element>
+
+		</sequence>
+		<!-- <attribute name="number" type="int"></attribute> -->
+	</complexType>
+
+	<complexType name="destination">
+		<attribute name="belong">
+			<simpleType>
+				<restriction base="string">
+					<whiteSpace value="collapse"></whiteSpace>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<!--把父标签里面的number移动到每个队列中 add by guozq5 20161209 -->
+		<attribute name="number" default="3">
+			<simpleType>
+				<restriction base="int">
+					<whiteSpace value="collapse"></whiteSpace>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<!-- 设置压缩传送的大小值、消息体超过当前值则进行压缩传输compressSize，单位是K, add by guozq5 20170215 -->
+		<attribute name="compressSize" default="4">
+			<simpleType>
+				<restriction base="int">
+					<whiteSpace value="collapse"></whiteSpace>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<!-- 设置消息最大值,超过当前值则不发送，单位是K, add by guozq5 20170215 -->
+		<attribute name="maxMsgSize" default="102400">
+			<simpleType>
+				<restriction base="int">
+					<whiteSpace value="collapse"></whiteSpace>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="name" use="required">
+			<simpleType>
+				<restriction base="string">
+					<whiteSpace value="collapse"></whiteSpace>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="ruleClass"
+			default="com.ai.aif.msgframe.common.route.impl.DefaultDestinationRule">
+			<simpleType>
+				<restriction base="string">
+					<whiteSpace value="collapse"></whiteSpace>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="transClass">
+			<simpleType>
+				<restriction base="string">
+					<whiteSpace value="collapse"></whiteSpace>
+				</restriction>
+			</simpleType>
+		</attribute>
+
+		<attribute name="order" type="boolean"></attribute>
+		<!-- <attribute name="pullNextDelayTimeMillis" type="int"></attribute> -->
+		<!-- <attribute name="maxNums" type="int"></attribute> -->
+	</complexType>
+
+	<complexType name="centers">
+		<sequence>
+			<element name="center" maxOccurs="unbounded" minOccurs="1">
+				<complexType>
+					<attribute name="name">
+						<simpleType>
+							<restriction base="string">
+								<whiteSpace value="collapse"></whiteSpace>
+							</restriction>
+						</simpleType>
+					</attribute>
+					<attribute name="containClusters">
+						<simpleType>
+							<restriction base="string">
+								<whiteSpace value="collapse"></whiteSpace>
+							</restriction>
+						</simpleType>
+					</attribute>
+				</complexType>
+			</element>
+		</sequence>
+
+	</complexType>
+
+	<complexType name="persistence">
+		<sequence>
+			<element name="exceptionPersistence">
+				<complexType>
+					<sequence>
+						<element name="producerExceptionClass" maxOccurs="1"
+							minOccurs="0">
+							<simpleType>
+								<restriction base="string">
+									<whiteSpace value="collapse"></whiteSpace>
+								</restriction>
+							</simpleType>
+						</element>
+						<element name="consumerExceptionClass" maxOccurs="1"
+							minOccurs="0">
+							<simpleType>
+								<restriction base="string">
+									<whiteSpace value="collapse"></whiteSpace>
+								</restriction>
+							</simpleType>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			<!-- <element name="logPersistence"> -->
+			<!-- <complexType> -->
+			<!-- <sequence> -->
+			<!-- <element name="isLogPersistence" -->
+			<!-- type="boolean"> -->
+			<!-- </element> -->
+			<!-- <element name="logType"> -->
+			<!-- <simpleType> -->
+			<!-- <restriction base="string"> -->
+			<!-- <enumeration value="file"></enumeration> -->
+			<!-- <enumeration value="db"></enumeration> -->
+			<!-- <whiteSpace value="collapse"></whiteSpace> -->
+			<!-- </restriction> -->
+			<!-- </simpleType> -->
+			<!-- </element> -->
+			<!-- </sequence> -->
+			<!-- </complexType> -->
+			<!-- </element> -->
+		</sequence>
+	</complexType>
+
+	<complexType name="clusters">
+		<sequence>
+			<element name="cluster" maxOccurs="unbounded" minOccurs="1">
+				<complexType>
+					<sequence>
+						<element name="url" maxOccurs="unbounded" minOccurs="1">
+							<complexType>
+								<simpleContent>
+									<extension base="string">
+										<attribute name="user" default="admin">
+											<simpleType>
+												<restriction base="string">
+													<whiteSpace value="collapse">
+													</whiteSpace>
+												</restriction>
+											</simpleType>
+										</attribute>
+										<attribute name="password" default="admin">
+											<simpleType>
+												<restriction base="string">
+													<whiteSpace value="collapse">
+													</whiteSpace>
+												</restriction>
+											</simpleType>
+										</attribute>
+									</extension>
+								</simpleContent>
+							</complexType>
+							<!-- <simpleType> -->
+							<!-- <restriction base="string"> -->
+							<!-- <whiteSpace value="collapse"></whiteSpace> -->
+							<!-- </restriction> -->
+							<!-- </simpleType> -->
+						</element>
+					</sequence>
+					<attribute name="name">
+						<simpleType>
+							<restriction base="string">
+								<whiteSpace value="collapse"></whiteSpace>
+							</restriction>
+						</simpleType>
+					</attribute>
+					<attribute name="poolSize" default="1">
+						<simpleType>
+							<restriction base="int">
+								<maxExclusive value="10"></maxExclusive>
+								<minExclusive value="0"></minExclusive>
+							</restriction>
+						</simpleType>
+					</attribute>
+					<attribute name="type" use="required">
+						<simpleType>
+							<restriction base="string">
+								<enumeration value="ActiveMQ"></enumeration>
+								<enumeration value="RocketMQ"></enumeration>
+								<enumeration value="Kafka"></enumeration>
+								<enumeration value="RabbitMQ"></enumeration>
+								<enumeration value="DB"></enumeration>
+								<whiteSpace value="collapse"></whiteSpace>
+							</restriction>
+						</simpleType>
+					</attribute>
+				</complexType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<!-- <complexType name="pullCfg"> -->
+	<!-- <sequence> -->
+	<!-- <element name="pullNextDelayTimeMillis" type="int" -->
+	<!-- default="50000" maxOccurs="1" minOccurs="1"> -->
+	<!-- </element> -->
+	<!-- <element name="maxNums" type="int" default="5" maxOccurs="1" -->
+	<!-- minOccurs="1"> -->
+	<!-- </element> -->
+	<!-- </sequence> -->
+	<!-- </complexType> -->
+
+
+
+	<complexType name="msgframeCfg">
+		<sequence>
+			<element name="centerCfg" type="tns:centerCfg" maxOccurs="unbounded"
+				minOccurs="1">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="centerCfg">
+		<sequence>
+			<element name="name" maxOccurs="1" minOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<whiteSpace value="collapse"></whiteSpace>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="globalCfg" type="tns:globalCfg" maxOccurs="1"
+				minOccurs="0">
+			</element>
+			<element name="producerCfg" type="tns:producerCfg" maxOccurs="1"
+				minOccurs="0">
+			</element>
+
+			<element name="destinations" type="tns:destinations"
+				maxOccurs="1" minOccurs="1">
+			</element>
+			<element name="subscribes" type="tns:subscribes" maxOccurs="1"
+				minOccurs="0">
+			</element>
+			<element name="centers" type="tns:centers" maxOccurs="1"
+				minOccurs="0">
+			</element>
+			<element name="clusters" type="tns:clusters" maxOccurs="1"
+				minOccurs="1">
+			</element>
+			<element name="persistence" type="tns:persistence" maxOccurs="1"
+				minOccurs="0">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="producerCfg">
+		<sequence>
+			<element name="resendTimes" default="3" maxOccurs="1"
+				minOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<maxExclusive value="20"></maxExclusive>
+						<minExclusive value="1"></minExclusive>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="resenddelay" default="1000" maxOccurs="1"
+				minOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<maxExclusive value="300000"></maxExclusive>
+						<minExclusive value="10"></minExclusive>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="replyTimeOut" type="int" maxOccurs="1"
+				minOccurs="1" default="2000"></element>
+		</sequence>
+	</complexType>
+
+	<!-- <complexType name="consumeCfg"> -->
+	<!-- <sequence> -->
+	<!-- <element name="consumeType" maxOccurs="1" minOccurs="1"> -->
+	<!-- <simpleType> -->
+	<!-- <restriction base="string"> -->
+	<!-- <enumeration value="pull"></enumeration> -->
+	<!-- <enumeration value="push"></enumeration> -->
+	<!-- </restriction> -->
+	<!-- </simpleType> -->
+	<!-- </element> -->
+	<!-- <element name="pullCfg" type="tns:pullCfg" maxOccurs="1" minOccurs="0"></element> -->
+	<!-- </sequence> -->
+	<!-- </complexType> -->
+
+	<complexType name="globalCfg">
+		<sequence>
+			<!-- <element name="serializeType"> -->
+			<!-- <simpleType> -->
+			<!-- <restriction base="string"> -->
+			<!-- <enumeration value="JDK"></enumeration> -->
+			<!-- <enumeration value="JSON"></enumeration> -->
+			<!-- <enumeration value="KRYO"></enumeration> -->
+			<!-- <whiteSpace value="collapse"></whiteSpace> -->
+			<!-- </restriction> -->
+			<!-- </simpleType> -->
+			<!-- </element> -->
+			<element name="prodInjection" maxOccurs="unbounded"
+				minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<whiteSpace value="collapse"></whiteSpace>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="warmUpper" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<whiteSpace value="collapse"></whiteSpace>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="consInjection" maxOccurs="unbounded"
+				minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<whiteSpace value="collapse"></whiteSpace>
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+</schema>

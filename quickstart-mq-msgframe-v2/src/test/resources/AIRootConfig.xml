@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="GB2312"?>
+<AIRootConfig>
+  <item name="FetchConfigType" value="CLASSPATH" desc="获取配置信息方式：CLASSPATH,LOCALFILE,HTTP,RMI"></item>
+  <item name="Application" value="WORKFLOW" desc="应用类型。例如工作流调度，CRM-WEB,CRM-APP,也可以通过JVM的参数appframe.application来设置"></item>
+  <item name="ConfigServerURL" value="rmi://localhost:9999/qh_appframemanager" desc="服务器地址"></item>
+  <item name="JxmBeanName" value="Appframe:name=ServerConfigList" desc="服务器地址"></item>
+  <item name="LocalDirector" value="AppframeConfig" desc="本地配置文件目录"></item>
+  <item name="IsRegister" value="false" desc="本地配置文件目录"></item>
+  <item name="RegisterDataSource" value="UserDataSource" desc="Appframe注册服务器需要的数据源"></item>
+  <item name="RegisterRate" value="120" desc="注册频率(秒)"></item>
+  <item name="AppframeServerDeadInterval" value="300" desc="服务器无效间隔(秒)"></item>
+</AIRootConfig>

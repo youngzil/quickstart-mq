@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<parent>
+		<groupId>org.quickstart</groupId>
+		<artifactId>quickstart-mq</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath> <!-- lookup parent from repository -->
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>quickstart-mq-activemq</artifactId>
+	<packaging>jar</packaging>
+	<name>${project.artifactId}-${project.version}</name>
+	<url>http://maven.apache.org</url>
+	<description>Demo project for XXX</description>
+
+	<properties>
+		<activemq.version>5.15.2</activemq.version>
+		<!-- <activemq.version>5.13.2</activemq.version> -->
+		<fusesource.mqtt-client.version>1.12</fusesource.mqtt-client.version>
+		<eclipse.paho.client.mqttv3-version>1.1.0</eclipse.paho.client.mqttv3-version>
+		<javaee-api-version>7.0</javaee-api-version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.fusesource.mqtt-client</groupId>
+			<artifactId>mqtt-client</artifactId>
+			<version>${fusesource.mqtt-client.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.paho</groupId>
+			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+			<version>${eclipse.paho.client.mqttv3-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>${javaee-api-version}</version>
+		</dependency>
+
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.activemq</groupId> -->
+		<!-- <artifactId>activemq-all</artifactId> -->
+		<!-- <version>${activemq.version}</version> -->
+		<!-- </dependency> -->
+
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-web</artifactId>
+			<version>${activemq.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-client</artifactId>
+			<version>${activemq.version}</version>
+		</dependency>
+
+
+	</dependencies>
+</project>

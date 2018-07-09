@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<parent>
+		<groupId>org.quickstart</groupId>
+		<artifactId>quickstart-mq</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath> <!-- lookup parent from repository -->
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>quickstart-mq-kafka</artifactId>
+	<packaging>jar</packaging>
+	<name>${project.artifactId}-${project.version}</name>
+	<url>http://maven.apache.org</url>
+	<description>Demo project for XXX</description>
+
+	<properties>
+		<!-- 大于0.9.X and 0.10.X and 0.11.X接口都更加简便，且兼容之前的版本，包路径改为org.apache.kafka.clients -->
+
+		<!-- 0.8.X 和之前的版本，包路径改为kafka.*、kafka.javaapi.* -->
+
+		<!-- <kafka.scala.version>2.11</kafka.scala.version> -->
+		<kafka.scala.version>2.12</kafka.scala.version>
+		<kafka.version>1.0.0</kafka.version>
+		<!-- <kafka.version>0.11.0.1</kafka.version> -->
+		<!-- <kafka.version>0.9.0.1</kafka.version> -->
+		<!-- <kafka.version>0.8.2.2</kafka.version> -->
+
+		<confluent.version>2.0.0</confluent.version>
+		<avro.version>1.7.7</avro.version>
+
+		<logback.version>1.2.3</logback.version>
+		<log4j.version>1.2.17</log4j.version>
+
+	</properties>
+
+	<dependencies>
+
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.kafka</groupId> -->
+		<!-- <artifactId>kafka_${kafka.scala.version}</artifactId> -->
+		<!-- <version>${kafka.version}</version> -->
+		<!-- </dependency> -->
+
+
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.kafka</groupId> -->
+		<!-- <artifactId>kafka_${kafka.scala.version}</artifactId> -->
+		<!-- <version>${kafka.version}</version> -->
+		<!-- <exclusions> -->
+		<!-- <exclusion> -->
+		<!-- <artifactId>jmxri</artifactId> -->
+		<!-- <groupId>com.sun.jmx</groupId> -->
+		<!-- </exclusion> -->
+		<!-- <exclusion> -->
+		<!-- <artifactId>jms</artifactId> -->
+		<!-- <groupId>javax.jms</groupId> -->
+		<!-- </exclusion> -->
+		<!-- <exclusion> -->
+		<!-- <artifactId>jmxtools</artifactId> -->
+		<!-- <groupId>com.sun.jdmk</groupId> -->
+		<!-- </exclusion> -->
+		<!-- </exclusions> -->
+		<!-- </dependency> -->
+
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_${kafka.scala.version}</artifactId>
+			<version>${kafka.version}</version>
+		</dependency>
+
+
+		<!-- <dependency> -->
+		<!-- <groupId>io.confluent</groupId> -->
+		<!-- <artifactId>kafka-avro-serializer</artifactId> -->
+		<!-- <version>${confluent.version}</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.kafka</groupId> -->
+		<!-- <artifactId>kafka_${kafka.scala.version}</artifactId> -->
+		<!-- <version>${kafka.version}</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.avro</groupId> -->
+		<!-- <artifactId>avro</artifactId> -->
+		<!-- <version>${avro.version}</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.avro</groupId> -->
+		<!-- <artifactId>avro-maven-plugin</artifactId> -->
+		<!-- <version>${avro.version}</version> -->
+		<!-- </dependency> -->
+
+		<!-- <dependency> -->
+		<!-- <groupId>ch.qos.logback</groupId> -->
+		<!-- <artifactId>logback-core</artifactId> -->
+		<!-- <version>${logback.version}</version> -->
+		<!-- </dependency> -->
+
+		<!-- <dependency> -->
+		<!-- <groupId>ch.qos.logback</groupId> -->
+		<!-- <artifactId>logback-classic</artifactId> -->
+		<!-- <version>${logback.version}</version> -->
+		<!-- </dependency> -->
+
+		<!-- log start -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- log end -->
+
+
+	</dependencies>
+</project>

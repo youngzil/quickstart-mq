@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.asiainfo.com/msgframe/destinationrule" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.asiainfo.com/msgframe/destinationrule">
+    <xsd:element name="destinationRuleCfg" type="destinationRuleCfg">
+    </xsd:element>
+    
+    <xsd:complexType name="destinationRuleCfg">
+    	<xsd:sequence>
+    		<xsd:element name="subject" type="subject" maxOccurs="unbounded" minOccurs="1">
+    		</xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="subject">
+    	<xsd:sequence>
+    		<xsd:element name="area" type="area" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+    	</xsd:sequence>
+    	<xsd:attribute name="name" type="xsd:string"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="area">
+    	<xsd:attribute name="name" type="xsd:string"></xsd:attribute>
+    	<xsd:attribute name="desc" type="xsd:string"></xsd:attribute>
+    	<xsd:attribute name="number" type="xsd:int" default="1"></xsd:attribute>
+    </xsd:complexType>
+</xsd:schema>

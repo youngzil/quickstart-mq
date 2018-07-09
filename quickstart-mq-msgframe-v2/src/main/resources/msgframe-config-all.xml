@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<msgframeCfg xmlns="http://www.asiainfo.com/msgframe">
+	<!--［1-＊］ 客户端所属中心，如果是服务端配置centerCfg节点可以有多个，如果是客户端配置centerCfg只有一个 -->
+	<centerCfg>
+		<!--［1-1］ 中心名称 -->
+		<name>comframe</name>
+		<!-- 全局配置 -->
+		<globalCfg>
+			<!-- 消息生产端消息注入处理类，可以不配或者多配，在发送时可以在消息发送前执行，配置类的全路径且继承接口 com.ai.aif.msgframe.common.hook.ISendMessageHook -->
+			<prodInjection>com.ai.aif.msgframe.extend.appframe.hook.RecordSendMessageHook</prodInjection>
+			<prodInjection>com.ai.aif.msgframe.extend.es.hook.impl.SendMessageHookESImpl</prodInjection>
+			<!-- 消息消费端消息注入处理类，可以不配或者多配，在消费时可以在消息处理业务前执行，配置类的全路径且继承接口 com.ai.aif.msgframe.common.hook.IConsumeMessageHook -->
+<!-- 			<consInjection>com.ai.aif.msgframe.extend.appframe.hook.AntiDuplicateConsumerHook</consInjection> -->
+			<consInjection>com.ai.aif.msgframe.extend.es.hook.impl.ConsumeMessageHookESImpl</consInjection>
+			<consInjection>com.ai.aif.msgframe.extend.appframe.hook.RecordConsumeMessageHook</consInjection>
+		</globalCfg>
+
+		<!-- 客户端发送消息配置 -->
+		<producerCfg>
+			<!--重发次数 范围1-20 -->
+			<resendTimes>2</resendTimes>
+			<!--重发间隔时间 范围10-30000 -->
+			<resenddelay>1000</resenddelay>
+			<!-- 获取回执消息超时时间 -->
+			<replyTimeOut>1000</replyTimeOut>
+		</producerCfg>
+
+		<consumeCfg>
+			<!-- 消费者是推还是拉模式 pull push,一般都是用的推的模式,拉会自动用定时任务去拉，1000ms拉一次 -->
+			<consumeType>pull</consumeType>
+			<!-- 只有consumeType配置为pull才有用 -->
+			<pullCfg>
+				<!-- 拉模式下间隔时间 -->
+				<pullNextDelayTimeMillis>1</pullNextDelayTimeMillis>
+				<!-- 批量拉的个数 -->
+				<maxNums>30</maxNums>
+			</pullCfg>
+		</consumeCfg>
+
+		<!--后面都是从控制台拉取得数据,需要发送的topic或者queue -->
+
+		<!-- 发送或者消费都要配置 destinations 和 subscribes -->
+		<destinations>
+			<!-- belong:可选,未配置就是自己的中心 -->
+			<!-- name:必选,主题名称 -->
+			<!-- order属性这个是此主题是否用于顺序消息，true或者false 不设置此属性时默认false -->
+			<!-- ruleClass可选：默认是com.ai.aif.msgframe.common.route.impl.DefaultDestinationRule，如果是默认，小队列的规则是name＋number -->
+			<queue name="topicTest" belong="comframe" number="3" />
+			<queue name="DBTest" belong="db-center" />
+			<queue name="PerfTest" belong="orderCenter" />
+			<queue name="TagTest" belong="comframe" number="10" order="true" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" />
+			<queue name="OrderTest" order="true" belong="orderCenter" number="1" />
+			<queue name="TransactionTest" belong="orderCenter" />
+			<queue name="test0221" compressSize="3" />
+			<topic name="testActivemq" belong="activemqCenter" />
+		</destinations>
+
+		<subscribes>
+			<!-- tag:可选，默认是＊。配合destinations->ruleClass，如果有多个过滤条件，请按照a||b -->
+			<!--isTrans是否开启事务消费，不配此属性或者isTrans="false"为未开启，true为开启 -->
+			<!-- subDestination:必选，订阅的主题名称。必须要存在 -->
+			<!-- tag:可选，默认是＊。配合destinations->ruleClass，如果有多个过滤条件，请按照a||b -->
+			<!-- processThreadNums:可选，默认consumeCfg->processThreadNums.处理消息的线程 -->
+			<subscribe subDestination="AmsPaperLessPrint" consumeType="push">
+				<!-- 配置实现类，利用管道流的思想，按照配置顺序依次处理消息.只支持异步消息 -->
+				<implclass>org.quickstart.msgframe.v2.consumer2.SubscribeImpl1</implclass>
+			</subscribe>
+			<subscribe subDestination="testActivemq" consumeType="pull" pullNextDelayTimeMillis="10000" maxNums="20">
+				<!-- 配置实现类，利用管道流的思想，按照配置顺序依次处理消息.只支持异步消息 -->
+				<implclass>com.ai.aif.msgframe.SubscribeImpl1</implclass>
+				<!--<implclass>com.ai.aif.msgframe.SubscribeImpl2</implclass> -->
+			</subscribe>
+		</subscribes>
+
+		<centers>
+			<!-- containClusters: 定义了中心部署在哪些集群上，containClusters属性可以使多个，使用 ,分割 -->
+			<center name="rocketmq-center" containClusters="rocketmq-cluster" />
+			<center name="activemq-center" containClusters="activemq-cluster,activemq-cluster2" />
+			<center name="db-center" containClusters="db-cluster" />
+		</centers>
+
+		<clusters>
+			<!--RocketMQ、Kafka、ActiveMQ、RabbitMQ、DB -->
+			<cluster name="rocketmq-cluster" type="RocketMQ">
+				<!-- <url>10.1.243.19:9876;10.1.243.20:9876</url> -->
+				<url>10.1.235.102:9878;10.1.235.103:9878;10.1.235.104:9878;10.1.235.105:9878</url>
+			</cluster>
+
+			<cluster name="activemq-cluster" type="ActiveMQ">
+				<!-- <url>failover:(tcp://10.11.20.102:61616)</url> -->
+				<url>failover:(tcp://10.20.16.210:20002,tcp://10.20.16.209:20002,tcp://10.20.16.211:20002)</url>
+			</cluster>
+			<cluster name="activemq-cluster2" type="ActiveMQ">
+				<!-- <url>failover:(tcp://10.11.20.102:61616)</url> -->
+				<url>failover:(tcp://10.20.16.210:20002,tcp://10.20.16.209:20002,tcp://10.20.16.211:20002)</url>
+				<url>failover:(tcp://10.20.16.210:20002,tcp://10.20.16.209:20002,tcp://10.20.16.211:20002)</url>
+			</cluster>
+
+			<cluster name="db-cluster" type="DB">
+				<url>db</url>
+			</cluster>
+		</clusters>
+
+		<!-- 异常持久化配置 -->
+		<persistence>
+			<exceptionPersistence>
+				<!-- 为异常处理分配的线程数 -->
+				<processThreadNums>10</processThreadNums>
+				<isExceptionPersitence>false</isExceptionPersitence>
+				<!-- 持久化类型：db（数据库）,class(实现类) -->
+				<exceptionType>class</exceptionType>
+				<!-- 生产者异常处理,必须实现com.ai.aif.msgframe.common.ex.exception.IExceptionPersitence接口 -->
+				<producerExceptionClass>com.ai.aif.msgframe.producer.ex.ProducerExceptionHandle</producerExceptionClass>
+				<!-- 消费者异常处理,必须实现com.ai.aif.msgframe.common.ex.exception.IExceptionPersitence接口 -->
+				<consumerExceptionClass>com.ai.aif.msgframe.consumer.ex.ConsumerExceptionHandle</consumerExceptionClass>
+			</exceptionPersistence>
+
+			<!-- logPersistence 消息是否进行客户端持久化-false、true -->
+			<logPersistence>
+				<isLogPersistence>false</isLogPersistence>
+				<!--logType 消息客户端持久化方式 -file、db -->
+				<logType>file</logType>
+			</logPersistence>
+
+		</persistence>
+
+	</centerCfg>
+</msgframeCfg>

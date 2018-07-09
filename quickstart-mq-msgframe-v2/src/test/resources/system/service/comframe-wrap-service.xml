@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="gb2312"?>
+<services>
+
+	<service id="com.ai.comframe.ComframeCallEngineForBPS" invoke="sv" type="primitive">
+		<property name="interfaceClass" value="com.ai.comframe.wrap.core.IComframeCallEngine"/>
+		<property name="implClass" value="com.ai.comframe.wrap.bps.ComframeWrapForBPS"/>
+	</service>
+
+	<service id="com.ai.comframe.ComframeCallEngineForFuego" invoke="sv" type="primitive">
+		<property name="interfaceClass" value="com.ai.comframe.wrap.core.IComframeCallEngine"/>
+		<property name="implClass" value="com.ai.comframe.wrap.fuego.ComframeWrapForFuego"/>
+	</service>
+	
+	<service id="com.ai.comframe.ComframeCallEngineForWPS" invoke="sv" type="primitive">
+		<property name="interfaceClass" value="com.ai.comframe.wrap.core.IComframeCallEngine"/>
+		<property name="implClass" value="com.ai.comframe.wrap.wps.ComframeWrapForWPS"/>
+	</service>
+
+</services>

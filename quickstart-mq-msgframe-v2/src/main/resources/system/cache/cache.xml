@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="gb2312"?>
+<caches>
+
+   <quartz>
+       <!--线程池-->
+       <property name="org.quartz.threadPool.class" value="org.quartz.simpl.SimpleThreadPool"/>
+       <property name="org.quartz.threadPool.threadCount" value="3"/>
+       <property name="org.quartz.threadPool.threadPriority" value="5"/>
+       <property name="org.quartz.threadPool.makeThreadsDaemons" value="true"/>
+
+       <!--scheduler-->
+       <property name="org.quartz.scheduler.instanceName" value="CacheScheduler"/>
+       <property name="org.quartz.scheduler.makeSchedulerThreadDaemon" value="true"/>
+
+       <!--JobStore-->
+       <property name="org.quartz.jobStore.misfireThreshold" value="60000"/>
+       <property name="org.quartz.jobStore.class" value="org.quartz.simpl.RAMJobStore"/>
+   </quartz>
+
+   <!--默认都是需要init的-->
+
+   <!--主机和数据库时隙,每天凌晨2点刷新-->
+   <cache id="com.ai.appframe2.complex.cache.impl.SysDateCacheImpl">
+       <property name="cronExpression" value="0 0 0/20 * * ?"/>
+   </cache>
+
+   <!--分表关系-->
+   <cache id="com.ai.appframe2.complex.cache.impl.TableSplitCacheImpl"/>
+
+   <!--分表映射关系-->
+   <cache id="com.ai.appframe2.complex.cache.impl.TableSplitFunctionCacheImpl"/>
+
+   <!--分表函数关系-->
+   <cache id="com.ai.appframe2.complex.cache.impl.TableSplitMappingCacheImpl"/>
+
+   <!--IdGenerator-->
+   <cache id="com.ai.appframe2.complex.cache.impl.IdGeneratorCacheImpl"/>
+   
+   <cache id="com.ai.appframe2.complex.cache.impl.IdGeneratorWrapperCacheImpl"/>
+
+   <!--BatchIdGenerator关系-->
+   <cache id="com.ai.appframe2.complex.cache.impl.BatchIdGeneratorCacheImpl"/>
+<!--分表函数关系-->
+   <cache id="com.ai.appframe2.complex.cache.impl.MethodCenterCacheImpl"/>
+      <!--bo模糊化-->
+ 	<cache id="com.ai.appframe2.complex.cache.impl.BOMaskCacheImpl" init="true"/>
+   
+ <!-- comframe缓存 --> 
+<!--    <cache id="com.ai.comframe.cache.VmQueueConfigCacheImpl"> -->
+<!--      <property name="cronExpression" value="0 0 0/20 * * ?"/> -->
+<!--    </cache> -->
+<!--    <cache id="com.ai.comframe.cache.VmTemplateCacheImpl"> -->
+<!--      <property name="cronExpression" value="0 0 0/20 * * ?"/> -->
+<!--    </cache> -->
+<!--    <cache id="com.ai.comframe.cache.VmAlarmConfigCacheImpl"> -->
+<!--      <property name="cronExpression" value="0 0 0/20 * * ?"/> -->
+<!--    </cache> -->
+<!--    <cache id="com.ai.comframe.cache.VmHoliDayCacheImpl"> -->
+<!--      <property name="cronExpression" value="0 0 0/20 * * ?"/> -->
+<!--    </cache> -->
+<!--    <cache id="com.ai.comframe.cache.VmTemplateVersionCacheImpl"> -->
+<!--      <property name="cronExpression" value="0 0 0/20 * * ?"/> -->
+<!--    </cache> -->
+   <!--  
+   <cache id="com.ai.comframe.cache.VmQueueConfigRelateCacheImpl">
+     <property name="cronExpression" value="0 0 0/20 * * ?"/>
+   </cache>
+	-->
+    <!--java侧的国际化资源-->
+<!--     <cache id="com.ai.common.cache.JavaI18nResourceCacheImpl" init="true"> -->
+<!--         <property name="cronExpression" value="0 8 2 * * ?"/> -->
+<!--     </cache> -->
+
+    <!--静态数据-->
+<!--     <cache id="com.ai.common.cache.StaticDataCacheImpl" init="true"> -->
+<!--         <property name="cronExpression" value="0 14 2 * * ?"/> -->
+<!--     </cache> -->
+	
+	 <!--District数据-->
+<!--     <cache id="com.ai.common.cache.DistrictCacheImpl" init="true"> -->
+<!--         <property name="cronExpression" value="0 14 2 * * ?"/> -->
+<!--     </cache> -->
+	
+</caches>

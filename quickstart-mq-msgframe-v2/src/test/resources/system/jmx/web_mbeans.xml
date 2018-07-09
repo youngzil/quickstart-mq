@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="gb2312"?>
+<mbeans>
+   <mbean name="appframe:name=SystemMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.system.SystemMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.system.SystemMonitor" desc="系统的MBean"/>
+
+   <mbean name="appframe:name=CacheMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.cache.CacheMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.cache.CacheMonitor" desc="缓存的MBean"/>
+
+   <mbean name="appframe:name=ActionMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.action.ActionMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.action.ActionMonitor" enable="true" timeout="-1" desc="web的action的MBean"/>
+
+   <mbean name="appframe:name=AppframeSessionMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.session.AppframeSessionMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.session.AppframeSessionMonitor" desc="web的session的MBean"/>
+   
+   <mbean name="appframe:name=DataSourceMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.datasource.DataSourceMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.datasource.DataSourceMonitor" desc="数据源的MBean"/>
+      
+   <mbean name="appframe:name=SQLMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.sql.SQLMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.sql.SQLMonitor" desc="SQL 在线统计MBean"/>
+   
+   <mbean name="appframe:name=SVMethodMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.sv.SVMethodMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.sv.SVMethodMonitor" desc="服务在线统计MBean"/>
+   
+   <mbean name="appframe:name=TransactionMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.tm.TransactionMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.tm.TransactionMonitor" desc="事务监控MBean"/>
+
+   <mbean name="appframe:name=AppTraceMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.trace.AppTraceMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.trace.AppTraceMonitor" desc="AppTrace的MBean"/>
+   
+   <mbean name="appframe:name=WebTraceMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.trace.WebTraceMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.trace.WebTraceMonitor" desc="WebTrace的MBean"/>
+
+   <mbean name="appframe:name=AppframeCacheMonitor" interfacename="com.ai.appframe2.complex.mbean.standard.ac.AppframeCacheMonitorMBean" classname="com.ai.appframe2.complex.mbean.standard.ac.AppframeCacheMonitor" desc="AppframeCacheMonitor的MBean"/>
+   
+   <mbean name="comframe:name=QueueMonitor" interfacename="com.ai.comframe.monitor.mbean.QueueMonitorMBean" classname="com.ai.comframe.monitor.mbean.QueueMonitor" desc="QueueMonitor的MBean"/>
+   
+</mbeans>
