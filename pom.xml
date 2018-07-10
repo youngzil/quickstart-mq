@@ -25,7 +25,7 @@
 
 	<modules>
 		<module>quickstart-activemq</module>
-		<module>quickstart-apollo</module>
+		<module>quickstart-activemq-apollo</module>
 		<module>quickstart-artemis</module>
 		<module>quickstart-mqtt</module>
 		<module>quickstart-zeromq</module>
