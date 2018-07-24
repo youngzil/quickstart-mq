@@ -13,8 +13,8 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ai.aif.msgframe.extend.appframe.db.bo.MsgCheckRepeatBean;
-import com.ai.aif.msgframe.extend.appframe.db.service.interfaces.IMsgCheckRepeatSV;
+import com.ai.aif.msgframe.extend.appframe.db.bo.MsgExamineConsumerBean;
+import com.ai.aif.msgframe.extend.appframe.db.service.interfaces.IMsgExamineConsumerSV;
 import com.ai.appframe2.common.AIException;
 import com.ai.appframe2.service.ServiceFactory;
 
@@ -33,11 +33,11 @@ public class DataInsertTest {
 
         logger.info("============插入数据===========");
         try {
-            IMsgCheckRepeatSV sv = (IMsgCheckRepeatSV) ServiceFactory.getService(IMsgCheckRepeatSV.class);
-            MsgCheckRepeatBean msgCheckRepeatBean = new MsgCheckRepeatBean();
-            msgCheckRepeatBean.setMsgId("11111111115");
+            IMsgExamineConsumerSV sv = (IMsgExamineConsumerSV) ServiceFactory.getService(IMsgExamineConsumerSV.class);
+            MsgExamineConsumerBean msgCheckRepeatBean = new MsgExamineConsumerBean();
+            msgCheckRepeatBean.setMsgId("11111111111");
             msgCheckRepeatBean.setDestinationCode("test");
-            sv.addMsgCheckRepeat(msgCheckRepeatBean);
+            sv.insert(msgCheckRepeatBean);
         } catch (AIException e) {
             e.printStackTrace();
         } catch (SQLException e) {

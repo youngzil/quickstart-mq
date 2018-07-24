@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<parent>
 		<groupId>org.quickstart</groupId>
 		<artifactId>quickstart-mq</artifactId>
@@ -14,23 +12,36 @@
 	<name>${project.artifactId}-${project.version}</name>
 	<url>http://maven.apache.org</url>
 	<description>Demo project for XXX</description>
+
 	<repositories>
 		<repository>
+			<id>alimaven</id>
+			<name>aliyun maven</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
 			<id>aif_group</id>
-			<url>http://10.21.20.161:8080/nexus/content/groups/aif_group/</url>
+			<url>http://10.11.20.81:8080/nexus/content/groups/aif_group/</url>
 		</repository>
 		<repository>
 			<id>msgframe</id>
 			<name>msgframe</name>
-			<url>http://10.21.20.161:8080/nexus/content/repositories/msgframe/</url>
+			<url>http://10.11.20.81:8080/nexus/content/repositories/msgframe/</url>
 		</repository>
 	</repositories>
+
 	<distributionManagement>
-		<repository>
-			<id>msgframe</id>
-			<name>msgframe</name>
-			<url>http://10.21.20.161:8080/nexus/content/repositories/msgframe</url>
-		</repository>
+		<!-- <repository> -->
+		<!-- <id>msgframe</id> -->
+		<!-- <name>msgframe</name> -->
+		<!-- <url>http://10.21.20.161:8080/nexus/content/repositories/msgframe</url> -->
+		<!-- </repository> -->
 		<!-- <snapshotRepository> -->
 		<!-- <id>nexus-snapshots</id> -->
 		<!-- <name>Nexus Snapshot Repository</name> -->
@@ -206,7 +217,9 @@
 		<dependency>
 			<groupId>msgframe</groupId>
 			<artifactId>xmlmsgframe</artifactId>
-			<version>2.4.11</version>
+			<version>2.4.12</version>
+			<!-- <scope>system</scope> -->
+			<!-- <systemPath>${project.basedir}/lib/zj/xmlmsgframe-2.4.12.jar</systemPath> -->
 		</dependency>
 		<!-- amber相关 -->
 		<dependency>
@@ -225,6 +238,21 @@
 					<artifactId>xbean</artifactId>
 				</exclusion>
 			</exclusions>
+			<!-- <scope>system</scope> -->
+			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-client-2.0.0.jar</systemPath> -->
+		</dependency>
+		<dependency>
+			<groupId>com.ai.aif.msgframe</groupId>
+			<artifactId>msgframe-common</artifactId>
+			<version>${msgframe.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>msgframe</groupId>
+					<artifactId>xbean</artifactId>
+				</exclusion>
+			</exclusions>
+			<!-- <scope>system</scope> -->
+			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-common-2.0.0.jar</systemPath> -->
 		</dependency>
 		<dependency>
 			<groupId>com.ai.aif.msgframe</groupId>
@@ -236,6 +264,8 @@
 					<artifactId>xbean</artifactId>
 				</exclusion>
 			</exclusions>
+			<!-- <scope>system</scope> -->
+			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-server-2.0.0.jar</systemPath> -->
 		</dependency>
 		<dependency>
 			<groupId>com.ai.aif.msgframe</groupId>
@@ -247,6 +277,8 @@
 					<artifactId>xbean</artifactId>
 				</exclusion>
 			</exclusions>
+			<!-- <scope>system</scope> -->
+			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-extend-redis-2.0.0.jar</systemPath> -->
 		</dependency>
 		<dependency>
 			<groupId>com.ai.aif.msgframe</groupId>
@@ -258,6 +290,8 @@
 					<artifactId>xbean</artifactId>
 				</exclusion>
 			</exclusions>
+			<!-- <scope>system</scope> -->
+			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-extend-es-2.0.0.jar</systemPath> -->
 		</dependency>
 		<dependency>
 			<groupId>com.ai.aif.msgframe</groupId>
@@ -269,6 +303,15 @@
 					<artifactId>xbean</artifactId>
 				</exclusion>
 			</exclusions>
+			<!-- <scope>system</scope> -->
+			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-extend-appframe-2.0.0.jar</systemPath> -->
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.jmeter</groupId>
+			<artifactId>ApacheJMeter_java</artifactId>
+			<version>4.0</version>
+		</dependency>
+		
 	</dependencies>
 </project>
