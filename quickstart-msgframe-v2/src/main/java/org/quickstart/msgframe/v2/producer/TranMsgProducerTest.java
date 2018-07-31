@@ -5,7 +5,6 @@ import org.junit.Test;
 import com.ai.aif.msgframe.ClientFactory;
 import com.ai.aif.msgframe.MfProducerTxClient;
 import com.ai.aif.msgframe.common.message.MsgFTextMessage;
-import com.ai.aif.msgframe.consumer.MfConsumerClient;
 
 public class TranMsgProducerTest {
 

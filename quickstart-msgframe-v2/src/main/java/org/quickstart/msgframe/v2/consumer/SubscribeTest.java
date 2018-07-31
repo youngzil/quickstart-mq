@@ -15,7 +15,7 @@ public class SubscribeTest {
     }
 
     @Test
-    public void test() {
+    public void testSubscribe() {
         try {
 
             // MfConsumerClient.subscribe("topicTest", "*", "com.ai.aif.msgframe.SubscribeImpl1");

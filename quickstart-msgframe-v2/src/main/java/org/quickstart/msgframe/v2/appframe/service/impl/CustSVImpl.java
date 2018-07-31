@@ -16,7 +16,6 @@ public class CustSVImpl implements ICustSV {
         message.setText("haha");
         client.send("topicTest", message);
         // client.sendOrderMsg("Test", message,"sadsa");
-
     }
 
 }

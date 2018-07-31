@@ -54,7 +54,6 @@ public class CommonSendTest {
         MsgFMapMessage messageMap = new MsgFMapMessage();
         messageMap.setMapmessage(new HashMap<String, String>());
         messageMap.getMapmessage().put("mapKey", "mapValue");
-
         client.send(topic, messageMap);
     }
 
@@ -108,7 +107,9 @@ public class CommonSendTest {
     public void testSendTxMessage() throws Exception {
         MsgFTextMessage message = new MsgFTextMessage();
         message.setText("txMessageForActiveMQ");
-        this.txClient.send("topicTest", message);
+        this.txClient.send(topic, message);
+        
+//        this.txClient.sendOrderMsg(topic, message, "20013");
 
         this.txClient.commit();
         logger.info("发送成功，" + message);

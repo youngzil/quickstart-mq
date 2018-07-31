@@ -214,13 +214,7 @@
 		<!-- <artifactId>xmlbeans</artifactId> -->
 		<!-- <version>2.6.0</version> -->
 		<!-- </dependency> -->
-		<dependency>
-			<groupId>msgframe</groupId>
-			<artifactId>xmlmsgframe</artifactId>
-			<version>2.4.12</version>
-			<!-- <scope>system</scope> -->
-			<!-- <systemPath>${project.basedir}/lib/zj/xmlmsgframe-2.4.12.jar</systemPath> -->
-		</dependency>
+		
 		<!-- amber相关 -->
 		<dependency>
 			<groupId>com.ai.aif.amber</groupId>
@@ -229,15 +223,16 @@
 		</dependency>
 		<!-- msgframe相关 -->
 		<dependency>
+			<groupId>msgframe</groupId>
+			<artifactId>xmlmsgframe</artifactId>
+			<version>2.4.12</version>
+			<!-- <scope>system</scope> -->
+			<!-- <systemPath>${project.basedir}/lib/zj/xmlmsgframe-2.4.12.jar</systemPath> -->
+		</dependency>
+		<dependency>
 			<groupId>com.ai.aif.msgframe</groupId>
 			<artifactId>msgframe-client</artifactId>
 			<version>${msgframe.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>msgframe</groupId>
-					<artifactId>xbean</artifactId>
-				</exclusion>
-			</exclusions>
 			<!-- <scope>system</scope> -->
 			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-client-2.0.0.jar</systemPath> -->
 		</dependency>
@@ -245,12 +240,6 @@
 			<groupId>com.ai.aif.msgframe</groupId>
 			<artifactId>msgframe-common</artifactId>
 			<version>${msgframe.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>msgframe</groupId>
-					<artifactId>xbean</artifactId>
-				</exclusion>
-			</exclusions>
 			<!-- <scope>system</scope> -->
 			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-common-2.0.0.jar</systemPath> -->
 		</dependency>
@@ -258,12 +247,6 @@
 			<groupId>com.ai.aif.msgframe</groupId>
 			<artifactId>msgframe-server</artifactId>
 			<version>${msgframe.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>msgframe</groupId>
-					<artifactId>xbean</artifactId>
-				</exclusion>
-			</exclusions>
 			<!-- <scope>system</scope> -->
 			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-server-2.0.0.jar</systemPath> -->
 		</dependency>
@@ -271,12 +254,6 @@
 			<groupId>com.ai.aif.msgframe</groupId>
 			<artifactId>msgframe-extend-redis</artifactId>
 			<version>${msgframe.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>msgframe</groupId>
-					<artifactId>xbean</artifactId>
-				</exclusion>
-			</exclusions>
 			<!-- <scope>system</scope> -->
 			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-extend-redis-2.0.0.jar</systemPath> -->
 		</dependency>
@@ -284,12 +261,6 @@
 			<groupId>com.ai.aif.msgframe</groupId>
 			<artifactId>msgframe-extend-es</artifactId>
 			<version>${msgframe.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>msgframe</groupId>
-					<artifactId>xbean</artifactId>
-				</exclusion>
-			</exclusions>
 			<!-- <scope>system</scope> -->
 			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-extend-es-2.0.0.jar</systemPath> -->
 		</dependency>
@@ -297,12 +268,6 @@
 			<groupId>com.ai.aif.msgframe</groupId>
 			<artifactId>msgframe-extend-appframe</artifactId>
 			<version>${msgframe.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>msgframe</groupId>
-					<artifactId>xbean</artifactId>
-				</exclusion>
-			</exclusions>
 			<!-- <scope>system</scope> -->
 			<!-- <systemPath>${project.basedir}/lib/zj/msgframe-extend-appframe-2.0.0.jar</systemPath> -->
 		</dependency>

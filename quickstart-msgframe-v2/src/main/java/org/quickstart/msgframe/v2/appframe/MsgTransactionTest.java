@@ -14,8 +14,10 @@ public class MsgTransactionTest {
     */
 
     public static void main(String[] args) throws Exception {
+        
         ICustSV sv = (ICustSV) ServiceFactory.getService(ICustSV.class);
         sv.doService();
 
     }
+    
 }

@@ -30,6 +30,8 @@ public class ConsumerProcessorImpl implements IConsumerProcessor {
             logger.info("MsgFObjectMessage,name={},age={}", stu.getName(), stu.getAge());
             logger.info(Thread.currentThread().getName() + " Receive New Messages: ");
         }
+        
+//        throw new RuntimeException();
 
         // try {
         // Thread.currentThread().sleep(60 * 1000);

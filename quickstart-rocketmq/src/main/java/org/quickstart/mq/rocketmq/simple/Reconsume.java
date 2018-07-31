@@ -35,7 +35,7 @@ import com.alibaba.rocketmq.common.message.MessageQueue;
 public class Reconsume {
 
     public static void main(String[] args) throws InterruptedException, MQClientException {
-
+        
         // String subString = "nihao||hahaha";
         String subString = "TagA || TagC || TagD";
         String[] tags = subString.split("\\|\\|");

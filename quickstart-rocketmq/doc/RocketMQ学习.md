@@ -15,6 +15,21 @@ RocketMQ消费组上线问题：
 
 
 
+V4.3.0开始，支持事务消息
+事务消息是先把消息存放在RMQ_SYS_TRANS_HALF_TOPIC主题中，当endTransaction时，-》Commit时候把消息放在原来的正常队列中然后deletePrepareMessage，Rollback就直接deletePrepareMessage，deletePrepareMessage就是把消息放到操作队列RMQ_SYS_TRANS_OP_HALF_TOPIC中，消息体存放消息在HALF_TOPIC主题中的offset。
+Broker启动的时候启动一个事务扫描线程，使用自己重写的CountDownLatch2类await定时回查客户端事务消息的状态，客户端根据事务ID查询到消息状态后进行endTransaction
+
+主题RMQ_SYS_TRANS_HALF_TOPIC和主题RMQ_SYS_TRANS_OP_HALF_TOPIC的队列一一对应（队列数一样），
+
+
+
+消费消息过程：Broker收到pull消息请求，首先从CQ（）
+根据offset找到对应的CQ，从CQ找到需要拉取的size，然后从对应的MapperFile中拉取消息返回Client
+Client接收到消息Buffer，然后根据消息格式decode，然后交给对应的线程处理。
+
+消息的格式：17个数据，第一个是整个消息的大小
+
+
 全新的消费组第一次上线，设置从尾部开始消费，但是实际从头开始消费：
 https://docs.google.com/document/d/1IbmWqhkklBw_bIzDdlMx5ViM3WcvJXZWw0y9M0xZ2x0/edit
 新消费组上线时还是要处理好历史消息的，无论怎样处理，要提前做好准备。有可能消费到大量历史消息，这是RocketMQ的本身机制导致的，RocketMQ的一个重大设计原则，宁可重复消费无数消息，也绝不漏掉一条消息，RocketMQ的设计是合理的，导致了重复消费是不可避免的
