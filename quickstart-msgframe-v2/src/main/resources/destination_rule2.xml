@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<destinationRuleCfg xmlns="http://www.asiainfo.com/msgframe/destinationrule">
+	<!-- subject配置的是,name是主题名称-->
+	<subject name="TagTest">
+	<!--area是分地市、分区域、分tag，name是名称，desc是描述，number是分区数量  -->
+		<area name="mytag" desc="" number="10"/>
+		<area name="luoy" desc="" number="10"/>
+	</subject>
+	<subject name="R_OSS">
+		<area name="471" desc="" number="3"/>
+	</subject>
+</destinationRuleCfg>	

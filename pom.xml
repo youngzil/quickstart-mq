@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<groupId>org.quickstart</groupId>
 		<artifactId>quickstart-all</artifactId>
@@ -39,6 +37,7 @@
 		<module>quickstart-pulsar</module>
 		<module>quickstart-msgframe-v1</module>
 		<module>quickstart-msgframe-v2</module>
-	</modules>
+    <module>quickstart-hornetq</module>
+  </modules>
 
 </project>

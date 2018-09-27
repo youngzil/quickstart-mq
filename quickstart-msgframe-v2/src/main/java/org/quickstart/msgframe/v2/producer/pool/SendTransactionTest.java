@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ai.aif.msgframe.ClientFactory;
 import com.ai.aif.msgframe.MfProducerTxClient;
 import com.ai.aif.msgframe.common.message.MsgFTextMessage;
 
@@ -55,6 +56,20 @@ public class SendTransactionTest {
         while (true) {
         }
 
+    }
+
+    @org.junit.Test
+    public void tesTxError() throws Exception {
+        MfProducerTxClient client = ClientFactory.createTxClient();
+        MsgFTextMessage message = new MsgFTextMessage();
+        message.setText("hello");
+        client.send("open_quene", message);
+
+        MfProducerTxClient client2 = ClientFactory.createTxClient();
+        client2.send("AMS_ACCT_BUSI_DEAL", message);
+
+        client.commit();
+        client2.commit();
     }
 
     static class ProducerThreadTest implements Runnable {

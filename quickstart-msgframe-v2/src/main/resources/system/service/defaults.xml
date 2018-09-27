@@ -90,9 +90,18 @@
 		<!-- </pool> -->
 		<pool name="base" primary="true" type="dbcp" db="oracle" init="true" isAdvanceUrl="true">
 			<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
-			<property name="url" value="jdbc:oracle:thin:@20.26.24.150:1521:CSH150" />
-			<property name="username" value="zjmsg" />
-			<property name="password" value="zjmsg" />
+<!-- 			<property name="url" value="jdbc:oracle:thin:@20.26.24.150:1521:CSH150" /> -->
+<!-- 			<property name="username" value="zjmsg" /> -->
+<!-- 			<property name="password" value="zjmsg" /> -->
+
+<!-- 			<property name="url" value="jdbc:oracle:thin:@//20.26.26.69:1521/zjmsg" /> -->
+<!-- 			<property name="username" value="zjaimsg" /> -->
+<!-- 			<property name="password" value="zjaimsg_1Q#" /> -->
+			
+			<property name="url" value="jdbc:oracle:thin:@10.21.20.155:1521:oracle" />
+			<property name="username" value="msgframe" />
+			<property name="password" value="msgframe" />
+			
 			<property name="initialSize" value="5" />
 			<property name="maxActive" value="10" />
 			<property name="maxIdle" value="10" />

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<msgframeCfg xmlns="http://www.asiainfo.com/msgframe"> 
+  <!-- 客户端所属中心 -->  
+  <name>cust</name>  
+  <!--全局配置-->  
+  <globalCfg>
+    <!--消息生产端消息注入处理类，可以不配或者多配，在发送时可以在消息发送前执行，配置类的全路径且继承接口 com.ai.aif.msgframe.common.hook.ISendMessageHook-->
+    <prodInjection>com.ai.aif.msgframe.extend.appframe.hook.RecordSendMessageHook</prodInjection>
+    <prodInjection>com.ai.aif.msgframe.extend.es.hook.impl.SendMessageHookESImpl</prodInjection>
+    <!--消息消费端消息注入处理类，可以不配或者多配，在消费时可以在消息处理业务前执行，配置类的全路径且继承接口 com.ai.aif.msgframe.common.hook.IConsumeMessageHook -->
+    <consInjection>com.ai.aif.msgframe.extend.es.hook.impl.ConsumeMessageHookESImpl</consInjection>
+    <consInjection>com.ai.aif.msgframe.extend.appframe.hook.RecordConsumeMessageHook</consInjection>
+  </globalCfg>  
+  <!--后面都是从控制台拉取得数据,需要发送的topic或者queue-->
+  <destinations timeout="2000" resendtimes="3" resenddelay="1000">
+    <queue fromCenter="cust" order="true" name="CUST_ACCT_SEND2BILLING" belong="billingCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="true" name="CUST_USER_SEND2BILLING" belong="billingCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="true" name="CUST_CUSTOMER_SEND2BILLING" belong="billingCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="false" name="CUST_USER_SEND2RP" belong="ocrmCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="false" name="CUST_USER_SEND2CHK" belong="ocrmCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="false" name="open_quene" belong="openCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="true" name="PERSONAL_ORDER_BUSI_DEAL" belong="orderCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="true" name="FAMILY_ORDER_BUSI_DEAL" belong="orderCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="true" name="AMS_USER_BUSI_DEAL" belong="amsCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="true" name="AMS_ACCT_BUSI_DEAL" belong="amsCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="false" name="CUST_USER_SEND2VM_REPLY" belong="ocrmCenter-csf" type="event" number="4"/>
+    <queue fromCenter="cust" order="true" name="FLOW_USER_BUSI_DEAL" belong="amsCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="true" name="EXPIRE_CRM_ORDER_DEPOSIT" belong="expireCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="true" name="STOP_OPEN_QUEUE" belong="orderCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+    <queue fromCenter="cust" order="true" name="Echnl2CRMRequest" belong="amsCenter-csf" type="event" number="4"/>
+    <queue fromCenter="cust" order="true" name="CUST_USER_SEND2OPENCENTER" belong="openCenter-csf" type="event" ruleClass="com.ai.aif.msgframe.common.route.impl.CustomDestinationRule" number="4"/>
+  </destinations>
+  <!--subscribeCenter 订阅的中心，统一化配置-->
+  <subscribes></subscribes>  
+  <!-- half消息客户端回查接口,可选(不发half消息时，不要选),实现TransactionCheckListener 接口的checkLocalTransactionState方法-->  
+  <!-- containClusters: 定义了中心部署在哪些集群上 -->  
+  <centers> 
+    <center name="amsCenter-csf" containClusters="cluster-1"/>  
+    <center name="openCenter-csf" containClusters="cluster-2"/>  
+    <center name="orderCenter-csf" containClusters="cluster-3"/>  
+    <center name="billingCenter-csf" containClusters="cluster-4"/>  
+    <center name="expireCenter-csf" containClusters="cluster-5"/>  
+    <center name="ocrmCenter-csf" containClusters="cluster-6"/> 
+  </centers>  
+  <clusters> 
+    <cluster name="cluster-1" poolSize="1" type="ActiveMQ"> 
+      <url>failover:(tcp://20.26.25.37:20001)</url>
+      <url>failover:(tcp://20.26.25.37:20002)</url>
+    </cluster>  
+    <cluster name="cluster-2" poolSize="1" type="ActiveMQ"> 
+       <url>failover:(tcp://20.26.25.37:20003)</url>
+      <url>failover:(tcp://20.26.25.38:20001)</url>
+    </cluster>  
+    <cluster name="cluster-3" poolSize="2" type="ActiveMQ"> 
+      <url>failover:(tcp://20.26.25.38:20002)</url>
+      <url>failover:(tcp://20.26.25.38:20003)</url>
+    </cluster>  
+    <cluster name="cluster-4" poolSize="1" type="ActiveMQ"> 
+       <url>failover:(tcp://20.26.25.39:20001)</url>
+      <url>failover:(tcp://20.26.25.39:20002)</url>
+    </cluster>  
+    <cluster name="cluster-5" poolSize="1" type="ActiveMQ"> 
+     <url>failover:(tcp://20.26.25.39:20003)</url>
+    </cluster>  
+    <cluster name="cluster-6" poolSize="1" type="ActiveMQ"> 
+     <url>failover:(tcp://20.26.25.39:20003)</url>
+    </cluster> 
+  </clusters>  
+  <persistence> 
+    <exceptionPersistence> 
+      <!-- 持久化类型：db（数据库）,class(实现类) -->  
+      <!-- 生产者异常处理,必须实现com.ai.aif.msgframe.common.ex.exception.IExceptionPersitence接口 -->  
+      <producerExceptionClass>com.ai.aif.msgframe.producer.ex.ProducerExceptionHandle</producerExceptionClass>  
+      <!-- 消费者异常处理,必须实现com.ai.aif.msgframe.common.ex.exception.IExceptionPersitence接口 -->  
+      <consumerExceptionClass>com.ai.aif.msgframe.consumer.ex.ConsumerExceptionHandle</consumerExceptionClass> 
+    </exceptionPersistence>  
+    <!-- logPersistence 消息是否进行客户端持久化-false、true--> 
+  </persistence>
+</msgframeCfg>
