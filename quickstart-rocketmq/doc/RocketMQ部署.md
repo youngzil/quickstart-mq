@@ -1,3 +1,11 @@
+nohup sh mqnamesrv &
+nohup sh mqbroker &
+
+sh mqshutdown namesrv
+sh mqshutdown broker
+
+
+
 重新部署：
 1、检查配置文件：properties文件
 2、删除namesrv中的topic、消费组、消费进度consumerOffset等信息：路径为：user.home/store/config文件夹：topics.json、subscriptionGroup.json
