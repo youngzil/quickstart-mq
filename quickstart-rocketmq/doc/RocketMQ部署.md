@@ -1,5 +1,6 @@
 nohup sh mqnamesrv &
 nohup sh mqbroker &
+ nohup bin/mqbroker -c conf/broker-m.properties & 
 
 sh mqshutdown namesrv
 sh mqshutdown broker

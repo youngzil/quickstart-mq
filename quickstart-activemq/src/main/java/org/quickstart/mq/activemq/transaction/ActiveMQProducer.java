@@ -39,6 +39,7 @@ public class ActiveMQProducer {
         ActiveMQConnection connection = (ActiveMQConnection) connectionFactory.createConnection();
         connection.start();
 
+        //设置事务
         Session session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);
         Destination queue = session.createQueue("queueTest");
         Destination topic = session.createTopic("topicTest");
@@ -60,29 +61,12 @@ public class ActiveMQProducer {
             // txtMessage.setJMSMessageID("ID:dddd");
 
             producer.send(txtMessage);
-            /*producer.send(txtMessage, new CompletionListener(){
-            
-            	@Override
-            	public void onCompletion(Message message) {
-            		// TODO Auto-generated method stub
-            		
-            		System.out.println(message);
-            		System.out.println(message);
-            		
-            	}
-            
-            	@Override
-            	public void onException(Message message, Exception exception) {
-            		// TODO Auto-generated method stub
-            		
-            	}
-            	
-            });*/
 
             session.commit();
             System.out.println("发送消息" + i + txtMessage.getText());
         }
 
+//        producer.close();
         // session.close();
         // connection.close();
 

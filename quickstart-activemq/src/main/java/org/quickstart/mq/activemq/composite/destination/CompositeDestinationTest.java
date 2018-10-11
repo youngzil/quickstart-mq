@@ -95,31 +95,13 @@ public class CompositeDestinationTest {
             // producer.send(queue, txtMessage);
             // producer.send(multiQueue, txtMessage);
 
-            /*producer.send(txtMessage, new CompletionListener(){
-            
-            @Override
-            public void onCompletion(Message message) {
-                // TODO Auto-generated method stub
-                
-                System.out.println(message);
-                System.out.println(message);
-                
-            }
-            
-            @Override
-            public void onException(Message message, Exception exception) {
-                // TODO Auto-generated method stub
-                
-            }
-            
-            });*/
-
             session.commit();
             System.out.println("发送消息" + i + txtMessage.getText());
         }
 
-        session.close();
-        connection.close();
+        // producer.close();
+        // session.close();
+        // connection.close();
 
     }
 

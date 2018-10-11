@@ -6,7 +6,7 @@
  * Copyright asiainfo Corporation 2016
  * 版权所有 *
  */
-package org.quickstart.mq.activemq.simple;
+package org.quickstart.mq.activemq.priority;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
@@ -56,31 +56,12 @@ public class ActiveMQProducer {
             // txtMessage.setJMSDeliveryMode(2);
             // JMS定义从0级到9级的十级优先级。此外，客户端应优先考虑0-4为正常优先级， 5-9为高优先级。
             // JMS不要求提供者严格实现消息的优先级顺序；但是，它应该尽最大努力优先于正常消息投递加急消息。
-            // txtMessage.setJMSPriority(4);
+            txtMessage.setJMSPriority(4);
             // 通过消息生产者发出消息
             // txtMessage.setStringProperty("test", "hahaha");
             // txtMessage.setJMSMessageID("ID:dddd");
 
             producer.send(txtMessage);
-            /*producer.send(txtMessage, new CompletionListener(){
-            
-            	@Override
-            	public void onCompletion(Message message) {
-            		// TODO Auto-generated method stub
-            		
-            		System.out.println(message);
-            		System.out.println(message);
-            		
-            	}
-            
-            	@Override
-            	public void onException(Message message, Exception exception) {
-            		// TODO Auto-generated method stub
-            		
-            	}
-            	
-            });*/
-
             // session.commit();
             System.out.println("发送消息" + i + txtMessage.getText());
         }

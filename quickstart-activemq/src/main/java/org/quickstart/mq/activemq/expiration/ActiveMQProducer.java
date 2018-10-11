@@ -6,7 +6,7 @@
  * Copyright asiainfo Corporation 2016
  * 版权所有 *
  */
-package org.quickstart.mq.activemq.simple;
+package org.quickstart.mq.activemq.expiration;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
@@ -31,8 +31,6 @@ public class ActiveMQProducer {
     public static void main(String[] args) throws JMSException {
 
         // String url = "failover:(tcp://10.21.20.154:20001,tcp://10.20.16.209:20001,tcp://10.20.16.211:20001)";
-        // String url = "failover:(tcp://localhost:61616)";
-        // String url = "failover:(tcp://10.11.20.101:61616)";
         // String url = "failover:(tcp://10.11.20.103:61616,tcp://10.21.20.154:61616)";
         String url = "failover:(tcp://20.26.39.56:61616)";
 
@@ -52,8 +50,9 @@ public class ActiveMQProducer {
         for (int i = 0; i < 1; i++) {
             TextMessage txtMessage = session.createTextMessage();
             txtMessage.setText("this is a message vvvvvv---" + i);
-            // txtMessage.setJMSExpiration(1);//它表示为一个长整型值的，以毫秒为单位的
+            txtMessage.setJMSExpiration(30 * 1000);// 它表示为一个长整型值的，以毫秒为单位的
             // txtMessage.setJMSDeliveryMode(2);
+
             // JMS定义从0级到9级的十级优先级。此外，客户端应优先考虑0-4为正常优先级， 5-9为高优先级。
             // JMS不要求提供者严格实现消息的优先级顺序；但是，它应该尽最大努力优先于正常消息投递加急消息。
             // txtMessage.setJMSPriority(4);

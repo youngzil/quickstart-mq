@@ -2,7 +2,7 @@
  * 项目名称：msgframe-console 文件名：ActiveMQConsumer.java 版本信息： 日期：2016年12月23日 Copyright asiainfo
  * Corporation 2016 版权所有 *
  */
-package org.quickstart.mq.activemq.simple;
+package org.quickstart.mq.activemq.topic;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
@@ -37,10 +37,9 @@ public class ActiveMQConsumer {
         connection.start();
 
         Session session = connection.createSession(Boolean.FALSE, Session.CLIENT_ACKNOWLEDGE);
-        Destination queue = session.createQueue("queueTest");
         Destination topic = session.createTopic("topicTest");
 
-        MessageConsumer consumer = session.createConsumer(queue);
+        MessageConsumer consumer = session.createConsumer(topic);
 
         // 第一种情况
         // while (true) {
