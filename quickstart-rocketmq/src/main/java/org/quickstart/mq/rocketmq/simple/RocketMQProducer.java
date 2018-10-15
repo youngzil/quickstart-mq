@@ -14,10 +14,10 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.alibaba.rocketmq.client.exception.MQClientException;
-import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
-import com.alibaba.rocketmq.client.producer.SendResult;
-import com.alibaba.rocketmq.common.message.Message;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.common.message.Message;
 
 /**
  * RocketMQProducer
@@ -42,7 +42,8 @@ public class RocketMQProducer {
          * 注意：切记不可以在每次发送消息时，都调用start方法
          */
         // producer.setNamesrvAddr("10.1.243.19:9876;10.1.243.20:9876");
-        producer.setNamesrvAddr("10.11.20.102:9876");
+        producer.setNamesrvAddr("20.26.39.58:9876");
+        producer.setMaxMessageSize(2 * 1024);
         try {
             producer.start();
         } catch (MQClientException e1) {
@@ -115,10 +116,20 @@ class ProducerSend implements Runnable {
                 // }
 
                 {
+
+                    String context = "12322";
+                    while (context.getBytes().length < (2 * 1024)) {
+                        context += context;
+                    }
+
+                    System.out.println(context.getBytes().length);
+
                     Message msg = new Message("topicTest", // topic
                             "a", // tag
                             "eee", // key
-                            ("ee--" + i).getBytes());// body
+                            context.getBytes());// body
+//                    ("ee--" + i).getBytes());// body
+
                     SendResult sendResult = producer.send(msg);
                     System.out.println(sendResult);
                     // System.out.println(System.currentTimeMillis());

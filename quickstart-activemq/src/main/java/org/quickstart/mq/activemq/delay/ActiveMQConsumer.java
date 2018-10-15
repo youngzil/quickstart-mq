@@ -2,9 +2,7 @@
  * 项目名称：msgframe-console 文件名：ActiveMQConsumer.java 版本信息： 日期：2016年12月23日 Copyright asiainfo
  * Corporation 2016 版权所有 *
  */
-package org.quickstart.mq.activemq.simple;
-
-import java.util.Enumeration;
+package org.quickstart.mq.activemq.delay;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
@@ -38,12 +36,6 @@ public class ActiveMQConsumer {
         ActiveMQConnection connection = (ActiveMQConnection) connectionFactory.createConnection();
         connection.start();
 
-        Enumeration names = connection.getMetaData().getJMSXPropertyNames();
-        while (names.hasMoreElements()) {
-            String name = (String) names.nextElement();
-            System.out.println("jmsx name===" + name);
-        }
-
         Session session = connection.createSession(Boolean.FALSE, Session.CLIENT_ACKNOWLEDGE);
         Destination queue = session.createQueue("queueTest");
         Destination topic = session.createTopic("topicTest");
@@ -73,12 +65,12 @@ public class ActiveMQConsumer {
             public void onMessage(Message message) {
                 if (message instanceof TextMessage) {
                     System.out.println("arg0=" + message);
-                    /* try {
-                         throw new JMSException("sss");
-                         session.commit();
-                     } catch (JMSException e) {
-                         e.printStackTrace();
-                     }*/
+                   /* try {
+                        throw new JMSException("sss");
+                        session.commit();
+                    } catch (JMSException e) {
+                        e.printStackTrace();
+                    }*/
                 }
             }
         });

@@ -36,20 +36,27 @@ public class ActiveMQProducer {
         // String url = "failover:(tcp://10.11.20.103:61616,tcp://10.21.20.154:61616)";
         String url = "failover:(tcp://20.26.39.56:61616)";
 
+        // 1.创建ConnectionFactory对象
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_USER, ActiveMQConnection.DEFAULT_PASSWORD, url);
+        // 2.创建一个Connection并开启
         ActiveMQConnection connection = (ActiveMQConnection) connectionFactory.createConnection();
         // connection.start();//不需要启动
 
+        // 3.创建Session会话，用来接收消息，通过参数可以设置：是否启用事务、消息签收模式
+        // 参数设置生产者使用事务、客户端（消费者）签收方式
         Session session = connection.createSession(Boolean.FALSE, Session.AUTO_ACKNOWLEDGE);// 创建时候自动启动
-
+        // 4.创建Destination对象。在点对点模式中，该对象被称为Queue；在发布订阅模式中，该对象被称为Topic
         Destination queue = session.createQueue("queueTest");
         Destination topic = session.createTopic("topicTest");
+        // 5.创建消息的生产者
         MessageProducer producer = (MessageProducer) session.createProducer(queue);
-
+        // 6.设置生产者的消息持久化与非持久化特性
+        // messageProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
         // 设置不持久化，可以更改
         // productor.setDeliveryMode(DeliveryMode.PERSISTENT);
 
         for (int i = 0; i < 1; i++) {
+            // 7.选择需要的JMS消息格式，创建并发送消息，此处选择的是TextMessage字符串对象
             TextMessage txtMessage = session.createTextMessage();
             txtMessage.setText("this is a message vvvvvv---" + i);
             // txtMessage.setJMSExpiration(1);//它表示为一个长整型值的，以毫秒为单位的
@@ -62,6 +69,9 @@ public class ActiveMQProducer {
             // txtMessage.setJMSMessageID("ID:dddd");
 
             producer.send(txtMessage);
+            // 第3个参数：是否持久化；第4个参数：优先级（0~4普通 5~9加急）；第5个参数：消息在ActiveMQ中间件中存放的有效期
+            // producer.send(destination, textMessage,DeliveryMode.PERSISTENT, 4, 1000*60*10);
+
             /*producer.send(txtMessage, new CompletionListener(){
             
             	@Override
@@ -80,11 +90,12 @@ public class ActiveMQProducer {
             	}
             	
             });*/
-
+            // 使用事务，必须有commit操作
             // session.commit();
             System.out.println("发送消息" + i + txtMessage.getText());
         }
 
+        // 8.释放
         // producer.close();
         // session.close();
         // connection.close();
