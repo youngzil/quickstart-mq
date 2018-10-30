@@ -1,6 +1,4 @@
 http://activemq.apache.org/
-
-
 https://github.com/apache/activemq
 
 JMS：
@@ -28,6 +26,17 @@ JMS的基本构件
 
 
 http://www.liuhaihua.cn/archives/511431.html
+
+
+
+与Spring整合
+quickstart-spring-framework-activemq
+
+与SpringBoot整合
+quickstart-spring-boot-activemq
+
+
+
 
 
 

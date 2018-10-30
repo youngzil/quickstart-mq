@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<parent>
 		<groupId>org.quickstart</groupId>
 		<artifactId>quickstart-mq</artifactId>
@@ -18,6 +15,18 @@
 	<description>Demo project for XXX</description>
 
 	<repositories>
+		<repository>
+			<id>alimaven</id>
+			<name>aliyun maven</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+
 		<repository>
 			<id>aif_group</id>
 			<url>http://10.21.20.161:8080/nexus/content/groups/aif_group/</url>
@@ -46,10 +55,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<activemq-client.version>5.10.0</activemq-client.version>
+		<activemq-client.version>5.15.7</activemq-client.version>
 		<rocketmq-client.version>3.2.6</rocketmq-client.version>
 		<kafka-clients.version>0.8.2.2</kafka-clients.version>
-		<amqp-client.version>3.6.5</amqp-client.version>
+		<amqp-client.version>5.4.3</amqp-client.version>
 
 		<slf4j.version>1.7.25</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
@@ -196,14 +205,14 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/zj/log4x-common-1.0.0.jar</systemPath>
 		</dependency>
-		
+
 		<dependency>
-  <groupId>com.ai.aif.log4x</groupId>
-  <artifactId>log4x-logging</artifactId>
-  <version>1.0.0</version>
-  <scope>system</scope>
+			<groupId>com.ai.aif.log4x</groupId>
+			<artifactId>log4x-logging</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/zj/log4x-logging-1.0.0.jar</systemPath>
-</dependency>
+		</dependency>
 
 	</dependencies>
 

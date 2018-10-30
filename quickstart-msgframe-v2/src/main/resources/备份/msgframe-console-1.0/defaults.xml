@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="GB2312"?>
+
+<!-- 全局默认配置信息 -->
+<defaults>
+	<!--中心的类型和实现类的对应关系 -->
+	<center>
+	</center>
+	<!--默认代理调用方式.默认采用pojo的模式进行调用，采用的实现类为配置的实现类 -->
+	<proxy invoke="pojo" type="primitive">
+		<clazz name="com.ai.appframe2.complex.service.impl.LocalServiceInvokeImpl" />
+	</proxy>
+	<!--默认事务信息.默认采用Required的方式进行事务操作，采用的实现类为配置的实现类 -->
+	<transaction type="Required">
+		<!--<clazz name="com.ai.appframe2.complex.transaction.impl.LocalTransactionImpl"/> -->
+		<clazz
+			name="com.ai.appframe2.complex.transaction.impl.LocalMutilTransactionImpl" />
+		<!--<listener name="com.ai.appframe2.complex.transaction.listener.TestListenerImpl"/> -->
+		<!--映射每个服务模块对应的事务数据源，可以具体到类名 -->
+		<mapping>
+			<property name="com.ai.appframe2.complex.self.dao.base"
+				value="msgframe" />
+			<property name="com.ai.appframe2.complex.self.service.base"
+				value="msgframe" />
+			<property name="com.ai.appframe2.complex.self.service.check"
+				value="msgframe" />
+			<property name="com.ai.common.dao.base" value="msgframe" />
+			<property name="com.ai.aif.msgframe" value="msgframe" />
+			<property name="com.asiainfo.tools.dao" value="msgframe" />
+			<property name="com.asiainfo.pageframe" value="msgframe" />
+			<property name="com.asiainfo.appframe.ext.exeframe" value="msgframe" />
+		</mapping>
+	</transaction>
+	<!--默认数据源信息 -->
+	<datasource>
+		<!--根据base取数据库配置，然后以本配置中的覆盖除base以外的连接池的配置 -->
+		<!--默认 type=dbcp db=oracle -->
+		<!--映射每个DAO模块对应的操作数据源 -->
+		<clazz
+			name="com.ai.appframe2.complex.datasource.impl.LocalMutilDataSourceImpl">
+			<property name="tableName" value="cfg_db_acct" />
+		</clazz>
+		
+<!-- 		<clazz name="com.ai.appframe2.complex.transaction.impl.LocalMutilTransactionImpl"/> -->
+
+
+		<pool name="msgframe" primary="true" db="MYSQL" type="dbcp">
+			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+			<property name="url"
+				value="jdbc:mysql://10.11.20.83:3306/msgframeapp?useUnicode=true&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=true&amp;cachePrepStmts=true&amp;useServerPrepStmts=true&amp;autoReconnect=true&amp;failOverReadOnly=false" />
+			<property name="username" value="root" />
+			<property name="password" value="root" />
+			<property name="initialSize" value="5" />
+			<property name="maxActive" value="10" />
+			<property name="maxIdle" value="5" />
+			<property name="minIdle" value="1" />
+			<property name="maxWait" value="2000" />
+			<property name="validationQuery" value="select 1 " />
+			<property name="testOnBorrow" value="true" />
+			<property name="timeBetweenEvictionRunsMillis" value="20000" />
+			<property name="numTestsPerEvictionRun" value="3" />
+			<property name="minEvictableldleTimeMillis" value="1800000" />
+		</pool>
+
+
+<!-- 	<property name="url" value="jdbc:oracle:thin:@20.26.11.9:1521:CSIBM02"/> -->
+<!-- 			<property name="username" value="mcrm"/> <property name="password" value="mcrm2015"/> -->
+
+<!-- 		<pool name="msgframe" primary="true"> -->
+<!-- 			<property name="driverClassName" value="oracle.jdbc.OracleDriver" /> -->
+<!-- 			<property name="url" value="jdbc:oracle:thin:@10.21.20.155:1521:oracle" /> -->
+<!-- 			<property name="username" value="msgframe" /> -->
+<!-- 			<property name="password" value="msgframe" /> -->
+<!-- 			<property name="initialSize" value="5" /> -->
+<!-- 			<property name="maxActive" value="10" /> -->
+<!-- 			<property name="maxIdle" value="10" /> -->
+<!-- 			<property name="validationQuery" value="select 1 from dual" /> -->
+<!-- 			<property name="testWhileIdle" value="true" /> -->
+<!-- 			<property name="testOnBorrow" value="false" /> -->
+<!-- 			<property name="testOnReturn" value="false" /> -->
+<!-- 			<property name="timeBetweenEvictionRunsMillis" value="20000" /> -->
+<!-- 			<property name="minEvictableIdleTimeMillis" value="-1" /> -->
+<!-- 			<property name="softMinEvictableIdleTimeMillis" value="1800000" /> -->
+<!-- 			<property name="numTestsPerEvictionRun" value="2" /> -->
+<!-- 		</pool> -->
+
+
+		<mapping>
+			<property name="com.ai.appframe2.complex.self.dao.base"
+				value="msgframe" />
+			<property name="com.ai.appframe2.complex.self.service.base"
+				value="msgframe" />
+			<property name="com.ai.appframe2.complex.self.service.check"
+				value="msgframe" />
+			<property name="com.ai.common.dao.base" value="msgframe" />
+			<property name="com.ai.aif.msgframe" value="msgframe" />
+			<property name="com.asiainfo.test" value="msgframe" />
+			<property name="com.asiainfo.tools.dao" value="msgframe" />
+			<property name="com.asiainfo.pageframe" value="msgframe" />
+			<property name="com.asiainfo.appframe.ext.exeframe" value="msgframe" />
+		</mapping>
+	</datasource>
+
+	<!--包含的服务配置文件 -->
+	<!--平台 -->
+	<include type="sv" classpath="system/service/appframe-service.xml" />
+</defaults>

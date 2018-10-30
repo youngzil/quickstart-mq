@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Csf>
+	<Category name="client" description="客户端运行引擎需要的配置">
+		<Item name="csf.retry.policy">
+			<value>RetryNTimes(0)</value>
+			<description>客户端集群策略（重试策略）：重试N次,括号中为0或负数不重试</description>
+		</Item>
+		<Item name="csf.client.serviceinfo.fetcher">
+			<value>com.ai.aif.csf.client.service.info.fetcher.FetchDirectServiceInfo
+			</value>
+			<description>
+				客户端获取服务信息的方式
+				从服务路由器获取配置为
+				com.ai.aif.csf.client.service.info.fetcher.FetchServiceInfoFromServiceRouter
+				从jvm缓存中获取（通常在开发的时候使用，这样服务路由器可以对开发透明）com.ai.aif.csf.db.client.service.info.fetcher.FetchServiceInfoFromDBCache
+			</description>
+		</Item>
+		<Item name="csf.client.exception.handler">
+			<value>com.ai.aif.csf.client.service.exception.handler.DefaultClientExceptionHandler
+			</value>
+			<description>
+				1、该配置开放对业务异常的处理，可以对异常进行收缩（广西）或其他处理;
+				2、框架默认实现，直接将此类异常抛出，不做处理
+				3、广西异常收缩实现类com.ai.aif.csf.platform.exception.filter.ExceptionShrinkFilter
+			</description>
+		</Item>
+		<Item name="csf.client.extend">
+			<value>com.ai.aif.csf.client.service.extend.DefaultClientExtend
+			</value>
+			<description>
+				客户端扩展，可以扩展是否携带用户信息，是否根据regionid路由
+				默认不携带appframe相关的对象
+			</description>
+		</Item>
+		<ChildCategory name="client.timeout" description="客户端超时配置">
+			<Item name="csf.client.default.connection.timeout">
+				<value>1000</value>
+				<description>客户端默认连接创建时间，毫秒为单位；必须配置，不配置报错</description>
+			</Item>
+			<Item name="csf.client.default.socket.timeout">
+				<value>80000</value>
+				<description>客户端默认socket不活动最大时间，毫秒为单位；必须配置，不配置报错</description>
+			</Item>
+		</ChildCategory>
+		<ChildCategory name="client.warmup" description="客户端预热">
+			<Item name="warm.interceptor" description="客户端预热">
+				<value></value>
+				<description>
+					1、预热拦截器，做预热前、预热后、预热失败的处理 以分号;分割
+					2、实现接口com.ai.aif.csf.api.common.warmup.IWarmupInterceptor
+				</description>
+			</Item>
+			<Item name="warm.upper" description="客户端预热">
+				<value></value>
+				<description>
+					1、预热实现类,以分号;分割
+					2、com.ai.aif.csf.api.common.warmup.IWarmUpper
+				</description>
+			</Item>
+		</ChildCategory>
+
+		<!-- <Category name="develop" description="开发模式才可能需要到的配置"> <Item name="csf.develop.pattern"> 
+			<value>false</value> <description>是否开发模式</description> </Item> <Item name="csf.develop.serviceinfo.constructor"> 
+			<value>com.ai.aif.csf.api.deveplop.serviceinfo.constructor.IDeveplopServiceInfoConstructorZJ 
+			</value> <description> 1、配置IDeveplopServiceInfoConstructor接口的实现，配合DevelopParamsMappingFilter过滤器使用 
+			2、开发模式下才可能需要配置该项，根据serviceCode命名，还原出服务调用信息;因此需要serviceCode的命名，能够还原出服务调用信息 
+			3、该模式下，可以不依赖注册的服务资产信息，即所调用的服务可以不注册 4、生产环境该配置留空即可 </description> </Item> </Category> -->
+
+		<Item name="csf.clent.direct.check.flag">
+			<value>100000</value>
+		</Item>
+	</Category>
+	<Category name="common" description="客户端和服务端都需要的配置">
+		<Item name="csf.integrated.centers">
+			<value>force@remote</value>
+			<description>
+				1、中心集成定义(当前有哪些中心的代码是部署在一起的,以分号分割，比如order;product;
+				2、对于前后端分离/融合中心，前端的该文件都配置为force@remote
+			</description>
+		</Item>
+		<Item name="zk.server.list">
+			<value>20.26.20.92:2182,20.26.20.93:2182,20.26.20.94:2182</value>
+			<description>多个地址用逗号(,)隔开 </description>
+		</Item>
+		<Item name="csf.cluster">
+			<value>crm-app-ord-g1</value>
+		</Item>
+		
+	</Category>
+</Csf>

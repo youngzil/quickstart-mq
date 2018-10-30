@@ -43,7 +43,7 @@ public class RocketMQProducer {
          */
         // producer.setNamesrvAddr("10.1.243.19:9876;10.1.243.20:9876");
         producer.setNamesrvAddr("20.26.39.58:9876");
-        producer.setMaxMessageSize(2 * 1024);
+        producer.setMaxMessageSize(6 * 1024);
         try {
             producer.start();
         } catch (MQClientException e1) {
@@ -103,7 +103,7 @@ class ProducerSend implements Runnable {
          * 例如消息写入Master成功，但是Slave不成功，这种情况消息属于成功，但是对于个别应用如果对消息可靠性要求极高，<br>
          * 需要对这种情况做处理。另外，消息可能会存在发送失败的情况，失败重试由应用来处理。
          */
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10; i++) {
             try {
 
                 // {

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="GB2312"?>
+
+<tasks>
+	<group title="系统任务" type="system" isvisible="true">
+		<task type="start" title="开始"
+			templateclass="com.ai.comframe.vm.template.impl.TaskStartTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskStartImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskStartCell"
+			studioPic="flow/task/start.png"
+			studioPartClass="com.ai.studio.ui.part.node.StartNodeEditPartForSrv" />
+		<task type="finish" title="结束"
+			templateclass="com.ai.comframe.vm.template.impl.TaskFinishTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskFinishImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskFinishCell"
+			studioPic="flow/task/end.png"
+			studioPartClass="com.ai.studio.ui.part.node.FinishNodeEditPartForSrv" />
+		<task type="auto" title="自动"
+			templateclass="com.ai.comframe.vm.template.impl.TaskAutoTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskAutoImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskAutoCell"
+			studioPic="flow/task/auto.png"
+			studioPartClass="com.ai.studio.ui.part.node.AutoNodeEditPartForSrv" />
+		<task type="user" title="人工任务"
+			templateclass="com.ai.comframe.vm.template.impl.TaskUserTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskUserImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskUserCell"
+			studioPic="flow/task/Artificially-task.png"
+			studioPartClass="com.ai.studio.ui.part.node.UserNodeEditPartForSrv" />
+		<task type="sign" title="会签"
+			templateclass="com.ai.comframe.vm.template.impl.TaskSignTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskSignImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskUserCell"
+			studioPic="flow/task/sign.png"
+			studioPartClass="com.ai.studio.ui.part.node.SignNodeEditPartForSrv" />
+		<task type="shell" title="Shell"
+			templateclass="com.ai.comframe.vm.template.impl.TaskShellTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskShellImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskShellCell"
+			studioPic="flow/task/shell.png"
+			studioPartClass="com.ai.studio.ui.part.node.ShellNodeEditPart" />
+		<task type="decision" title="条件判断"
+			templateclass="com.ai.comframe.vm.template.impl.TaskDecisionConditionTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskDecisionConditionImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskDecisionConditionCell"
+			studioPic="flow/task/conditionjudgment.png"
+			studioPartClass="com.ai.studio.ui.part.node.DecisionNodeEditPart" />
+		<task type="autodecision" title="自动判断"
+			templateclass="com.ai.comframe.vm.template.impl.TaskDecisionAutoTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskDecisionAutoImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskDecisionAutoCell"
+			studioPic="flow/task/judgment_automatic.png"
+			studioPartClass="com.ai.studio.ui.part.node.AutoDecisionNodeEditPartForSrv" />
+		<task type="enddecision" title="判断结束"
+			templateclass="com.ai.comframe.vm.template.impl.TaskDecisionEndTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskNullImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskDecisionEndCell"
+			studioPic="flow/task/judgmentover.png"
+			studioPartClass="com.ai.studio.ui.part.node.EndDecisionNodeEditPart" />
+		<task type="loop" title="循环"
+			templateclass="com.ai.comframe.vm.template.impl.TaskLoopTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskLoopImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskLoopCell"
+			studioPic="flow/task/cycle.png"
+			studioPartClass="com.ai.studio.ui.part.node.LoopNodeEditPart" />
+		<task type="endloop" title="循环结束"
+			templateclass="com.ai.comframe.vm.template.impl.TaskLoopEndTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskNullImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskLoopEndCell"
+			studioPic="flow/task/cycle-end.png"
+			studioPartClass="com.ai.studio.ui.part.node.EndLoopNodeEditPart" />
+		<task type="break" title="break"
+			templateclass="com.ai.comframe.vm.template.impl.TaskBreakTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskNullImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskBreakCell"
+			studioPic="flow/task/break.png"
+			studioPartClass="com.ai.studio.ui.part.node.BreakNodeEditPart" />
+		<task type="continue" title="continue"
+			templateclass="com.ai.comframe.vm.template.impl.TaskContinueTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskNullImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskContinueCell"
+			studioPic="flow/task/continue.png"
+			studioPartClass="com.ai.studio.ui.part.node.ContinueNodeEditPart" />
+		<task type="childworkflow" title="子流程"
+			templateclass="com.ai.comframe.vm.template.impl.TaskWorkflowTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskWorkflowImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskWorkflowCell"
+			studioPic="flow/task/process_child.png"
+			studioPartClass="com.ai.studio.ui.part.node.WorkFlowNodeEditPartForSrv" />
+		<task type="event" title="业务事件"
+			templateclass="com.ai.comframe.vm.template.impl.TaskEventTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskEventImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskEventCell"
+			studioPic="flow/task/event.png"
+			studioPartClass="com.ai.studio.ui.part.node.BizEventNodeEditPart" />
+	</group>
+	<group title="工作流任务" type="workflow" isvisible="true">
+		<task type="timer" title="定时器"
+			templateclass="com.ai.comframe.vm.template.impl.TaskTimerTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskTimerImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskTimerCell"
+			studioPic="flow/busi/timer.png"
+			studioPartClass="com.ai.studio.ui.part.node.TimerNodeEditPart" />
+		<task type="fork" title="Fork"
+			templateclass="com.ai.comframe.vm.template.impl.TaskForkTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskNullImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskAndOrCell"
+			studioPic="flow/busi/fork.png"
+			studioPartClass="com.ai.studio.ui.part.node.ForkNodeEditPart" />
+		<task type="and" title="AND"
+			templateclass="com.ai.comframe.vm.template.impl.TaskAndTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskAndImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskAndOrCell"
+			studioPic="flow/busi/and.png"
+			studioPartClass="com.ai.studio.ui.part.node.AndNodeEditPart" />
+		<task type="or" title="OR"
+			templateclass="com.ai.comframe.vm.template.impl.TaskOrTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskOrImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskAndOrCell"
+			studioPic="flow/busi/or.png"
+			studioPartClass="com.ai.studio.ui.part.node.OrNodeEditPart" />
+		<task type="mail" title="发送邮件"
+			templateclass="com.ai.comframe.vm.template.impl.TaskAutoUserTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskAutoImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskAutoUserCell"
+			studioPic="flow/busi/email.png"
+			studioPartClass="com.ai.studio.ui.part.node.SendMailNodeEditPart">
+			<autodeal>
+				<runtype>pojo</runtype>
+				<servicename />
+				<runclassname>
+					com.ai.comframe.vm.task.SendMail
+				</runclassname>
+				<runfunctionname>send</runfunctionname>
+				<vars name="addr" datatype="String" inouttype="in"
+					description="邮件地址,逗号分隔" />
+				<vars name="ccAddr" datatype="String" inouttype="in"
+					description="抄送地址,逗号分隔" />
+				<vars name="subject" datatype="String" inouttype="in"
+					description="主题" />
+				<vars name="body" datatype="String" inouttype="in"
+					description="正文" />
+				<vars name="files" datatype="String" inouttype="in"
+					description="附件" />
+				<vars name="return" datatype="boolean"
+					inouttype="return" />
+			</autodeal>
+		</task>
+		<task type="isOverTime" title="是否超时"
+			templateclass="com.ai.comframe.vm.template.impl.TaskDecisionAutoUserTemplateImpl"
+			executeclass="com.ai.comframe.vm.engine.impl.TaskDecisionAutoImpl"
+			studioDisplayClass="com.ai.comframe.vm.studio.task.TaskDecisionAutoUserCell"
+			studioPic="flow/busi/overtime.png"
+			studioPartClass="com.ai.studio.ui.part.node.OverTimeNodeEditPart">
+			<autodeal>
+				<runtype>pojo</runtype>
+				<servicename />
+				<runclassname>
+					com.ai.comframe.vm.task.SysTask
+				</runclassname>
+				<runfunctionname>isOverTime</runfunctionname>
+				<vars name="inDate" datatype="java.sql.Date"
+					inouttype="in" />
+				<vars name="return" datatype="boolean"
+					inouttype="return" />
+			</autodeal>
+		</task>
+	</group>
+</tasks>

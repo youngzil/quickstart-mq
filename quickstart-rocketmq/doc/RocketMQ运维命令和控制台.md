@@ -32,7 +32,10 @@ Console控制台：
 
 
 
-运维命令（基于V4.2.0整理）：在代码包com.alibaba.rocketmq.tools.command中
+运维命令（基于V4.2.0整理）：在代码包org.apache.rocketmq.tools.command中
+org.apache.rocketmq.tools.command.MQAdminStartup
+SubCommand接口的实现
+
 
 cluster和namesrv：
 1、获取集群中的broker信息：sh mqadmin clusterList  -n 10.11.20.102:9876
@@ -57,7 +60,7 @@ Topic：
 4、查询主题在哪些集群上： ./mqadmin topicClusterList -n  10.11.20.102:9876 -t topicName
 5、Update or create topic：sh mqadmin updateTopic -n 10.11.20.102:9876 -c clusterName（或-b brokerAddr） -t topicName -r 10 -w 10 -p permission(intro[2:W 4:R; 6:RW]) -o order(true|false)
 6、更新主题权限：sh mqadmin updateTopicPerm -n 10.11.20.102:9876 -c clusterName（或-b brokerAddr） -t topicName -p permission(intro[2:W 4:R; 6:RW]) 
-7、Delete topic：sh mqadmin deleteTopic -n 10.11.20.102:9876 -c clusterName -t topicName
+7、删除主题：sh mqadmin deleteTopic -n 10.11.20.102:9876 -c clusterName -t topicName
 8、查询Topic的消费tps：sh mqadmin statsAll -n 10.11.20.102:9876 （-t topicName）
 
 
@@ -77,8 +80,9 @@ Consumer：
 3、重置消费进度通过时间：sh mqadmin resetOffsetByTime -n 10.11.20.102:9876 -g groupName -t topicName -s timestamp(long类型时间或者yyyy-MM-dd#HH:mm:ss:SSS型字符串)
 4、查询消费者连接：sh mqadmin consumerConnection -n 10.11.20.102:9876 -g groupName  
 
-   updateSubGroup       Update or create subscription group
-   deleteSubGroup       Delete subscription group from broker.
+5、新增消费组：sh mqadmin updateSubGroup 
+6、删除消费组：sh mqadmin deleteSubGroup -n 10.11.20.102:9876 -g groupName  
+
    cloneGroupOffset     clone offset from other group.
 
 
