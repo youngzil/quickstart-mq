@@ -19,7 +19,7 @@ import kafka.producer.ProducerConfig;
 /**
  * MyProducer
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年9月25日 下午10:01:18
  * @since 1.0
  */

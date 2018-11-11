@@ -23,7 +23,7 @@ import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 /**
  * RocketMQConsumer
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2016年12月6日 下午3:25:42
  * @version 1.0
  */

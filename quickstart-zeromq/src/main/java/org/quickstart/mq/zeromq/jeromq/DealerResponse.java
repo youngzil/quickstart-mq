@@ -13,7 +13,7 @@ import org.zeromq.ZMQ;
 /**
  * DealerResponse
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年9月9日 上午11:25:01
  * @since 1.0
  */

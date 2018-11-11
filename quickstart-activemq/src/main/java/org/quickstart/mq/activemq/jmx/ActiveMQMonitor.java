@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
 /**
  * ActiveMQMonitor 监控ActiveMQ的各种信息Broker,Connection,Queue,Topic的数量和压栈和出栈
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年8月8日 下午10:41:35
  * @since 1.0
  */

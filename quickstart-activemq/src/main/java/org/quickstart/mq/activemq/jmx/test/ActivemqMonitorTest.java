@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * ActivemqMonitorTest 对activemq组件的健康性的一个检测 这个main方法在整个工程调用一次就可以了
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年8月8日 下午10:51:42
  * @since 1.0
  */

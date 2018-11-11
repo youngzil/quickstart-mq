@@ -31,7 +31,7 @@ import org.fusesource.mqtt.codec.MQTTFrame;
  * 
  * MqttClient
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2016年12月22日 下午3:37:03
  * @version 1.0
  */

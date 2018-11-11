@@ -15,7 +15,7 @@ import org.zeromq.ZMQ;
 /**
  * Pull
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年9月8日 上午8:43:25
  * @since 1.0
  */

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 /**
  * MSGTransportListener
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年8月8日 下午10:52:51
  * @since 1.0
  */

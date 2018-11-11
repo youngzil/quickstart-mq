@@ -44,7 +44,7 @@ import io.netty.util.concurrent.DefaultEventExecutorGroup;
 /**
  * ServerStarter
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年10月25日 下午5:13:31
  * @since 1.0
  */

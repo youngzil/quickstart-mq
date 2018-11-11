@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * --partitions 3 --topic Topic-test MyPartition 实现org.apache.kafka.clients.producer.Partitioner 分区接口，以实现自定义的消息分区 备注： 要先用命令创建topic及partitions 分区数;否则在自定义的分区中如果有大于1的情况下，发送数据消息到kafka时会报expired due to
  * timeout while requesting metadata from brokers错误
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年11月16日 下午5:36:40
  * @since 1.0
  */

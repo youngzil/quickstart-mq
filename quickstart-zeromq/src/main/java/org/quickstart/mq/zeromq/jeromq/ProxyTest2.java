@@ -15,7 +15,7 @@ import org.zeromq.ZMQ.Socket;
 /**
  * ProxyTest
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年9月7日 下午10:30:50
  * @since 1.0
  */

@@ -24,7 +24,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 /**
  * VirtualTopicConsumer
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年9月20日 下午7:50:42
  * @since 1.0
  */

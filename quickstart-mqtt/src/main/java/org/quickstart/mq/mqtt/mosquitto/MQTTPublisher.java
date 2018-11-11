@@ -20,7 +20,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 /**
  * ServerMQTT 服务器向多个客户端推送主题，即不同客户端可向服务器订阅相同主题
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年9月22日 下午11:35:56
  * @since 1.0
  */

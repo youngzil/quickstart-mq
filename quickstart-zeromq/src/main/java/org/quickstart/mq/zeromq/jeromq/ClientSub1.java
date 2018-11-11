@@ -16,7 +16,7 @@ import org.zeromq.ZMQ;
 /**
  * ClientSub1
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年9月6日 下午7:06:21
  * @since 1.0
  */

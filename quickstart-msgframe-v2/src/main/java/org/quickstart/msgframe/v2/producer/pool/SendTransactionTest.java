@@ -25,7 +25,7 @@ import com.ai.aif.msgframe.common.message.MsgFTextMessage;
 /**
  * ThreadPoolSendTest
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年7月3日 下午2:13:00
  * @since 1.0
  */

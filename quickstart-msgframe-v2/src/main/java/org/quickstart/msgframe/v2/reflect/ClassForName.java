@@ -16,7 +16,7 @@ import com.ai.aif.msgframe.consumer.facade.IConsumerProcessor;
 /**
  * ClassForName
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年2月18日 下午12:41:37
  * @version 1.0
  */

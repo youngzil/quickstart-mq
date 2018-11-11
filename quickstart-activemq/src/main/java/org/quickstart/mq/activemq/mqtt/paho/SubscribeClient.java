@@ -11,7 +11,7 @@ package org.quickstart.mq.activemq.mqtt.paho;
 /**
  * Client 
  *  
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2016年12月22日 下午5:28:19 
  * @version 1.0
  */

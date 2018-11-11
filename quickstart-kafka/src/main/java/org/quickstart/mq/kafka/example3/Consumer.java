@@ -14,7 +14,7 @@ import kafka.consumer.KafkaStream;
 /**
  * Consumer 消费者的线程执行器实现
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年9月25日 下午10:23:30
  * @since 1.0
  */

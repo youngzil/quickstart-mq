@@ -16,7 +16,7 @@ import org.apache.jmeter.samplers.SampleResult;
 /**
  * SendMessage
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年5月22日 下午10:22:19
  * @version 1.0
  */

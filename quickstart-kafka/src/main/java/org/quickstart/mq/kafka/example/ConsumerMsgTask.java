@@ -14,7 +14,7 @@ import kafka.consumer.KafkaStream;
 /**
  * ConsumerMsgTask
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年9月25日 下午9:13:45
  * @since 1.0
  */

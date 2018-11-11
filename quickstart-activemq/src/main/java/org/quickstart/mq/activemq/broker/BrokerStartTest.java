@@ -19,7 +19,7 @@ import org.apache.activemq.command.ActiveMQQueue;
 /**
  * BrokerStartTest
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年8月22日 下午3:37:20
  * @since 1.0
  */

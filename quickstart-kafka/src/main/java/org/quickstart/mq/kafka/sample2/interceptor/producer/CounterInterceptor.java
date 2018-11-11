@@ -17,7 +17,7 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 /**
  * CounterInterceptor
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年10月21日 上午10:07:39
  * @since 1.0
  */
