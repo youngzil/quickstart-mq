@@ -32,12 +32,17 @@ import org.apache.activemq.web.config.SystemPropertiesConfiguration;
  * @since 1.0
  */
 public class ActiveMQMonitorTest {
-    public static void main(String[] args) throws Exception {
-        // String surl = "service:jmx:rmi:///jndi/rmi://10.21.20.154:1099/jmxrmi";
-        String surl = "service:jmx:rmi:///jndi/rmi://20.26.25.39:1097/jmxrmi";
-//        String surl = "service:jmx:rmi:///jndi/rmi://20.26.25.38:1098/jmxrmi";
-//        String surl = "service:jmx:rmi:///jndi/rmi://20.26.25.38:1099/jmxrmi";
 
+    public static void main(String[] args) throws Exception {
+
+        // String surl = "service:jmx:rmi:///jndi/rmi://10.21.20.154:1099/jmxrmi";
+        String surl = "service:jmx:rmi:///jndi/rmi://188.102.2.90:1099/jmxrmi";
+
+        // String surl = "service:jmx:rmi:///jndi/rmi://20.26.25.39:1097/jmxrmi";
+        // String surl = "service:jmx:rmi:///jndi/rmi://20.26.25.38:1098/jmxrmi";
+        // String surl = "service:jmx:rmi:///jndi/rmi://20.26.25.38:1099/jmxrmi";
+
+        System.out.println("url=" + surl);
         String url = "failover:(tcp://10.11.20.101:61616)";
 
         String user = "admin";
