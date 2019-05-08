@@ -1,17 +1,126 @@
+RocketMQ系统部署架构：Namesrv 和 Broker（Master、Slave）
+RocketMQ生产者模型、消费者模型
+RocketMQ存储模型:offset-->commitlog-->mmap
+
+
+
+
+生产者发送流程
+发送普通消息负载
+发送顺序消息
+发送事务消息
+
+
+Broker：
+broker消息存储过程、创建文件机制、刷盘机制
+broker查找消息过程
+如果想把一台broker下掉，但不能影响线上消息。
+RocketMQ的文件
+
+
+主题和消息：
+消息发送到消费流程
+消息重复原因和消费幂等的必要性
+线上关闭Topic自动创建
+事务消息流程
+
+
+
+消费者问题：
+1、多个消费者只有一个消费者消费：instanceId相同的问题
+2、全新的消费组第一次上线，设置从尾部开始消费，但是实际从头开始消费，如果是老的消费组重新上线，就从上次消费过的位置继续消费
+3、消费组中的消费者负载均衡
+4、
+
+
+RocketMQ和kafka的区别
+RocketMQ和ActiveMQ的区别
+常见问题
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+RocketMQ系统部署架构
+Namesrv：多个项目独立，不进行通信
+Broker（Master、Slave）：目前不支持主备切换
+
+
+
+
+RocketMQ生产者模型、消费者模型
+RocketMQ存储模型
+常见问题
+
+
+
+
+RocketMQ和ActiveMQ的区别：
+实现的协议：
+存储消息的方式和处理：
+生产端和消费端
+
+
+RocketMQ和kafka的区别：
+1、kafka是每个topic_partition一个文件，每个文件是顺序IO，表现到磁盘上，还是随机IO，RocketMQ所有消息存到一个文件里面，单文件的顺序写
+2、RocketMQ去掉了对ZK的依赖，转而使用自己开发的NameSrv。
+3、批量发送实现不同，Rocketmq的批量实现，是把批量消息封装到一个请求中，该请求还是Sync请求的实现
+4、kafka没有定时消息，Rocketmq支持定时消息
+5、kafka的顺序消息，如果有broker宕机，就会乱序，Rocketmq的是宕机后发送失败，但是可以保证严格的顺序
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
 学习网站
 https://github.com/a2888409/RocketMQ-Learning
 https://blog.csdn.net/a19881029/article/details/34446629
 https://blog.csdn.net/StrideBin/article/details/78338686
 
 
+
+生产者：
+
+
+broker消息存储过程：
+1、SendMessageProcessor-----》2、this.brokerController.getMessageStore().putMessage(msgInner)【brokerController包含全部的类】-----》3、this.commitLog.putMessage(msg)-----》4、获取mapedFile，然后mapedFile.appendMessage(msg, this.appendMessageCallback);-----》5、回调commitlog的doAppend方法，AppendMessageResult result =
+                    cb.doAppend(this.getFileFromOffset(), byteBuffer, this.fileSize - currentPos, msg);-----》6、如果文件满了，就使用特殊字符填充剩下的空间，重新创建新的mapedFile再次存放message
+
+
+broker查找消息过程
+消费消息过程：Broker收到pull消息请求，首先从CQ（）
+根据offset找到对应的CQ，从CQ找到需要拉取的size，然后从对应的MapperFile中拉取消息返回Client
+Client接收到消息Buffer，然后根据消息格式decode，然后交给对应的线程处理。
+
+
+查看源码消费原理：定时拉取消息，消费成功后，把消费进度暂时保存到本地，定时更新到（CLUSTERING）Server或者（BROADCASTING）保存到本地文件（根据MessageQueue获取brokerName，根据BrokerName获取brokerId=0的节点Addr并更新，这个CLUSTERING和BROADCASTING是一样的逻辑，只是保存的位置不一样）
+
+
+
+消费者：
+
 RocketMQ消费组上线问题：
 如果是老的消费组，就从上次消费过的位置继续消费
 如果是新的消费组，默认从头开始消费，设置CONSUME_FROM_LAST_OFFSET，如果一个queue的minOffset为0时，消费端要从0开始消费这个queue上消息，不会从尾部开始消费，也就是只有一个queue的minOffset不等于0，也就是消息被删除过，这个从尾开始消费才会生效，这是因为避免topic扩容queue的时候，少消费消息，宁可重复消费消息，也绝不少消费消息，至少消费一次的原则
 
 
-发送消息存储过程：
-1、SendMessageProcessor-----》2、this.brokerController.getMessageStore().putMessage(msgInner)【brokerController包含全部的类】-----》3、this.commitLog.putMessage(msg)-----》4、获取mapedFile，然后mapedFile.appendMessage(msg, this.appendMessageCallback);-----》5、回调commitlog的doAppend方法，AppendMessageResult result =
-                    cb.doAppend(this.getFileFromOffset(), byteBuffer, this.fileSize - currentPos, msg);-----》6、如果文件满了，就使用特殊字符填充剩下的空间，重新创建新的mapedFile再次存放message
+全新的消费组第一次上线，设置从尾部开始消费，但是实际从头开始消费：
+https://docs.google.com/document/d/1IbmWqhkklBw_bIzDdlMx5ViM3WcvJXZWw0y9M0xZ2x0/edit
+新消费组上线时还是要处理好历史消息的，无论怎样处理，要提前做好准备。有可能消费到大量历史消息，这是RocketMQ的本身机制导致的，RocketMQ的一个重大设计原则，宁可重复消费无数消息，也绝不漏掉一条消息，RocketMQ的设计是合理的，导致了重复消费是不可避免的
+
+下面我们来分析下为什么一个queue的minOffset为0时，消费端要从0开始消费这个queue上消息，只有这种情况超出了正常的预期。
+我们做个假设，假设新消费组上线时，都是从queue的maxOffset开始消费消息。又如果一个topic在一个broker上面有4个queue，新消费组上线后，开始从这四个queue的最后位置消费消息，这时我突然扩容这个topic到8个queue，那么消费端去namesrv上拿到这8个queue的信息需要一个心跳周期，按默认配置是30秒左右。这个心跳周期内，新扩展的queue上完全可能有新消息进来。
+当消费端拿到4个新扩展queue的信息后，去broker端拉取消息时，broker还是把这4个扩容queue当作新queue来处理的。按照我们的假设，最终消费端会从这4个新queue的maxOffset开始消费。这就有可能丢失了这4个扩容queue的前面一些消息，有可能会很多消息，而这些消息完全是在新消费组上线后发送出来的！！
+有消息漏消费了！这就是为什么新消费组不能都是从maxOffset开始消费的。
+
+消费组是第一次上线，设置尾部开始消费，只要这个mq的最小Offset是0，就从0开始消费，否则从尾部开始消费
+订阅组不存在情况下，如果这个队列的消息最小Offset是0，则表示这个Topic上线时间不长，服务器堆积的数据也不多，那么这个订阅组就从0开始消费。尤其对于Topic队列数动态扩容时，必须要从0开始消费。
+如果订阅的queue不是从0开始的（minOffset大于0，已经删除过数据了），那么消费端将从maxOffset开始消费，即从最新位置开始消费；如果订阅的queue是从0开始的（minOffset等于0，没有删除过数据），那么消费端将从0开始消费这个queue。
+
 
 
 
@@ -22,33 +131,9 @@ Broker启动的时候启动一个事务扫描线程，使用自己重写的Count
 主题RMQ_SYS_TRANS_HALF_TOPIC和主题RMQ_SYS_TRANS_OP_HALF_TOPIC的队列一一对应（队列数一样），
 
 
-
-消费消息过程：Broker收到pull消息请求，首先从CQ（）
-根据offset找到对应的CQ，从CQ找到需要拉取的size，然后从对应的MapperFile中拉取消息返回Client
-Client接收到消息Buffer，然后根据消息格式decode，然后交给对应的线程处理。
-
 消息的格式：17个数据，第一个是整个消息的大小
 
-
-全新的消费组第一次上线，设置从尾部开始消费，但是实际从头开始消费：
-https://docs.google.com/document/d/1IbmWqhkklBw_bIzDdlMx5ViM3WcvJXZWw0y9M0xZ2x0/edit
-新消费组上线时还是要处理好历史消息的，无论怎样处理，要提前做好准备。有可能消费到大量历史消息，这是RocketMQ的本身机制导致的，RocketMQ的一个重大设计原则，宁可重复消费无数消息，也绝不漏掉一条消息，RocketMQ的设计是合理的，导致了重复消费是不可避免的
-
-消费组是第一次上线，设置尾部开始消费，只要这个mq的最小Offset是0，就从0开始消费，否则从尾部开始消费
-订阅组不存在情况下，如果这个队列的消息最小Offset是0，则表示这个Topic上线时间不长，服务器堆积的数据也不多，那么这个订阅组就从0开始消费。尤其对于Topic队列数动态扩容时，必须要从0开始消费。
-如果订阅的queue不是从0开始的（minOffset大于0，已经删除过数据了），那么消费端将从maxOffset开始消费，即从最新位置开始消费；如果订阅的queue是从0开始的（minOffset等于0，没有删除过数据），那么消费端将从0开始消费这个queue。
-
-下面我们来分析下为什么一个queue的minOffset为0时，消费端要从0开始消费这个queue上消息，只有这种情况超出了正常的预期。
-我们做个假设，假设新消费组上线时，都是从queue的maxOffset开始消费消息。又如果一个topic在一个broker上面有4个queue，新消费组上线后，开始从这四个queue的最后位置消费消息，这时我突然扩容这个topic到8个queue，那么消费端去namesrv上拿到这8个queue的信息需要一个心跳周期，按默认配置是30秒左右。这个心跳周期内，新扩展的queue上完全可能有新消息进来。
-当消费端拿到4个新扩展queue的信息后，去broker端拉取消息时，broker还是把这4个扩容queue当作新queue来处理的。按照我们的假设，最终消费端会从这4个新queue的maxOffset开始消费。这就有可能丢失了这4个扩容queue的前面一些消息，有可能会很多消息，而这些消息完全是在新消费组上线后发送出来的！！
-有消息漏消费了！这就是为什么新消费组不能都是从maxOffset开始消费的。
-
-
-查看源码消费原理：定时拉取消息，消费成功后，把消费进度暂时保存到本地，定时更新到（CLUSTERING）Server或者（BROADCASTING）保存到本地文件（根据MessageQueue获取brokerName，根据BrokerName获取brokerId=0的节点Addr并更新，这个CLUSTERING和BROADCASTING是一样的逻辑，只是保存的位置不一样）
-
-
 Commitlog-->MappedFile-->MappedByteBuffer刷到内存
-
 
 保存消息（handleDiskFlush中可以看出，即使配置同步，基本就可以100%保证存储成功，除非os宕机或者断电，甚至宕机都可以刷到磁盘）
 1、PutMessageResult putMessageResult = this.brokerController.getMessageStore().putMessage(msgInner);
@@ -140,7 +225,6 @@ Producer send fail：
 放在log、mem、外部存储hbase、redis等，等待合适的时机再次发送
 
 
-
 消费端：
 重启会重新消费的问题，是不是你重启的时候，改变了消费者的消费组
 对于广播消息，同一个消费组的消费者，已经被消费掉的消息，重启的消费者就不会再收到之前的消息的
@@ -152,7 +236,7 @@ Producer send fail：
 消费端订阅的信息必须一致，包括topic和tag
 
 
-消息重复：
+消息重复原因：
 生产端同步发送，未接收到ack，重试发送，次数设置：defaultMQProducer.getRetryTimesWhenSendFailed()
 消费端消费未返回ack，broker重复投递：msg.getReconsumeTimes()
 重试次数会默认取消费组的配置，如果是3.4.9以后的版本就会取DefaultMQPushConsumer中的defaultMQPushConsumer.getMaxReconsumeTimes()，由于defaultMQPushConsumer中的默认次数是16，所以3.4.9一定是使用defaultMQPushConsumer中的重试次数的配置
@@ -206,6 +290,7 @@ this.rebalanceService.start();重新负载
 消息消费RT，rt啥意思请问？我理解是 response time
 
 
+消息发送到消费流程：
 
 Producer：
 1、发送消息时候，生产者获取本地topic信息（发布信息publishInfo），获取不到然后再从nameser更新一次，如果还是没获取到到，通过TBW102这个默认tocpic从nameser更新，然后复制它的路由信息创建publishInfo和subscribeInfo。publishInfo（可写mq）和subscribeInfo（可读的mq）都是MessageQueue信息（topic、brokerName，index）。
@@ -240,9 +325,13 @@ RequestCode和ResponseCode定义了请求和响应的类型
 
 通过MQAdmin或CLI方式创建topic：先更新this.brokerController.getTopicConfigManager().updateTopicConfig(topicConfig);包括保存在缓存topicConfigTable中和this.persist();持久化到文件，再注册到全部Broker中this.brokerController.registerBrokerAll(false, true);，其实是把本地的全部topic配置register到全部的nameSrv中去，nameSrv接收到后，更新本地的mq信息。
 
+
+线上关闭Topic自动创建：
+
 topic自动创建过程：
 在broker的sendMessage中的，有super.msgCheck(ctx, requestHeader, response);，在这个方法里面发现topic不存在，就会创建，并register到所有的broker（其实是所有的nameSrv）
 读写数量设置的不一样：都是从前面来循环，所以如果设置的写大于读，会导致后面的mq数据无法消费，读大于写，会导致部分mq的消费者空轮询
+
 
 
 线上应该关闭autoCreateTopicEnable，即在配置文件中将其设置为false。
@@ -250,6 +339,7 @@ RocketMQ在发送消息时，会首先获取路由信息。如果是新的消息
 所以基于目前RocketMQ的设计，建议关闭自动创建TOPIC的功能，然后根据消息量的大小，手动创建TOPIC。
 
 
+RocketMQ的文件：
 topic的发送和接收都是依据mq为单位，send时候需要选Select一个mq，拉取消息（pull或push）也是拉取某个mq中的信息，topic的mq保存在所有的nameSrv中，所有的nameSrv地位是相等的。
 
 topic、mq都是逻辑单元，部署物理单元，只有commitlog、topic offsetconsume offset等是对应物理文件
@@ -415,8 +505,34 @@ Console：
 2、前台页面查询慢，建立连接和属性拷贝慢：1、建立连接慢，查询rocketmq一次，第一次查询260ms左右，不建立连接就是50ms左右，2、循环查询导致很慢，去除后台循环查询，简化前台查询功能，每次只查询一次，在前台分页，3、属性拷贝大概2~3个1ms，进来避免大数据属性拷贝
 
 
+---------------------------------------------------------------------------------------------------------------------
 
 
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
 
 
 

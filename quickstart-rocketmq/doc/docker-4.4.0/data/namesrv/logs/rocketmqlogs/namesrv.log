@@ -1,0 +1,116 @@
+2019-03-27 15:21:33 INFO main - rocketmqHome=/opt/rocketmq-4.4.0
+2019-03-27 15:21:33 INFO main - kvConfigPath=/root/namesrv/kvConfig.json
+2019-03-27 15:21:33 INFO main - configStorePath=/root/namesrv/namesrv.properties
+2019-03-27 15:21:33 INFO main - productEnvName=center
+2019-03-27 15:21:33 INFO main - clusterTest=false
+2019-03-27 15:21:33 INFO main - orderMessageEnable=false
+2019-03-27 15:21:33 INFO main - listenPort=9876
+2019-03-27 15:21:33 INFO main - serverWorkerThreads=8
+2019-03-27 15:21:33 INFO main - serverCallbackExecutorThreads=0
+2019-03-27 15:21:33 INFO main - serverSelectorThreads=3
+2019-03-27 15:21:33 INFO main - serverOnewaySemaphoreValue=256
+2019-03-27 15:21:33 INFO main - serverAsyncSemaphoreValue=64
+2019-03-27 15:21:33 INFO main - serverChannelMaxIdleTimeSeconds=120
+2019-03-27 15:21:33 INFO main - serverSocketSndBufSize=65535
+2019-03-27 15:21:33 INFO main - serverSocketRcvBufSize=65535
+2019-03-27 15:21:33 INFO main - serverPooledByteBufAllocatorEnable=true
+2019-03-27 15:21:33 INFO main - useEpollNativeSelector=false
+2019-03-27 15:21:33 INFO main - Server is running in TLS permissive mode
+2019-03-27 15:21:33 INFO main - Tls config file doesn't exist, skip it
+2019-03-27 15:21:33 INFO main - Log the final used tls related configuration
+2019-03-27 15:21:33 INFO main - tls.test.mode.enable = true
+2019-03-27 15:21:33 INFO main - tls.server.need.client.auth = none
+2019-03-27 15:21:33 INFO main - tls.server.keyPath = null
+2019-03-27 15:21:33 INFO main - tls.server.keyPassword = null
+2019-03-27 15:21:33 INFO main - tls.server.certPath = null
+2019-03-27 15:21:33 INFO main - tls.server.authClient = false
+2019-03-27 15:21:33 INFO main - tls.server.trustCertPath = null
+2019-03-27 15:21:33 INFO main - tls.client.keyPath = null
+2019-03-27 15:21:33 INFO main - tls.client.keyPassword = null
+2019-03-27 15:21:33 INFO main - tls.client.certPath = null
+2019-03-27 15:21:33 INFO main - tls.client.authServer = false
+2019-03-27 15:21:33 INFO main - tls.client.trustCertPath = null
+2019-03-27 15:21:34 INFO main - Using OpenSSL provider
+2019-03-27 15:21:35 INFO main - SSLContext created for server
+2019-03-27 15:21:36 INFO NettyEventExecutor - NettyEventExecutor service started
+2019-03-27 15:21:36 INFO main - The Name Server boot success. serializeType=JSON
+2019-03-27 15:21:36 INFO FileWatchService - FileWatchService service started
+2019-03-27 15:22:35 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 15:22:35 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 15:55:15 INFO main - rocketmqHome=/opt/rocketmq-4.4.0
+2019-03-27 15:55:15 INFO main - kvConfigPath=/root/namesrv/kvConfig.json
+2019-03-27 15:55:15 INFO main - configStorePath=/root/namesrv/namesrv.properties
+2019-03-27 15:55:15 INFO main - productEnvName=center
+2019-03-27 15:55:15 INFO main - clusterTest=false
+2019-03-27 15:55:15 INFO main - orderMessageEnable=false
+2019-03-27 15:55:15 INFO main - listenPort=9876
+2019-03-27 15:55:15 INFO main - serverWorkerThreads=8
+2019-03-27 15:55:15 INFO main - serverCallbackExecutorThreads=0
+2019-03-27 15:55:15 INFO main - serverSelectorThreads=3
+2019-03-27 15:55:15 INFO main - serverOnewaySemaphoreValue=256
+2019-03-27 15:55:15 INFO main - serverAsyncSemaphoreValue=64
+2019-03-27 15:55:15 INFO main - serverChannelMaxIdleTimeSeconds=120
+2019-03-27 15:55:15 INFO main - serverSocketSndBufSize=65535
+2019-03-27 15:55:15 INFO main - serverSocketRcvBufSize=65535
+2019-03-27 15:55:15 INFO main - serverPooledByteBufAllocatorEnable=true
+2019-03-27 15:55:15 INFO main - useEpollNativeSelector=false
+2019-03-27 15:55:15 INFO main - Server is running in TLS permissive mode
+2019-03-27 15:55:15 INFO main - Tls config file doesn't exist, skip it
+2019-03-27 15:55:15 INFO main - Log the final used tls related configuration
+2019-03-27 15:55:15 INFO main - tls.test.mode.enable = true
+2019-03-27 15:55:15 INFO main - tls.server.need.client.auth = none
+2019-03-27 15:55:15 INFO main - tls.server.keyPath = null
+2019-03-27 15:55:15 INFO main - tls.server.keyPassword = null
+2019-03-27 15:55:15 INFO main - tls.server.certPath = null
+2019-03-27 15:55:15 INFO main - tls.server.authClient = false
+2019-03-27 15:55:15 INFO main - tls.server.trustCertPath = null
+2019-03-27 15:55:15 INFO main - tls.client.keyPath = null
+2019-03-27 15:55:15 INFO main - tls.client.keyPassword = null
+2019-03-27 15:55:15 INFO main - tls.client.certPath = null
+2019-03-27 15:55:15 INFO main - tls.client.authServer = false
+2019-03-27 15:55:15 INFO main - tls.client.trustCertPath = null
+2019-03-27 15:55:16 INFO main - Using OpenSSL provider
+2019-03-27 15:55:16 INFO main - SSLContext created for server
+2019-03-27 15:55:16 INFO NettyEventExecutor - NettyEventExecutor service started
+2019-03-27 15:55:16 INFO FileWatchService - FileWatchService service started
+2019-03-27 15:55:16 INFO main - The Name Server boot success. serializeType=JSON
+2019-03-27 15:55:22 INFO NettyServerCodecThread_1 - NETTY SERVER PIPELINE: channelRegistered 172.17.0.3:32948
+2019-03-27 15:55:22 INFO NettyServerCodecThread_1 - NETTY SERVER PIPELINE: channelActive, the channel[172.17.0.3:32948]
+2019-03-27 15:55:22 INFO RemotingExecutorThread_1 - new topic registered, BenchmarkTest QueueData [brokerName=88ec63630637, readQueueNums=1024, writeQueueNums=1024, perm=6, topicSynFlag=0]
+2019-03-27 15:55:22 INFO RemotingExecutorThread_1 - new topic registered, OFFSET_MOVED_EVENT QueueData [brokerName=88ec63630637, readQueueNums=1, writeQueueNums=1, perm=6, topicSynFlag=0]
+2019-03-27 15:55:22 INFO RemotingExecutorThread_1 - new topic registered, TBW102 QueueData [brokerName=88ec63630637, readQueueNums=8, writeQueueNums=8, perm=7, topicSynFlag=0]
+2019-03-27 15:55:22 INFO RemotingExecutorThread_1 - new topic registered, SELF_TEST_TOPIC QueueData [brokerName=88ec63630637, readQueueNums=1, writeQueueNums=1, perm=6, topicSynFlag=0]
+2019-03-27 15:55:22 INFO RemotingExecutorThread_1 - new topic registered, 88ec63630637 QueueData [brokerName=88ec63630637, readQueueNums=1, writeQueueNums=1, perm=7, topicSynFlag=0]
+2019-03-27 15:55:22 INFO RemotingExecutorThread_1 - new topic registered, DefaultCluster QueueData [brokerName=88ec63630637, readQueueNums=16, writeQueueNums=16, perm=7, topicSynFlag=0]
+2019-03-27 15:55:22 INFO RemotingExecutorThread_1 - new broker registered, 172.17.0.3:10911 HAServer: 172.17.0.3:10912
+2019-03-27 15:56:16 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 15:56:16 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 15:56:22 INFO RemotingExecutorThread_4 - new topic registered, RMQ_SYS_TRANS_HALF_TOPIC QueueData [brokerName=88ec63630637, readQueueNums=1, writeQueueNums=1, perm=6, topicSynFlag=0]
+2019-03-27 16:00:07 INFO NettyServerCodecThread_2 - NETTY SERVER PIPELINE: channelRegistered 172.17.0.1:59434
+2019-03-27 16:00:07 INFO NettyServerCodecThread_2 - NETTY SERVER PIPELINE: channelActive, the channel[172.17.0.1:59434]
+2019-03-27 16:00:07 INFO NettyServerCodecThread_2 - NETTY SERVER PIPELINE: channelInactive, the channel[172.17.0.1:59434]
+2019-03-27 16:00:07 INFO NettyServerCodecThread_2 - NETTY SERVER PIPELINE: channelUnregistered, the channel[172.17.0.1:59434]
+2019-03-27 16:01:27 INFO NettyServerCodecThread_3 - NETTY SERVER PIPELINE: channelRegistered 172.17.0.3:32954
+2019-03-27 16:01:27 INFO NettyServerCodecThread_3 - NETTY SERVER PIPELINE: channelActive, the channel[172.17.0.3:32954]
+2019-03-27 16:01:27 INFO NettyServerCodecThread_3 - NETTY SERVER PIPELINE: channelInactive, the channel[172.17.0.3:32954]
+2019-03-27 16:01:27 INFO NettyServerCodecThread_3 - NETTY SERVER PIPELINE: channelUnregistered, the channel[172.17.0.3:32954]
+2019-03-27 16:06:15 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 16:06:15 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 16:16:15 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 16:16:15 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 16:26:14 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 16:26:14 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 16:36:14 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 16:36:14 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 16:46:13 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 16:46:13 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 16:56:13 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 16:56:13 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 17:06:12 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 17:06:12 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 17:16:12 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 17:16:12 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 17:26:11 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 17:26:11 INFO NSScheduledThread1 - configTable SIZE: 0
+2019-03-27 17:36:11 INFO NSScheduledThread1 - --------------------------------------------------------
+2019-03-27 17:36:11 INFO NSScheduledThread1 - configTable SIZE: 0

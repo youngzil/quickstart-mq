@@ -11,8 +11,6 @@ https://github.com/a2888409/RocketMQ-Learning
 带有注释的源码
 https://codeload.github.com/YunaiV/incubator-rocketmq
 
-https://gitee.com/mirrors/rocketmq
-
 http://rocketmq.apache.org/docs/quick-start/
 
 druid-rocketmq项目（是druid.io，大数据分析系统）

@@ -1,0 +1,12 @@
+2019-03-27 15:22:27 INFO main - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@fe18270
+2019-03-27 15:55:21 INFO main - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@fe18270
+2019-03-27 15:55:21 INFO main - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@78b729e6
+2019-03-27 15:55:21 INFO main - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@79ad8b2f
+2019-03-27 15:55:21 INFO main - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@1df82230
+2019-03-27 15:55:21 INFO main - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@22635ba0
+2019-03-27 15:55:22 INFO main - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@441772e
+2019-03-27 15:55:22 INFO main - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@7334aada
+2019-03-27 15:55:22 INFO main - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@1d9b7cce
+2019-03-27 15:55:22 INFO main - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@4d9e68d0
+2019-03-27 15:55:22 INFO main - Looking for a resource file of name [META-INF/service/org.apache.rocketmq.remoting.RPCHook] ...
+2019-03-27 15:55:22 WARN main - No resource file with name [META-INF/service/org.apache.rocketmq.remoting.RPCHook] found.

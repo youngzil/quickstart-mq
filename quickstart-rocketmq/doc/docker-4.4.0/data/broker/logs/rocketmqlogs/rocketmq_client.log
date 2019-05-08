@@ -1,0 +1,291 @@
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.Buffer.address: available
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent0 - sun.misc.Unsafe.theUnsafe: available
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent0 - sun.misc.Unsafe.copyMemory: available
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent0 - direct buffer constructor: available
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.Bits.unaligned: available, true
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.DirectByteBuffer.<init>(long, int): available
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.Cleaner0 - java.nio.ByteBuffer.cleaner(): available
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent - Java version: 8
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.noUnsafe: false
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent - sun.misc.Unsafe: available
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.noJavassist: false
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent - Javassist: available
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.tmpdir: /tmp (java.io.tmpdir)
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.bitMode: 64 (sun.arch.data.model)
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent - io.netty.maxDirectMemory: 1040187392 bytes
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.PlatformDependent - org.jctools-core.MpscChunkedArrayQueue: available
+2019-03-27 08:00:07,007 INFO io.netty.channel.nio.NioEventLoop - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@402e37bc
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - name server address updated. NEW : [10.21.38.83:9876] , OLD: null
+2019-03-27 08:00:07,007 INFO RocketmqClient - user specified name server address: 10.21.38.83:9876
+2019-03-27 08:00:07,007 INFO RocketmqClient - Created a new client Instance, InstanceIndex:0, ClientID:172.17.0.3@1553673607309, ClientConfig:ClientConfig [namesrvAddr=10.21.38.83:9876, clientIP=172.17.0.3, instanceName=1553673607309, clientCallbackExecutorThreads=4, pollNameServerInterval=30000, heartbeatBrokerInterval=30000, persistConsumerOffsetInterval=5000, unitMode=false, unitName=null, vipChannelEnabled=true, useTLS=false, language=JAVA], ClientVersion:V4_4_0, SerializerType:JSON
+2019-03-27 08:00:07,007 INFO RocketmqClient - Created new MQClientInstance for clientId:[172.17.0.3@1553673607309]
+2019-03-27 08:00:07,007 INFO RocketmqClient - PullMessageService service started
+2019-03-27 08:00:07,007 INFO RocketmqClient - RebalanceService service started
+2019-03-27 08:00:07,007 INFO RocketmqClient - the producer [CLIENT_INNER_PRODUCER] start OK. sendMessageWithVIPChannel=true
+2019-03-27 08:00:07,007 INFO RocketmqClient - the client factory [172.17.0.3@1553673607309] start OK
+2019-03-27 08:00:07,007 INFO RocketmqClient - the adminExt [admin_ext_group] start OK
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - new name server is chosen. OLD: null , NEW: 10.21.38.83:9876. namesrvIndex = 579
+2019-03-27 08:00:07,007 DEBUG io.netty.buffer.ByteBufUtil - -Dio.netty.allocator.type: unpooled
+2019-03-27 08:00:07,007 DEBUG io.netty.buffer.ByteBufUtil - -Dio.netty.threadLocalDirectBufferSize: 65536
+2019-03-27 08:00:07,007 DEBUG io.netty.buffer.ByteBufUtil - -Dio.netty.maxThreadLocalCharBufferSize: 16384
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - createChannel: begin to connect remote host[10.21.38.83:9876] asynchronously
+2019-03-27 08:00:07,007 DEBUG io.netty.util.internal.JavassistTypeParameterMatcherGenerator - Generated: io.netty.util.internal.__matchers__.org.apache.rocketmq.remoting.protocol.RemotingCommandMatcher
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - NETTY CLIENT PIPELINE: CONNECT  UNKNOWN => 10.21.38.83:9876
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - createChannel: connect remote host[10.21.38.83:9876] success, DefaultChannelPromise@4a94ee4(success)
+2019-03-27 08:00:07,007 ERROR RocketmqAuthorize - [10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+java.security.NoSuchAlgorithmException: Algorithm HmacSHA1 not available
+	at javax.crypto.Mac.getInstance(Mac.java:181)
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:57)
+	at org.apache.rocketmq.acl.common.AclSigner.signAndBase64Encode(AclSigner.java:79)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:73)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:68)
+	at org.apache.rocketmq.acl.common.AclUtils.calSignature(AclUtils.java:58)
+	at org.apache.rocketmq.acl.common.AclClientRPCHook.doBeforeRequest(AclClientRPCHook.java:44)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingAbstract.doBeforeRpcHooks(NettyRemotingAbstract.java:172)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingClient.invokeSync(NettyRemotingClient.java:370)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getBrokerClusterInfo(MQClientAPIImpl.java:1180)
+	at org.apache.rocketmq.tools.admin.DefaultMQAdminExtImpl.examineBrokerClusterInfo(DefaultMQAdminExtImpl.java:275)
+	at org.apache.rocketmq.tools.admin.DefaultMQAdminExt.examineBrokerClusterInfo(DefaultMQAdminExt.java:222)
+	at org.apache.rocketmq.tools.command.cluster.ClusterListSubCommand.printClusterBaseInfo(ClusterListSubCommand.java:172)
+	at org.apache.rocketmq.tools.command.cluster.ClusterListSubCommand.execute(ClusterListSubCommand.java:88)
+	at org.apache.rocketmq.tools.command.MQAdminStartup.main0(MQAdminStartup.java:135)
+	at org.apache.rocketmq.tools.command.MQAdminStartup.main(MQAdminStartup.java:86)
+
+2019-03-27 08:00:07,007 ERROR RocketmqAuthorize - [10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+java.security.NoSuchAlgorithmException: Algorithm HmacSHA1 not available
+	at javax.crypto.Mac.getInstance(Mac.java:181)
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:57)
+	at org.apache.rocketmq.acl.common.AclSigner.signAndBase64Encode(AclSigner.java:79)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:73)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:68)
+	at org.apache.rocketmq.acl.common.AclUtils.calSignature(AclUtils.java:58)
+	at org.apache.rocketmq.acl.common.AclClientRPCHook.doBeforeRequest(AclClientRPCHook.java:44)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingAbstract.doBeforeRpcHooks(NettyRemotingAbstract.java:172)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingClient.invokeSync(NettyRemotingClient.java:370)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getTopicRouteInfoFromNameServer(MQClientAPIImpl.java:1212)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getTopicRouteInfoFromNameServer(MQClientAPIImpl.java:1202)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:605)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:492)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:361)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance$3.run(MQClientInstance.java:278)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
+2019-03-27 08:00:07,007 ERROR RocketmqAuthorize - [10015:signature-failed] unable to calculate a request signature. error=[10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+org.apache.rocketmq.acl.common.AclException: [10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:63)
+	at org.apache.rocketmq.acl.common.AclSigner.signAndBase64Encode(AclSigner.java:79)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:73)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:68)
+	at org.apache.rocketmq.acl.common.AclUtils.calSignature(AclUtils.java:58)
+	at org.apache.rocketmq.acl.common.AclClientRPCHook.doBeforeRequest(AclClientRPCHook.java:44)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingAbstract.doBeforeRpcHooks(NettyRemotingAbstract.java:172)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingClient.invokeSync(NettyRemotingClient.java:370)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getBrokerClusterInfo(MQClientAPIImpl.java:1180)
+	at org.apache.rocketmq.tools.admin.DefaultMQAdminExtImpl.examineBrokerClusterInfo(DefaultMQAdminExtImpl.java:275)
+	at org.apache.rocketmq.tools.admin.DefaultMQAdminExt.examineBrokerClusterInfo(DefaultMQAdminExt.java:222)
+	at org.apache.rocketmq.tools.command.cluster.ClusterListSubCommand.printClusterBaseInfo(ClusterListSubCommand.java:172)
+	at org.apache.rocketmq.tools.command.cluster.ClusterListSubCommand.execute(ClusterListSubCommand.java:88)
+	at org.apache.rocketmq.tools.command.MQAdminStartup.main0(MQAdminStartup.java:135)
+	at org.apache.rocketmq.tools.command.MQAdminStartup.main(MQAdminStartup.java:86)
+Caused by: java.security.NoSuchAlgorithmException: Algorithm HmacSHA1 not available
+	at javax.crypto.Mac.getInstance(Mac.java:181)
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:57)
+	... 14 more
+
+2019-03-27 08:00:07,007 ERROR RocketmqAuthorize - [10015:signature-failed] unable to calculate a request signature. error=[10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+org.apache.rocketmq.acl.common.AclException: [10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:63)
+	at org.apache.rocketmq.acl.common.AclSigner.signAndBase64Encode(AclSigner.java:79)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:73)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:68)
+	at org.apache.rocketmq.acl.common.AclUtils.calSignature(AclUtils.java:58)
+	at org.apache.rocketmq.acl.common.AclClientRPCHook.doBeforeRequest(AclClientRPCHook.java:44)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingAbstract.doBeforeRpcHooks(NettyRemotingAbstract.java:172)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingClient.invokeSync(NettyRemotingClient.java:370)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getTopicRouteInfoFromNameServer(MQClientAPIImpl.java:1212)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getTopicRouteInfoFromNameServer(MQClientAPIImpl.java:1202)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:605)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:492)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:361)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance$3.run(MQClientInstance.java:278)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.security.NoSuchAlgorithmException: Algorithm HmacSHA1 not available
+	at javax.crypto.Mac.getInstance(Mac.java:181)
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:57)
+	... 20 more
+
+2019-03-27 08:00:07,007 INFO RocketmqClient - the producer [CLIENT_INNER_PRODUCER] shutdown OK
+2019-03-27 08:00:07,007 INFO RocketmqCommon - shutdown thread PullMessageService interrupt true
+2019-03-27 08:00:07,007 INFO RocketmqClient - PullMessageService service end
+2019-03-27 08:00:07,007 INFO RocketmqCommon - join thread PullMessageService eclipse time(ms) 2 90000
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - closeChannel: begin close the channel[10.21.38.83:9876] Found: true
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - closeChannel: the channel[10.21.38.83:9876] was removed from channel table
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - NETTY CLIENT PIPELINE: CLOSE 10.21.38.83:9876
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - eventCloseChannel: the channel[null] has been removed from the channel table before
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - shutdown thread NettyEventExecutor interrupt false
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - join thread NettyEventExecutor eclipse time(ms) 0 90000
+2019-03-27 08:00:07,007 INFO RocketmqCommon - shutdown thread RebalanceService interrupt false
+2019-03-27 08:00:07,007 INFO RocketmqClient - RebalanceService service end
+2019-03-27 08:00:07,007 INFO RocketmqCommon - join thread RebalanceService eclipse time(ms) 0 90000
+2019-03-27 08:00:07,007 INFO RocketmqClient - the client factory [172.17.0.3@1553673607309] shutdown OK
+2019-03-27 08:00:07,007 INFO RocketmqClient - the adminExt [admin_ext_group] shutdown OK
+2019-03-27 08:00:07,007 INFO RocketmqRemoting - closeChannel: close the connection to remote address[10.21.38.83:9876] result: true
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.Buffer.address: available
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent0 - sun.misc.Unsafe.theUnsafe: available
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent0 - sun.misc.Unsafe.copyMemory: available
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent0 - direct buffer constructor: available
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.Bits.unaligned: available, true
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent0 - java.nio.DirectByteBuffer.<init>(long, int): available
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.Cleaner0 - java.nio.ByteBuffer.cleaner(): available
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent - Java version: 8
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.noUnsafe: false
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent - sun.misc.Unsafe: available
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.noJavassist: false
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent - Javassist: available
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.tmpdir: /tmp (java.io.tmpdir)
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent - -Dio.netty.bitMode: 64 (sun.arch.data.model)
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent - io.netty.maxDirectMemory: 1040187392 bytes
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.PlatformDependent - org.jctools-core.MpscChunkedArrayQueue: available
+2019-03-27 08:01:27,027 INFO io.netty.channel.nio.NioEventLoop - instrumented a special java.util.Set into: sun.nio.ch.EPollSelectorImpl@402e37bc
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - name server address updated. NEW : [namesrv:9876] , OLD: null
+2019-03-27 08:01:27,027 INFO RocketmqClient - user specified name server address: namesrv:9876
+2019-03-27 08:01:27,027 INFO RocketmqClient - Created a new client Instance, InstanceIndex:0, ClientID:172.17.0.3@1553673686974, ClientConfig:ClientConfig [namesrvAddr=namesrv:9876, clientIP=172.17.0.3, instanceName=1553673686974, clientCallbackExecutorThreads=4, pollNameServerInterval=30000, heartbeatBrokerInterval=30000, persistConsumerOffsetInterval=5000, unitMode=false, unitName=null, vipChannelEnabled=true, useTLS=false, language=JAVA], ClientVersion:V4_4_0, SerializerType:JSON
+2019-03-27 08:01:27,027 INFO RocketmqClient - Created new MQClientInstance for clientId:[172.17.0.3@1553673686974]
+2019-03-27 08:01:27,027 INFO RocketmqClient - PullMessageService service started
+2019-03-27 08:01:27,027 INFO RocketmqClient - RebalanceService service started
+2019-03-27 08:01:27,027 INFO RocketmqClient - the producer [CLIENT_INNER_PRODUCER] start OK. sendMessageWithVIPChannel=true
+2019-03-27 08:01:27,027 INFO RocketmqClient - the client factory [172.17.0.3@1553673686974] start OK
+2019-03-27 08:01:27,027 INFO RocketmqClient - the adminExt [admin_ext_group] start OK
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - new name server is chosen. OLD: null , NEW: namesrv:9876. namesrvIndex = 804
+2019-03-27 08:01:27,027 DEBUG io.netty.buffer.ByteBufUtil - -Dio.netty.allocator.type: unpooled
+2019-03-27 08:01:27,027 DEBUG io.netty.buffer.ByteBufUtil - -Dio.netty.threadLocalDirectBufferSize: 65536
+2019-03-27 08:01:27,027 DEBUG io.netty.buffer.ByteBufUtil - -Dio.netty.maxThreadLocalCharBufferSize: 16384
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - createChannel: begin to connect remote host[namesrv:9876] asynchronously
+2019-03-27 08:01:27,027 DEBUG io.netty.util.internal.JavassistTypeParameterMatcherGenerator - Generated: io.netty.util.internal.__matchers__.org.apache.rocketmq.remoting.protocol.RemotingCommandMatcher
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - NETTY CLIENT PIPELINE: CONNECT  UNKNOWN => amesrv/172.17.0.2:9876
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - createChannel: connect remote host[namesrv:9876] success, DefaultChannelPromise@4a94ee4(success)
+2019-03-27 08:01:27,027 ERROR RocketmqAuthorize - [10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+java.security.NoSuchAlgorithmException: Algorithm HmacSHA1 not available
+	at javax.crypto.Mac.getInstance(Mac.java:181)
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:57)
+	at org.apache.rocketmq.acl.common.AclSigner.signAndBase64Encode(AclSigner.java:79)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:73)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:68)
+	at org.apache.rocketmq.acl.common.AclUtils.calSignature(AclUtils.java:58)
+	at org.apache.rocketmq.acl.common.AclClientRPCHook.doBeforeRequest(AclClientRPCHook.java:44)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingAbstract.doBeforeRpcHooks(NettyRemotingAbstract.java:172)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingClient.invokeSync(NettyRemotingClient.java:370)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getTopicRouteInfoFromNameServer(MQClientAPIImpl.java:1212)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getTopicRouteInfoFromNameServer(MQClientAPIImpl.java:1202)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:605)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:492)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:361)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance$3.run(MQClientInstance.java:278)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
+2019-03-27 08:01:27,027 ERROR RocketmqAuthorize - [10015:signature-failed] unable to calculate a request signature. error=[10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+org.apache.rocketmq.acl.common.AclException: [10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:63)
+	at org.apache.rocketmq.acl.common.AclSigner.signAndBase64Encode(AclSigner.java:79)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:73)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:68)
+	at org.apache.rocketmq.acl.common.AclUtils.calSignature(AclUtils.java:58)
+	at org.apache.rocketmq.acl.common.AclClientRPCHook.doBeforeRequest(AclClientRPCHook.java:44)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingAbstract.doBeforeRpcHooks(NettyRemotingAbstract.java:172)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingClient.invokeSync(NettyRemotingClient.java:370)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getTopicRouteInfoFromNameServer(MQClientAPIImpl.java:1212)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getTopicRouteInfoFromNameServer(MQClientAPIImpl.java:1202)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:605)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:492)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance.updateTopicRouteInfoFromNameServer(MQClientInstance.java:361)
+	at org.apache.rocketmq.client.impl.factory.MQClientInstance$3.run(MQClientInstance.java:278)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.security.NoSuchAlgorithmException: Algorithm HmacSHA1 not available
+	at javax.crypto.Mac.getInstance(Mac.java:181)
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:57)
+	... 20 more
+
+2019-03-27 08:01:27,027 ERROR RocketmqAuthorize - [10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+java.security.NoSuchAlgorithmException: Algorithm HmacSHA1 not available
+	at javax.crypto.Mac.getInstance(Mac.java:181)
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:57)
+	at org.apache.rocketmq.acl.common.AclSigner.signAndBase64Encode(AclSigner.java:79)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:73)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:68)
+	at org.apache.rocketmq.acl.common.AclUtils.calSignature(AclUtils.java:58)
+	at org.apache.rocketmq.acl.common.AclClientRPCHook.doBeforeRequest(AclClientRPCHook.java:44)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingAbstract.doBeforeRpcHooks(NettyRemotingAbstract.java:172)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingClient.invokeSync(NettyRemotingClient.java:370)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getBrokerClusterInfo(MQClientAPIImpl.java:1180)
+	at org.apache.rocketmq.tools.admin.DefaultMQAdminExtImpl.examineBrokerClusterInfo(DefaultMQAdminExtImpl.java:275)
+	at org.apache.rocketmq.tools.admin.DefaultMQAdminExt.examineBrokerClusterInfo(DefaultMQAdminExt.java:222)
+	at org.apache.rocketmq.tools.command.cluster.ClusterListSubCommand.printClusterBaseInfo(ClusterListSubCommand.java:172)
+	at org.apache.rocketmq.tools.command.cluster.ClusterListSubCommand.execute(ClusterListSubCommand.java:88)
+	at org.apache.rocketmq.tools.command.MQAdminStartup.main0(MQAdminStartup.java:135)
+	at org.apache.rocketmq.tools.command.MQAdminStartup.main(MQAdminStartup.java:86)
+
+2019-03-27 08:01:27,027 ERROR RocketmqAuthorize - [10015:signature-failed] unable to calculate a request signature. error=[10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+org.apache.rocketmq.acl.common.AclException: [10015:signature-failed] unable to calculate a request signature. error=Algorithm HmacSHA1 not available
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:63)
+	at org.apache.rocketmq.acl.common.AclSigner.signAndBase64Encode(AclSigner.java:79)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:73)
+	at org.apache.rocketmq.acl.common.AclSigner.calSignature(AclSigner.java:68)
+	at org.apache.rocketmq.acl.common.AclUtils.calSignature(AclUtils.java:58)
+	at org.apache.rocketmq.acl.common.AclClientRPCHook.doBeforeRequest(AclClientRPCHook.java:44)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingAbstract.doBeforeRpcHooks(NettyRemotingAbstract.java:172)
+	at org.apache.rocketmq.remoting.netty.NettyRemotingClient.invokeSync(NettyRemotingClient.java:370)
+	at org.apache.rocketmq.client.impl.MQClientAPIImpl.getBrokerClusterInfo(MQClientAPIImpl.java:1180)
+	at org.apache.rocketmq.tools.admin.DefaultMQAdminExtImpl.examineBrokerClusterInfo(DefaultMQAdminExtImpl.java:275)
+	at org.apache.rocketmq.tools.admin.DefaultMQAdminExt.examineBrokerClusterInfo(DefaultMQAdminExt.java:222)
+	at org.apache.rocketmq.tools.command.cluster.ClusterListSubCommand.printClusterBaseInfo(ClusterListSubCommand.java:172)
+	at org.apache.rocketmq.tools.command.cluster.ClusterListSubCommand.execute(ClusterListSubCommand.java:88)
+	at org.apache.rocketmq.tools.command.MQAdminStartup.main0(MQAdminStartup.java:135)
+	at org.apache.rocketmq.tools.command.MQAdminStartup.main(MQAdminStartup.java:86)
+Caused by: java.security.NoSuchAlgorithmException: Algorithm HmacSHA1 not available
+	at javax.crypto.Mac.getInstance(Mac.java:181)
+	at org.apache.rocketmq.acl.common.AclSigner.sign(AclSigner.java:57)
+	... 14 more
+
+2019-03-27 08:01:27,027 INFO RocketmqClient - the producer [CLIENT_INNER_PRODUCER] shutdown OK
+2019-03-27 08:01:27,027 INFO RocketmqCommon - shutdown thread PullMessageService interrupt true
+2019-03-27 08:01:27,027 INFO RocketmqClient - PullMessageService service end
+2019-03-27 08:01:27,027 INFO RocketmqCommon - join thread PullMessageService eclipse time(ms) 1 90000
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - closeChannel: begin close the channel[172.17.0.2:9876] Found: false
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - closeChannel: the channel[172.17.0.2:9876] has been removed from the channel table before
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - NETTY CLIENT PIPELINE: CLOSE 172.17.0.2:9876
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - closeChannel: the channel[namesrv:9876] was removed from channel table
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - NETTY CLIENT PIPELINE: CLOSE 172.17.0.2:9876
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - eventCloseChannel: the channel[null] has been removed from the channel table before
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - closeChannel: close the connection to remote address[172.17.0.2:9876] result: true
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - shutdown thread NettyEventExecutor interrupt false
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - join thread NettyEventExecutor eclipse time(ms) 0 90000
+2019-03-27 08:01:27,027 INFO RocketmqRemoting - closeChannel: close the connection to remote address[172.17.0.2:9876] result: true
+2019-03-27 08:01:27,027 INFO RocketmqCommon - shutdown thread RebalanceService interrupt false
+2019-03-27 08:01:27,027 INFO RocketmqClient - RebalanceService service end
+2019-03-27 08:01:27,027 INFO RocketmqCommon - join thread RebalanceService eclipse time(ms) 0 90000
+2019-03-27 08:01:27,027 INFO RocketmqClient - the client factory [172.17.0.3@1553673686974] shutdown OK
+2019-03-27 08:01:27,027 INFO RocketmqClient - the adminExt [admin_ext_group] shutdown OK

@@ -24,7 +24,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 /**
  * QueueReceiver 
  *  
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年10月30日 下午2:30:03 
  * @since 1.0
  */
