@@ -1,7 +1,9 @@
 JMS规范
 JMS消息组成：JMS消息由3部分组成：消息头、属性和消息体
 
-Activemq的同步和异步消息
+属性设置的三种方式：URL、ConnectionFactory、Connection
+
+Activemq发送的同步和异步设置
 ActiveMQ顺序消息：consumer之独有消费者（exclusive consumer）、 Message Groups特性
 
 activemq开启jmx监控

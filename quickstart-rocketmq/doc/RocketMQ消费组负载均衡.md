@@ -1,8 +1,10 @@
+Producer、Consumer启动的时候，都会定时往所有的broker发送心跳信息，注册自己
 Consumer对mq的负载均衡策略：默认是平均
 消费端获取所有的MessageQueue和客户端ID（IP@Port），然后使用客户端注册的AllocateMessageQueueStrategy来做负载均衡
 比如9个mq，2个Consumer，就第一个Consumer获取0-4的5个mq，第二个Consumer获取5-8的4个mq
 
 每次上线Consumer时候，Server通过RequestCode.NOTIFY_CONSUMER_IDS_CHANGED来通知Client的ClientRemotingProcessor处理，进行重新负载均衡rebalanceImmediately
+然后客户端就随机选择一个broker请求，获取所有的消费者信息，getConsumerIdListByGroup，因为启动的时候会想所有的Broker发送心跳注册自己
 
 
 
@@ -18,6 +20,10 @@ RequestCode.RESET_CONSUMER_CLIENT_OFFSET【重置消费进度】
 RequestCode.GET_CONSUMER_STATUS_FROM_CLIENT【获取Consumer的信息，已经不建议使用@Deprecated】
 RequestCode.GET_CONSUMER_RUNNING_INFO【获取Consumer的信息】
 RequestCode.CONSUME_MESSAGE_DIRECTLY【推送消息到Consumer直接消费】
+
+
+
+负载策略是在Client进行执行的
 
 
 

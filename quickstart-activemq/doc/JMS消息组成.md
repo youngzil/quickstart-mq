@@ -14,6 +14,13 @@ JMS消息由3部分组成：消息头、属性和消息体
 
 
 消息体：JMS API定义了5种消息体格式，也叫消息类型，可以使用不同形式发送接收数据，并可以兼容现有的消息格式。包括：TextMessage、MapMessage、BytesMessage、StreamMessage和ObjectMessage。
+
+
+属性设置方式：
+1.在连接的URI中配置 
+2.在ConnectionFactory层配置 
+3.在Connection层配置 
+
 消息属性：包含以下三种类型的属性：
 1.应用程序设置和添加的属性，比如：
 Message.setStringProperty("username",username);

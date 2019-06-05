@@ -1,8 +1,58 @@
 RocketMQ系统部署架构：Namesrv 和 Broker（Master、Slave）
 RocketMQ生产者模型、消费者模型
 RocketMQ存储模型:offset-->commitlog-->mmap
+1、存储文件夹和文件说明
+
+生产存储消费流程：
+1、消息发送到存储再到消费流程
+2、broker查找消息过程
+3、RocketMQ消费组上线问题
+
+broker消息存储过程、创建文件机制、刷盘机制：
+1、消息的格式
+2、存储流程
+3、创建文件机制
+4、刷盘机制
+5、MMAP(Memory Mapped Files，内存映射文件)技术
+
+Broker常见问题：
+1、下线一个Broker节点
+2、监控数据
+3、本机启动RocketMQ
+RocketMQ部署.md
 
 
+生产端注意事项：
+1、生产者属性
+2、发送失败处理
+3、事务消息
+
+
+消费端注意事项：
+1、广播消费重复消费
+2、消息重复原因
+3、消费幂等的必要性
+4、消息查询功能
+5、消费失败处理
+6、广播消费
+RocketMQ消费组负载均衡.md
+
+
+Topic主题：
+1、线上关闭topic自动创建
+2、topic保存在broker的存储结构
+3、topic的读写队列
+
+运维监控：
+1、Console提供的功能
+2、Console提供三种查询消息方式
+RocketMQ运维命令和控制台.md
+
+常见问题：
+1、事务的回查
+2、消费端要做好幂等性
+3、rocketmq的内存占用
+4、刷盘方式
 
 
 生产者发送流程
@@ -11,32 +61,10 @@ RocketMQ存储模型:offset-->commitlog-->mmap
 发送事务消息
 
 
-Broker：
-broker消息存储过程、创建文件机制、刷盘机制
-broker查找消息过程
-如果想把一台broker下掉，但不能影响线上消息。
-RocketMQ的文件
-
-
-主题和消息：
-消息发送到消费流程
-消息重复原因和消费幂等的必要性
-线上关闭Topic自动创建
-事务消息流程
-
-
-
 消费者问题：
 1、多个消费者只有一个消费者消费：instanceId相同的问题
 2、全新的消费组第一次上线，设置从尾部开始消费，但是实际从头开始消费，如果是老的消费组重新上线，就从上次消费过的位置继续消费
 3、消费组中的消费者负载均衡
-4、
-
-
-RocketMQ和kafka的区别
-RocketMQ和ActiveMQ的区别
-常见问题
-
 
 
 ---------------------------------------------------------------------------------------------------------------------
@@ -46,45 +74,120 @@ Broker（Master、Slave）：目前不支持主备切换
 
 
 
-
 RocketMQ生产者模型、消费者模型
-RocketMQ存储模型
+生产者、生产组，消费者、消费组，组内集群消费，组间广播消费
+
+
+
 常见问题
 
 
 
-
-RocketMQ和ActiveMQ的区别：
-实现的协议：
-存储消息的方式和处理：
-生产端和消费端
+---------------------------------------------------------------------------------------------------------------------
+RocketMQ存储模型
+1、存储文件夹和文件说明
 
 
-RocketMQ和kafka的区别：
-1、kafka是每个topic_partition一个文件，每个文件是顺序IO，表现到磁盘上，还是随机IO，RocketMQ所有消息存到一个文件里面，单文件的顺序写
-2、RocketMQ去掉了对ZK的依赖，转而使用自己开发的NameSrv。
-3、批量发送实现不同，Rocketmq的批量实现，是把批量消息封装到一个请求中，该请求还是Sync请求的实现
-4、kafka没有定时消息，Rocketmq支持定时消息
-5、kafka的顺序消息，如果有broker宕机，就会乱序，Rocketmq的是宕机后发送失败，但是可以保证严格的顺序
+RocketMQ存储模型
+所有的消息存储在同一个文件，顺序写，随机读
 
 
+存储文件夹和文件说明：
+
+Commitlog：存储消息文件
+consumequeue：主题和offset偏移量
+index：是消息key和消息offset偏移量关系
+
+config：topics.json【主题的元信息、subscriptionGroup.json【订阅组的元信息、consumerOffset.json【消费组消费进度信息
+
+lock文件：防止多个服务使用同一个路径
+checkpoint文件：主要记录三个时间，校验消息的时候使用
+
+
+RocketMQ的文件：
+topic的发送和接收都是依据mq为单位，send时候需要选Select一个mq，拉取消息（pull或push）也是拉取某个mq中的信息，topic的mq保存在所有的nameSrv中，所有的nameSrv地位是相等的。
+
+topic、mq都是逻辑单元，没有物理单元，只有commitlog、topic offsetconsume offset等是对应物理文件
+
+
+ConfigManager负责持久化数据或者加载，查看（和子类）里面的persist()或load() 
+BrokerPathConfigHelper里面是持久化文件的名字
+StorePathConfigHelper 存储相关的持久化文件的名字
+在properties中配置跟存储路径storePathRootDir，在它下面会有
+文件：abort、checkpoint、lock
+文件夹：commitlog、config、consumequeue、index、
+
+abort文件：仅仅是创建，目前没有使用
+
+lock文件：启动时候锁定改文件，退出释放，一个存储路径只能启动一个服务，防止多个服务使用同一个路径
+
+checkpoint文件：主要记录三个时间
+physicMsgTimestamp【物理消息刷盘时间，上面的commitlog文件夹】
+logicsMsgTimestamp【逻辑消息时间，上面的consumequeue文件夹】
+indexMsgTimestamp【index消息时间，上面的index文件夹】
+
+
+
+1、commitlog文件夹【消息日志文件，大小默认1G大小，文件名为文件起始字节数，20位，不足前面补0：第二个文件名为1073741824=1024*1024*1024】 
+
+2、config文件夹：【topics、subscriptionGroup、consumerOffset、delayOffset、consumerFilter，都有bak文件】   
+topics.json【主题的元信息：topicName、readQueueNums、writeQueueNums、perm、order】
+subscriptionGroup.json【订阅组的元信息：】
+consumerOffset.json【消费组消费进度信息："TESTTEST@CONSUMER_TEST_GROUP":{0:2073,1:2074,2:2073,3:2074}】
+delayOffset.json【】
+consumerFilter.json【】
+
+
+topics.json.bak
+consumerOffset.json.bak
+delayOffset.json.bak
+consumerFilter.json.bak
+
+3、consumequeue文件夹：【主题下的队列和commitlog的offset对应关系等元信息】一级目录是主题名称，二级目录是queueId，下面是文件（名称和commitlog的文件对应，大小默认固定6M），存储和commitlog的offset对应关系等元信息
+4、index文件夹：【名字为yyyyMMddhhmmssSSS格式】保存消息的Key和commitlog的offset对应关系等元信息，根据Key来查询消息使用
 
 ---------------------------------------------------------------------------------------------------------------------
-
-
-
-
----------------------------------------------------------------------------------------------------------------------
-
 学习网站
 https://github.com/a2888409/RocketMQ-Learning
 https://blog.csdn.net/a19881029/article/details/34446629
 https://blog.csdn.net/StrideBin/article/details/78338686
 
+生产存储消费流程：
+1、消息发送到存储再到消费流程
+2、broker查找消息过程
+3、RocketMQ消费组上线问题
+
+
+
+消息发送到存储再到消费流程：
+
+Producer：
+1、发送消息时候，生产者获取本地topic信息（发布信息publishInfo），获取不到然后再从nameser更新一次，如果还是没获取到到，通过TBW102这个默认tocpic从nameser更新，然后复制它的路由信息创建publishInfo和subscribeInfo。publishInfo（可写mq）和subscribeInfo（可读的mq）都是MessageQueue信息（topic、brokerName，index）。
+2、选择一个mq来发送：MessageQueue mqSelected = this.selectOneMessageQueue(topicPublishInfo, lastBrokerName);
+3、根据mq中的brokerName获取broker地址，处理消息是否使用VIPChannel，是否压缩，hasCheckForbiddenHook执行、hasSendMessageHook执行等，this.remotingClient.invokeSync发送消息，hasSendMessageHook执行
+4、.remotingClient包含invokeSync、invokeAsync、invokeOneway等，执行this.rpcHook.doBeforeRequest(addr, request);，然后网络发送消息RemotingCommand response = this.invokeSyncImpl(channel, request, timeoutMillis);，最后this.rpcHook.doAfterResponse(RemotingHelper.parseChannelRemoteAddr(channel), request, response);
+5、在初始化Producer端的Client Netty时候，设置了NettyClientHandler来处理发送到Producer端的消息，不管是Sync还是Async，发送成功后都是由接收到Broker后由NettyClientHandler处理的，Sync释放等待，Async执行回调
+
+Broker：
+1、SendMessageProcessor处理接收到的消息，处理消息，调用AbstractPluginMessageStore.putMessage-->DefaultMessageStore.putMessage-->this.commitLog.putMessage-->mappedFile.appendMessage(msg, this.appendMessageCallback);-->Statistics-->handleDiskFlush消息刷盘（pagecache）-->handleHA主备同步
+
+Consumer：
+PULL：DefaultMQPullConsumer.pullBlockIfNotFound-->this.pullAPIWrapper.pullKernelImpl(-->this.remotingClient.invokeAsync通过网络发送请求，拉取消息
+PUSH：this.checkConfig();-->  this.copySubscription();-->变量的构建，初始化，信息保存-->mQClientFactory.start();启动--》// Start request-response channel
+                    this.mQClientAPIImpl.start();
+                    // Start various schedule tasks
+                    this.startScheduledTask();
+                    // Start pull service
+                    this.pullMessageService.start();
+                    // Start rebalance service
+                    this.rebalanceService.start();
+                    // Start push service
+                    this.defaultMQProducer.getDefaultMQProducerImpl().start(false);
+--》pullMessageService会不停地拉取消息，返回给客户端
+
 
 
 生产者：
-
 
 broker消息存储过程：
 1、SendMessageProcessor-----》2、this.brokerController.getMessageStore().putMessage(msgInner)【brokerController包含全部的类】-----》3、this.commitLog.putMessage(msg)-----》4、获取mapedFile，然后mapedFile.appendMessage(msg, this.appendMessageCallback);-----》5、回调commitlog的doAppend方法，AppendMessageResult result =
@@ -123,16 +226,19 @@ https://docs.google.com/document/d/1IbmWqhkklBw_bIzDdlMx5ViM3WcvJXZWw0y9M0xZ2x0/
 
 
 
-
-V4.3.0开始，支持事务消息
-事务消息是先把消息存放在RMQ_SYS_TRANS_HALF_TOPIC主题中，当endTransaction时，-》Commit时候把消息放在原来的正常队列中然后deletePrepareMessage，Rollback就直接deletePrepareMessage，deletePrepareMessage就是把消息放到操作队列RMQ_SYS_TRANS_OP_HALF_TOPIC中，消息体存放消息在HALF_TOPIC主题中的offset。
-Broker启动的时候启动一个事务扫描线程，使用自己重写的CountDownLatch2类await定时回查客户端事务消息的状态，客户端根据事务ID查询到消息状态后进行endTransaction
-
-主题RMQ_SYS_TRANS_HALF_TOPIC和主题RMQ_SYS_TRANS_OP_HALF_TOPIC的队列一一对应（队列数一样），
+---------------------------------------------------------------------------------------------------------------------
+broker消息存储过程、创建文件机制、刷盘机制：
+1、消息的格式
+2、存储流程
+3、创建文件机制
+4、刷盘机制
+5、MMAP(Memory Mapped Files，内存映射文件)技术
 
 
 消息的格式：17个数据，第一个是整个消息的大小
 
+
+存储流程：
 Commitlog-->MappedFile-->MappedByteBuffer刷到内存
 
 保存消息（handleDiskFlush中可以看出，即使配置同步，基本就可以100%保证存储成功，除非os宕机或者断电，甚至宕机都可以刷到磁盘）
@@ -204,28 +310,90 @@ Dirty Page
 
 上下文切换 非常厉害的，不一定多线程就比 单线程快。
 
+---------------------------------------------------------------------------------------------------------------------
+Broker常见问题：
+1、下线一个Broker节点
+2、监控数据
+3、本机启动RocketMQ
 
-Broker：
+
+
+下线一个Broker节点：
 如果想把一台broker下掉，但不能影响线上消息。
 wipeWritePerm这个命令会通知nsr，把指定broker的写权限禁用了，但读不受影响。-b后面只能写brokerName不能写IP，运维命令文档指导有误。
 wipeWritePerm命令原理：发送命令到namesrv，namesrv把此broker的队列数据的权限的写权限给禁了（其实就是把所有的queue的写权限给关闭了）
 理想的操作步骤是：1，修改当前broker上的所有队列为只读，2.等待所有消息都消费完成。3.执行shutdowm下线。
 
 
+监控数据
 RocketMQ消息缓存在pagecache中，当消费及时的时候，直接从pagecache中拉取消息，整个链路的RT会很短，否则出现堆积，要从disk拉取消息，就会比较慢，通过运维命令，查询哪些订阅组在消费磁盘的消息，把这些订阅组降级
 broker记录了很多Statistics log，可以直接拿出来导入ELK平台，也可以直接查询，
 
 
-生产端：
+
+本机启动RocketMQ
+本地rocketmq debug环境构建：
+NamesrvStartup中添加：namesrvConfig.setRocketmqHome("/Users/yangzl/src/RocketMQ-3.5.8");
+BrokerStartup中添加如下：brokerConfig.setRocketmqHome("/Users/yangzl/src/RocketMQ-3.5.8");
+brokerConfig.setNamesrvAddr("localhost:9876");
+
+broker节点初始化时候加载如下参数，启动定时任务（定时任务的周期参数大多可以配置）（包括主备同步等，查看有哪些），根据设置刷盘方式（同步、异步）和主备同步方式（同步、异步）
+				MixAll.properties2Object(properties, brokerConfig);
+        MixAll.properties2Object(properties, nettyServerConfig);
+        MixAll.properties2Object(properties, nettyClientConfig);
+        MixAll.properties2Object(properties, messageStoreConfig);
+DataVersion记录broker更新配置次数和最后更新时间
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+生产端注意事项：
+1、生产者属性
+2、发送失败处理
+3、事务消息
+
+
+
+生产者属性：
 多个节点需要保证producerInstanceName 实例名称唯一
 若需要在同一台机器上启动多个produer  则需要设置不同的producerInstanceName
 producerGroup这个东东建议保持全局唯一
 
+
+
+发送失败处理
 Producer send fail：
 放在log、mem、外部存储hbase、redis等，等待合适的时机再次发送
 
 
-消费端：
+
+事务消息：
+
+V4.3.0开始，支持事务消息
+事务消息是先把消息存放在RMQ_SYS_TRANS_HALF_TOPIC主题中，当endTransaction时，-》Commit时候把消息放在原来的正常队列中然后deletePrepareMessage，Rollback就直接deletePrepareMessage，deletePrepareMessage就是把消息放到操作队列RMQ_SYS_TRANS_OP_HALF_TOPIC中，消息体存放消息在HALF_TOPIC主题中的offset。
+Broker启动的时候启动一个事务扫描线程，使用自己重写的CountDownLatch2类await定时回查客户端事务消息的状态，客户端根据事务ID查询到消息状态后进行endTransaction
+
+主题RMQ_SYS_TRANS_HALF_TOPIC和主题RMQ_SYS_TRANS_OP_HALF_TOPIC的队列一一对应（队列数一样），
+
+---------------------------------------------------------------------------------------------------------------------
+消费端注意事项：
+1、广播消费重复消费
+2、消息重复原因
+3、消费幂等的必要性
+4、消息查询功能
+5、消费失败处理
+6、广播消费
+
+
+
+
+消费组消费订阅信息一致
+同一个消费组：消费端订阅的信息必须一致，包括topic和tag
+
+
+
+广播消费重复消费：
 重启会重新消费的问题，是不是你重启的时候，改变了消费者的消费组
 对于广播消息，同一个消费组的消费者，已经被消费掉的消息，重启的消费者就不会再收到之前的消息的
 如果你起的消费者是一个完全新的消费组，就会从新消费全部消息的
@@ -233,12 +401,11 @@ Producer send fail：
 消息的commitOffset是有个5s的延迟的   如果你消费者进程在收到消息就立刻关掉的话 ，会导致offset未提交，会出现重复消费的
 
 
-消费端订阅的信息必须一致，包括topic和tag
-
 
 消息重复原因：
 生产端同步发送，未接收到ack，重试发送，次数设置：defaultMQProducer.getRetryTimesWhenSendFailed()
 消费端消费未返回ack，broker重复投递：msg.getReconsumeTimes()
+消费者数量变动（宕机或者新增）带来的重新负载，导致的消费offset丢失，导致消费重复
 重试次数会默认取消费组的配置，如果是3.4.9以后的版本就会取DefaultMQPushConsumer中的defaultMQPushConsumer.getMaxReconsumeTimes()，由于defaultMQPushConsumer中的默认次数是16，所以3.4.9一定是使用defaultMQPushConsumer中的重试次数的配置
 解决：
 RocketMQ Consumer去重：
@@ -256,14 +423,12 @@ MQ Consumer 消费消息场景下，消息已投递到消费者并完成业务�
 
 
 消息查询功能：SQL92查询
-重试队列和DLQ队列：重试和死信：会创建%RETRY%或%DLQ%+consumerGroup的主题，把消息发进去，在消费组
-重置消费
+重试队列和DLQ队列：重试和死信：会创建%RETRY%或%DLQ%+consumerGroup的主题，把消息发进去，在消费组重置消费
 
-消费失败：
+
+消费失败处理：
 BROADCASTING模式，直接drop，跳过
 CLUSTERING模式，重试发送服务端失败或异常，会再次在本地重试消费，所以说RocketMQ提供的是At Least Once语义
-
-
 
 消费失败放DB或者放DLQ中，再慢慢消费
 
@@ -289,32 +454,76 @@ this.rebalanceService.start();重新负载
 
 消息消费RT，rt啥意思请问？我理解是 response time
 
+Consumer端的ConsumeFromWhere在数据量小的时候，是不生效的，始终从头开始消费，这又说明RocketMQ提供的的at least once语义，另一个证明是不处理重复消息，由客户端去重，当然还有就是Broker去重代价比较大
+新集群或者是数据量较少的情况下  新的ConsumerGroup 这个枚举是不起作用的  用一段时间就可以了 这个跟策略有些关系
 
-消息发送到消费流程：
 
-Producer：
-1、发送消息时候，生产者获取本地topic信息（发布信息publishInfo），获取不到然后再从nameser更新一次，如果还是没获取到到，通过TBW102这个默认tocpic从nameser更新，然后复制它的路由信息创建publishInfo和subscribeInfo。publishInfo（可写mq）和subscribeInfo（可读的mq）都是MessageQueue信息（topic、brokerName，index）。
-2、选择一个mq来发送：MessageQueue mqSelected = this.selectOneMessageQueue(topicPublishInfo, lastBrokerName);
-3、根据mq中的brokerName获取broker地址，处理消息是否使用VIPChannel，是否压缩，hasCheckForbiddenHook执行、hasSendMessageHook执行等，this.remotingClient.invokeSync发送消息，hasSendMessageHook执行
-4、.remotingClient包含invokeSync、invokeAsync、invokeOneway等，执行this.rpcHook.doBeforeRequest(addr, request);，然后网络发送消息RemotingCommand response = this.invokeSyncImpl(channel, request, timeoutMillis);，最后this.rpcHook.doAfterResponse(RemotingHelper.parseChannelRemoteAddr(channel), request, response);
-5、在初始化Producer端的Client Netty时候，设置了NettyClientHandler来处理发送到Producer端的消息，不管是Sync还是Async，发送成功后都是由接收到Broker后由NettyClientHandler处理的，Sync释放等待，Async执行回调
+如果 master  slave  都活着 ，那就消费 master,如果master挂掉了 就会消费 slave
+其实在消息积压的时候，也会从slave消费
 
-Broker：
-1、SendMessageProcessor处理接收到的消息，处理消息，调用AbstractPluginMessageStore.putMessage-->DefaultMessageStore.putMessage-->this.commitLog.putMessage-->mappedFile.appendMessage(msg, this.appendMessageCallback);-->Statistics-->handleDiskFlush消息刷盘（pagecache）-->handleHA主备同步
 
-Consumer：
-PULL：DefaultMQPullConsumer.pullBlockIfNotFound-->this.pullAPIWrapper.pullKernelImpl(-->this.remotingClient.invokeAsync通过网络发送请求，拉取消息
-PUSH：this.checkConfig();-->  this.copySubscription();-->变量的构建，初始化，信息保存-->mQClientFactory.start();启动--》// Start request-response channel
-                    this.mQClientAPIImpl.start();
-                    // Start various schedule tasks
-                    this.startScheduledTask();
-                    // Start pull service
-                    this.pullMessageService.start();
-                    // Start rebalance service
-                    this.rebalanceService.start();
-                    // Start push service
-                    this.defaultMQProducer.getDefaultMQProducerImpl().start(false);
---》pullMessageService会不停地拉取消息，返回给客户端
+严格消费模式：会阻塞
+或者通过设置消息的方式，把单组顺序ABC放到重试队列，然后跳过单组的（业务实现），业务端ack broker消费成功，然后保存下来消费失败的单组消息自行处理
+
+
+
+广播消费：
+集群模式：一条消息被集群中任何一个消费者消费
+广播模式：每条消息都被每一个消费者消费。
+
+集群模式下，一条消息只能被集群内的一个消费者消费，进度不能保存在消费端，只能集中保存在一个地方，比较合适的是在Broker端。
+广播模式，既然每条消息要被每一个消费者消费，则消费进度可以与消费者保存在一起，也就是本地保存，
+
+集群模式：存储在Namesrv上，/rocketmq_home/store/config/consumerOffset.json
+广播模式：存储在消费者机器上，LOCAL_OFFSET_STORE_DIR : offset存储根目录，默认为用户主目录，例如 /home/dingw,可以在消费者启动的JVM参数中，通过-Drocketmq.client.localOffsetStoreDir=路径
+
+广播模式消息，如果返回CONSUME_LATER,竟然不会重试，而是直接丢弃
+
+
+---------------------------------------------------------------------------------------------------------------------
+Topic主题：
+1、线上关闭topic自动创建
+2、topic保存在broker的存储结构
+3、topic的读写队列
+
+
+线上关闭Topic自动创建：
+
+topic自动创建过程：
+在broker的sendMessage中的，有super.msgCheck(ctx, requestHeader, response);，在这个方法里面发现topic不存在，就会创建，并register到所有的broker（其实是所有的nameSrv）
+读写数量设置的不一样：都是从前面来循环，所以如果设置的写大于读，会导致后面的mq数据无法消费，读大于写，会导致部分mq的消费者空轮询
+
+
+线上应该关闭autoCreateTopicEnable，即在配置文件中将其设置为false。
+RocketMQ在发送消息时，会首先获取路由信息。如果是新的消息，由于MQServer上面还没有创建对应的Topic，这个时候，如果上面的配置打开的话，会返回默认TOPIC的（RocketMQ会在每台broker上面创建名为TBW102的TOPIC）路由信息，然后Producer会选择一台Broker发送消息，选中的broker在存储消息时，发现消息的topic还没有创建，就会自动创建topic。后果就是：以后所有该TOPIC的消息，都将发送到这台broker上，达不到负载均衡的目的。
+所以基于目前RocketMQ的设计，建议关闭自动创建TOPIC的功能，然后根据消息量的大小，手动创建TOPIC。
+
+
+
+topic保存在broker的TopicConfigManger数据结构中，持久化在：
+在创建 topic 的时候，会同时推送 topic 的信息到 name srv 中，也会同时里面进行持久化，保存 topic 的相关信息。configManager类里有一个persist方法
+
+
+topic的读写队列如何理解
+读写数量设置的不一样：都是从前面来循环，所以如果设置的写大于读，会导致后面的mq数据无法消费，读大于写，会导致部分mq的消费者空轮询
+比如说有一个topic原来有8个queue，要缩小为4个queue，你就会发现有用了，就是动态调整过程中，会出现重复消费、丢失数据等情况，比较敏感
+可以先把readQueueNums缩小，禁写后面的mq，等后面的mq消费完，再缩小writeQueueNums即可，未验证，不知是否可行
+所以说队列数缩小的时候，被缩小的队列不会再被消费，其实只要readQueueNums缩小就是的
+读写队列数不一样的时候，在broker只是保存topic配置，在Client端write和read是分开保存在TopicPublishInfo和subscribeInfo中的，分别创建publish的mq和subscribe的mq
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+运维监控：
+1、Console提供的功能
+2、Console提供三种查询消息方式
+
+
+
+Console提供的功能：
+生产者、消费者、Broker、Topic、Message消息
+
+
 
 MQAdmin：MQAdminExt接口提供的方法，实现类DefaultMQAdminExt（内部都是直接调用DefaultMQAdminExtImpl）和DefaultMQAdminExtImpl
 
@@ -326,94 +535,26 @@ RequestCode和ResponseCode定义了请求和响应的类型
 通过MQAdmin或CLI方式创建topic：先更新this.brokerController.getTopicConfigManager().updateTopicConfig(topicConfig);包括保存在缓存topicConfigTable中和this.persist();持久化到文件，再注册到全部Broker中this.brokerController.registerBrokerAll(false, true);，其实是把本地的全部topic配置register到全部的nameSrv中去，nameSrv接收到后，更新本地的mq信息。
 
 
-线上关闭Topic自动创建：
-
-topic自动创建过程：
-在broker的sendMessage中的，有super.msgCheck(ctx, requestHeader, response);，在这个方法里面发现topic不存在，就会创建，并register到所有的broker（其实是所有的nameSrv）
-读写数量设置的不一样：都是从前面来循环，所以如果设置的写大于读，会导致后面的mq数据无法消费，读大于写，会导致部分mq的消费者空轮询
-
-
-
-线上应该关闭autoCreateTopicEnable，即在配置文件中将其设置为false。
-RocketMQ在发送消息时，会首先获取路由信息。如果是新的消息，由于MQServer上面还没有创建对应的Topic，这个时候，如果上面的配置打开的话，会返回默认TOPIC的（RocketMQ会在每台broker上面创建名为TBW102的TOPIC）路由信息，然后Producer会选择一台Broker发送消息，选中的broker在存储消息时，发现消息的topic还没有创建，就会自动创建topic。后果就是：以后所有该TOPIC的消息，都将发送到这台broker上，达不到负载均衡的目的。
-所以基于目前RocketMQ的设计，建议关闭自动创建TOPIC的功能，然后根据消息量的大小，手动创建TOPIC。
-
-
-RocketMQ的文件：
-topic的发送和接收都是依据mq为单位，send时候需要选Select一个mq，拉取消息（pull或push）也是拉取某个mq中的信息，topic的mq保存在所有的nameSrv中，所有的nameSrv地位是相等的。
-
-topic、mq都是逻辑单元，部署物理单元，只有commitlog、topic offsetconsume offset等是对应物理文件
-
-
-ConfigManager负责持久化数据或者加载，查看（和子类）里面的persist()或load() 
-BrokerPathConfigHelper里面是持久化文件的名字
-StorePathConfigHelper 存储相关的持久化文件的名字
-在properties中配置跟存储路径storePathRootDir，在它下面会有
-文件：abort、checkpoint、lock
-文件夹：commitlog、config、consumequeue、index、
-
-abort文件：仅仅是创建，目前没有使用
-
-lock文件：启动时候锁定改文件，退出释放，一个存储路径只能启动一个服务，防止多个服务使用同一个路径
-
-checkpoint文件：主要记录三个时间
-physicMsgTimestamp【物理消息刷盘时间，上面的commitlog文件夹】
-logicsMsgTimestamp【逻辑消息时间，上面的consumequeue文件夹】
-indexMsgTimestamp【index消息时间，上面的index文件夹】
-
-
-
-1、commitlog文件夹【消息日志文件，大小默认1G大小，文件名为文件起始字节数，20位，不足前面补0：第二个文件名为1073741824=1024*1024*1024】 
-
-2、config文件夹：【topics、subscriptionGroup、consumerOffset、delayOffset、consumerFilter，都有bak文件】   
-topics.json【主题的元信息：topicName、readQueueNums、writeQueueNums、perm、order】
-subscriptionGroup.json【订阅组的元信息：】
-consumerOffset.json【消费组消费进度信息："TESTTEST@CONSUMER_TEST_GROUP":{0:2073,1:2074,2:2073,3:2074}】
-delayOffset.json【】
-consumerFilter.json【】
-
-
-topics.json.bak
-consumerOffset.json.bak
-delayOffset.json.bak
-consumerFilter.json.bak
-
-3、consumequeue文件夹：【主题下的队列和commitlog的offset对应关系等元信息】一级目录是主题名称，二级目录是queueId，下面是文件（名称和commitlog的文件对应，大小默认固定6M），存储和commitlog的offset对应关系等元信息
-4、index文件夹：【名字为yyyyMMddhhmmssSSS格式】保存消息的Key和commitlog的offset对应关系等元信息，根据Key来查询消息使用
-
-
 Console提供三种查询消息方式:
 1、根据Topic+beginTime+endTime【使用DefaultMQPullConsumer获取Topic的全部mq，循环mq，使用mq+begin获取minOffset，mq+begin获取maxOffset，使用consumer.pull(mq, subExpression, offset, 32)拉取消息，从minOffset开始，最大拉取到maxOffset，直到达到消息数量】
 2、根据Topic+Key（+beginTime+endTime，默认是0到当前时间，就是当前存在的全部消息）【根据Topic+Key+maxNum+beginTime+endTime从Broker的index文件夹下的文件中搜索消息（数量是maxNum和Broker部署时候配置的MaxMsgsNumBatch中的min的那个决定）】
 3、根据MessageId【根据MessageId可以解析出brokerAddr和commitLogOffset，传到对应的Broker，Broker根据commitLogOffset查询消息并返回】
 
 
-topic保存在broker的TopicConfigManger数据结构中，持久化在：
-在创建 toPic 的时候，会同时推送 topic 的信息到 name srv 中，也会同时里面进行持久化，保存 topic 的相关信息。configManager类里有一个persist方法
 
+Console：
+1、目前使用连接为使用切面注入方式创建，线程退出就清除，频繁操作还是会频繁创建销毁连接
+可以修改为连接使用连接缓存优化，定时清理连接，定时刷新，定时任务扫描超时的连接并清除，ConsumeMessageConcurrentlyService中的cleanExpireMsg
+2、前台页面查询慢，建立连接和属性拷贝慢：1、建立连接慢，查询rocketmq一次，第一次查询260ms左右，不建立连接就是50ms左右，2、循环查询导致很慢，去除后台循环查询，简化前台查询功能，每次只查询一次，在前台分页，3、属性拷贝大概2~3个1ms，进来避免大数据属性拷贝
 
-topic的读写队列如何理解
-读写数量设置的不一样：都是从前面来循环，所以如果设置的写大于读，会导致后面的mq数据无法消费，读大于写，会导致部分mq的消费者空轮询
-比如说有一个topic原来有8个queue，要缩小为4个queue，你就会发现有用了，就是动态调整过程中，会出现重复消费、丢失数据等情况，比较敏感
-可以先把readQueueNums缩小，禁写后面的mq，等后面的mq消费完，再缩小writeQueueNums即可，未验证，不知是否可行
-所以说队列数缩小的时候，被缩小的队列不会再被消费，其实只要readQueueNums缩小就是的
-读写队列数不一样的时候，在broker只是保存topic配置，在Client端write和read是分开保存在TopicPublishInfo和subscribeInfo中的，分别创建publish的mq和subscribe的mq
-
-
-本机启动RocketMQ
-本地rocketmq debug环境构建：
-NamesrvStartup中添加：namesrvConfig.setRocketmqHome("/Users/yangzl/src/RocketMQ-3.5.8");
-BrokerStartup中添加如下：brokerConfig.setRocketmqHome("/Users/yangzl/src/RocketMQ-3.5.8");
-brokerConfig.setNamesrvAddr("localhost:9876");
-
-
-broker节点初始化时候加载如下参数，启动定时任务（定时任务的周期参数大多可以配置）（包括主备同步等，查看有哪些），根据设置刷盘方式（同步、异步）和主备同步方式（同步、异步）
-				MixAll.properties2Object(properties, brokerConfig);
-        MixAll.properties2Object(properties, nettyServerConfig);
-        MixAll.properties2Object(properties, nettyClientConfig);
-        MixAll.properties2Object(properties, messageStoreConfig);
-DataVersion记录broker更新配置次数和最后更新时间
-
+---------------------------------------------------------------------------------------------------------------------
+常见问题：
+1、事务的回查
+2、消费端要做好幂等性
+3、rocketmq的内存占用
+4、刷盘方式
+5、RocketMQ和ActiveMQ的区别
+6、Rocketmq和kafka的区别
 
 rocketmq的回调检查这块
 应该是用数据库或者REDIS作为QUEUE然后模拟实现prepared加扫描回调吧
@@ -447,18 +588,6 @@ Java里面有Netty这种好东西，所以TCP通信业变得很easy了
 SQL是个好东西
 
 
-Consumer端的ConsumeFromWhere在数据量小的时候，是不生效的，始终从头开始消费，这又说明RocketMQ提供的的at least once语义，另一个证明是不处理重复消息，由客户端去重，当然还有就是Broker去重代价比较大
-新集群或者是数据量较少的情况下  新的ConsumerGroup 这个枚举是不起作用的  用一段时间就可以了 这个跟策略有些关系
-
-
-如果 master  slave  都活着 ，那就消费 master,如果master挂掉了 就会消费 slave
-其实在消息积压的时候，也会从slave消费
-
-
-严格消费模式：会阻塞
-或者通过设置消息的方式，把单组顺序ABC放到重试队列，然后跳过单组的（业务实现），业务端ack broker消费成功，然后保存下来消费失败的单组消息自行处理
-
-
 rocketmq的内存占用
 堆外内存越大越好，堆内不大
 都是利用操作系统的文件映射
@@ -467,6 +596,8 @@ rocketmq的内存占用
 正常消费没有堆积的时候，从内存取消息，会比较快，否则就要从disk取消息，就比较慢了
 
 
+
+刷盘方式：
 同步刷盘就是立刻刷盘，不管内存页是否满一页，同步复制就是集群中，至少有一个slave的pagecache中与master的offset一致，即可认为高可用成功
 如果数据写入分页，但未刷盘，这时，JVM 退出（kill -9 pid 这种），未刷盘的数据应该都会刷盘
 操作系统会帮你做吧  
@@ -489,6 +620,7 @@ RocketMQ版本3.4.6磁盘flush出错
 原因是很多天前，系统时间发生了变化，我们做了次系统时间同步，导致日志生成的时间异常。然后这些文件由于时间异常，导致了这些文件的最后修改时间发生了混乱，导致了系统归档的时候，删除了一些中间的日志，反而留下较旧的日志，也就是minOffset还是最小的，但是中间的一些日志文件已经被删除，在计算最新index的时候，是按照最小和最新offset计算的。而实际上，之前的归档已经删除了部分中间的日志，导致日志文件个数比计算出来的应该落日志的数字要小，报warning reputService的index出错。其实这个时候已经没有办法更新consumerqueue和index了
 
 
+
 延迟消息：设置延时级别，在服务端设置延时级别对应的延时时间
 死信队列，重试消费超过一定次数默认是16次就放进死信队列，可配置重试次数和重试时间间隔
 消息消费超时后将消息清除、重试消费此消息
@@ -499,53 +631,14 @@ consumer group 消费进度重置，根据时间重置
 拉取消息的线程数，由于使用了无界队列，所以最大线程数不会生效，一定是最小线程数
 
 
-Console：
-1、目前使用连接为使用切面注入方式创建，线程退出就清除，频繁操作还是会频繁创建销毁连接
-可以修改为连接使用连接缓存优化，定时清理连接，定时刷新，定时任务扫描超时的连接并清除，ConsumeMessageConcurrentlyService中的cleanExpireMsg
-2、前台页面查询慢，建立连接和属性拷贝慢：1、建立连接慢，查询rocketmq一次，第一次查询260ms左右，不建立连接就是50ms左右，2、循环查询导致很慢，去除后台循环查询，简化前台查询功能，每次只查询一次，在前台分页，3、属性拷贝大概2~3个1ms，进来避免大数据属性拷贝
-
-
 ---------------------------------------------------------------------------------------------------------------------
 
+
+Rocketmq介绍文章
+https://blog.csdn.net/prestigeding/article/details/78888290
 
 
 
 ---------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
----------------------------------------------------------------------------------------------------------------------
-
-
-
-
----------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
----------------------------------------------------------------------------------------------------------------------
-
-
-
-
----------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

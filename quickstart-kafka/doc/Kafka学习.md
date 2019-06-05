@@ -11,6 +11,10 @@ kafka架构内部原理
 kafka架构内部原理
 https://blog.csdn.net/lp284558195/article/details/80297208
 
+在一套kafka架构中有多个Producer，多个Broker,多个Consumer，每个Producer可以对应多个Topic，每个Consumer只能对应一个ConsumerGroup。
+整个Kafka架构对应一个ZK集群，通过ZK管理集群配置，选举Leader，以及在consumer group发生变化时进行rebalance。
+
+
 Producer发送到Broker，Consumer从Broker上pull消息
 Zookeeper管理集群配置，选举leader，以及在consumer group发生变化时进行rebalance
 Producer使用push(推)模式将消息发布到broker，Consumer使用pull(拉)模式从broker订阅并消费消息。
@@ -144,6 +148,9 @@ Consumer消费端：
 
 
 ---------------------------------------------------------------------------------------------------------------------
+深入剖析kafka架构内部原理
+https://blog.csdn.net/w372426096/article/details/81282320
+https://blog.csdn.net/lp284558195/article/details/80297208
 
 
 
