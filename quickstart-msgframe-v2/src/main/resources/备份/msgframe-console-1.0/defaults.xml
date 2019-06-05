@@ -25,9 +25,9 @@
 				value="msgframe" />
 			<property name="com.ai.common.dao.base" value="msgframe" />
 			<property name="com.ai.aif.msgframe" value="msgframe" />
-			<property name="com.asiainfo.tools.dao" value="msgframe" />
-			<property name="com.asiainfo.pageframe" value="msgframe" />
-			<property name="com.asiainfo.appframe.ext.exeframe" value="msgframe" />
+			<property name="com.youngzil.tools.dao" value="msgframe" />
+			<property name="com.youngzil.pageframe" value="msgframe" />
+			<property name="com.youngzil.appframe.ext.exeframe" value="msgframe" />
 		</mapping>
 	</transaction>
 	<!--默认数据源信息 -->
@@ -93,10 +93,10 @@
 				value="msgframe" />
 			<property name="com.ai.common.dao.base" value="msgframe" />
 			<property name="com.ai.aif.msgframe" value="msgframe" />
-			<property name="com.asiainfo.test" value="msgframe" />
-			<property name="com.asiainfo.tools.dao" value="msgframe" />
-			<property name="com.asiainfo.pageframe" value="msgframe" />
-			<property name="com.asiainfo.appframe.ext.exeframe" value="msgframe" />
+			<property name="com.youngzil.test" value="msgframe" />
+			<property name="com.youngzil.tools.dao" value="msgframe" />
+			<property name="com.youngzil.pageframe" value="msgframe" />
+			<property name="com.youngzil.appframe.ext.exeframe" value="msgframe" />
 		</mapping>
 	</datasource>
 

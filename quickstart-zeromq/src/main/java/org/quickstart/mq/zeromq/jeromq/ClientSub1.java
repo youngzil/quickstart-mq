@@ -3,7 +3,7 @@
  * 文件名：ClientSub1.java
  * 版本信息：
  * 日期：2017年9月6日
- * Copyright asiainfo Corporation 2017
+ * Copyright youngzil Corporation 2017
  * 版权所有 *
  */
 package org.quickstart.mq.zeromq.jeromq;

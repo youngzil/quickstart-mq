@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<msgframeCfg xmlns="http://www.asiainfo.com/msgframe">
+<msgframeCfg xmlns="http://www.youngzil.com/msgframe">
 	<centerCfg>
 	<!-- 客户端所属中心 -->
 	<name>amsCenter</name>
@@ -52,41 +52,41 @@
 	<subscribes>
 		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsPaperLessPrint" tag="*" transaction="true" implclass="com.ai.aif.msgframe.consumer.core.ConsumerProcessorImpl"/>
     <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsResPayCardRecSend" tag="*"  transaction="true" implclass="com.ai.aif.msgframe.consumer.core.ConsumerProcessorImpl"/>
-    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsCallEsbSend" tag="*"  transaction="true" implclass="com.asiainfo.ac.consumer.CallEsbConsumerImpl"/>
-    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsCallFlowSend" tag="*"  transaction="true" implclass="com.asiainfo.ac.consumer.CallFlowConsumerImpl"/>
-    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsCallDealPromSend" tag="*"  transaction="true" implclass="com.asiainfo.ac.consumer.CallDealPromConsumerImpl"/>
-    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="CUST_CUSTOMER_SEND2ACCTCENTER" tag="*"  transaction="true" implclass="com.asiainfo.ac.consumer.AcctChangeConsumerImpl"/>
-    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_CONSISTENCY_REVOKE" tag="*"  transaction="true" implclass="com.asiainfo.ac.consumer.BusiConsistenceyConsumerImpl"/>
-    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsCallBalanceTransSpec" tag="*"  transaction="true" implclass="com.asiainfo.ac.consumer.CallBalanceTransConsumerImpl"/>
-	  <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsSendUserAppBal" tag="*"  transaction="true" implclass="com.asiainfo.ac.consumer.SendUserAppBalConsumerImpl"/>
-	  <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsSendSimActiveAPP" tag="*"  transaction="true" implclass="com.asiainfo.ac.consumer.SendSimActiveAPPConsumerImpl"/>
-	  <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsPayOweFee" tag="*"  transaction="true" implclass="com.asiainfo.ac.consumer.PayOweFeeConsumerImpl"/>
-	  <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsDelUserAppBal" tag="*"  transaction="true" implclass="com.asiainfo.ac.consumer.DelUserAppBalConsumerImpl"/>
+    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsCallEsbSend" tag="*"  transaction="true" implclass="com.youngzil.ac.consumer.CallEsbConsumerImpl"/>
+    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsCallFlowSend" tag="*"  transaction="true" implclass="com.youngzil.ac.consumer.CallFlowConsumerImpl"/>
+    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsCallDealPromSend" tag="*"  transaction="true" implclass="com.youngzil.ac.consumer.CallDealPromConsumerImpl"/>
+    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="CUST_CUSTOMER_SEND2ACCTCENTER" tag="*"  transaction="true" implclass="com.youngzil.ac.consumer.AcctChangeConsumerImpl"/>
+    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_CONSISTENCY_REVOKE" tag="*"  transaction="true" implclass="com.youngzil.ac.consumer.BusiConsistenceyConsumerImpl"/>
+    <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsCallBalanceTransSpec" tag="*"  transaction="true" implclass="com.youngzil.ac.consumer.CallBalanceTransConsumerImpl"/>
+	  <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsSendUserAppBal" tag="*"  transaction="true" implclass="com.youngzil.ac.consumer.SendUserAppBalConsumerImpl"/>
+	  <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsSendSimActiveAPP" tag="*"  transaction="true" implclass="com.youngzil.ac.consumer.SendSimActiveAPPConsumerImpl"/>
+	  <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsPayOweFee" tag="*"  transaction="true" implclass="com.youngzil.ac.consumer.PayOweFeeConsumerImpl"/>
+	  <subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AmsDelUserAppBal" tag="*"  transaction="true" implclass="com.youngzil.ac.consumer.DelUserAppBalConsumerImpl"/>
 	    <!-- subscribeCenter 订阅的中心，统一化配置 -->
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_570" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_571" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_572" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_573" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_574" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_575" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_576" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_577" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_578" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_579" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_580" transaction="true" implclass="com.asiainfo.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_570" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_571" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_572" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_573" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_574" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_575" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_576" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_577" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_578" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_579" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="AMS_USER_BUSI_DEAL" tag="A_USER_580" transaction="true" implclass="com.youngzil.ac.consumer.Cust2AmsConsumerImpl"/>
 		
 		<!-- subscribeCenter 订阅的中心，死信队列统一化配置 -->
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_570" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_571" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_572" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_573" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_574" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_575" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_576" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_577" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_578" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_579" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
-		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_580" transaction="true" implclass="com.asiainfo.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_570" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_571" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_572" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_573" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_574" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_575" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_576" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_577" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_578" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_579" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
+		<subscribe consumeType="pull" subscribeCenter="amsCenter"  subDestination="DLQ.AMS_USER_BUSI_DEAL" tag="DLQ_USER_580" transaction="true" implclass="com.youngzil.ac.consumer.DlqCust2AmsConsumerImpl"/>
 		 
 	</subscribes>
 

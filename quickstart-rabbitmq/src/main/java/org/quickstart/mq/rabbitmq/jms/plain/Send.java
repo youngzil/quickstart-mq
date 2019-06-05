@@ -3,7 +3,7 @@
  * 文件名：Send.java
  * 版本信息：
  * 日期：2017年2月28日
- * Copyright asiainfo Corporation 2017
+ * Copyright youngzil Corporation 2017
  * 版权所有 *
  */
 package org.quickstart.mq.rabbitmq.jms.plain;

@@ -1,5 +1,5 @@
 /**
- * 项目名称：quickstart-activemq 文件名：ActiveMQMonitorTest.java 版本信息： 日期：2017年8月8日 Copyright asiainfo
+ * 项目名称：quickstart-activemq 文件名：ActiveMQMonitorTest.java 版本信息： 日期：2017年8月8日 Copyright youngzil
  * Corporation 2017 版权所有 *
  */
 package org.quickstart.mq.activemq.jmx;

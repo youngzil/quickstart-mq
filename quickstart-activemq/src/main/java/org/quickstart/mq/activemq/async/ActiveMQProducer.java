@@ -3,7 +3,7 @@
  * 文件名：ActiveMQConsumer.java
  * 版本信息：
  * 日期：2016年12月23日
- * Copyright asiainfo Corporation 2016
+ * Copyright youngzil Corporation 2016
  * 版权所有 *
  */
 package org.quickstart.mq.activemq.async;

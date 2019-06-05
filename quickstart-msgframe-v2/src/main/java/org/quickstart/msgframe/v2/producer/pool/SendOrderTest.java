@@ -3,7 +3,7 @@
  * 文件名：ThreadPoolSendTest.java
  * 版本信息：
  * 日期：2018年7月3日
- * Copyright asiainfo Corporation 2018
+ * Copyright youngzil Corporation 2018
  * 版权所有 *
  */
 package org.quickstart.msgframe.v2.producer.pool;

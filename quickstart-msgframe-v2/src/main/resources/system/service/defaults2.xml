@@ -33,15 +33,15 @@
 				value="aiorder"/> <property name="com.ai.order.rediness" value="ord_base"/>
 				<property name="com.ai.order.bomgmt" value="aiorder"/> -->
 			<!-- <property name="com.ai.common" value="ord_base" /> -->
-      <property name="com.asiainfo.appframe.ext.exeframe" value="base"/>
+      <property name="com.youngzil.appframe.ext.exeframe" value="base"/>
       <!-- 短信 -->
 			<property name="com.ai.common.sms.fastpending" value="so{CENTER}"/>
 			<property name="com.ai.realname.mgr.user.dao.so" value="so{CENTER}" />
 			<property name="com.ai.realname.mgr.user.dao.party" value="party" />
 			<property name="com.ai.realname.mgr.customer.dao.so" value="so{CENTER}" />
 			<property name="com.ai.realname.mgr.customer.dao.party" value="party" />
-			<property name="com.asiainfo.appframe.ext.exeframe.bp" value="aibatch" />
-	 		<property name="com.asiainfo.crm.common.bp " value="aibatch" />
+			<property name="com.youngzil.appframe.ext.exeframe.bp" value="aibatch" />
+	 		<property name="com.youngzil.crm.common.bp " value="aibatch" />
 			<!-- BP框架必须依赖 -->
 
 
@@ -815,7 +815,7 @@
 			<property name="com.ai.common.sms.fastpending" value="so{CENTER}" />
 			<property name="com.ai.common.sms.configuration" value="base" />
 		    <!-- 框架必须依赖 -->
-			<property name="com.asiainfo.appframe.ext.exeframe" value="base"/>
+			<property name="com.youngzil.appframe.ext.exeframe" value="base"/>
 			<!-- 框架必须依赖 -->
 			<!-- 缓存数据源配置 -->
 			<property name="com.ai.cust.cache.dao" value="base" />
@@ -830,8 +830,8 @@
 			<property name="com.ai.cust.mgr.contact.dao.party" value="party" /> 
       <property name="com.ai.cust.mgr.custorder.dao"  value="so{CENTER}" />
 			<!-- BP框架必须依赖 -->
-			<property name="com.asiainfo.appframe.ext.exeframe.bp" value="aibatch" />
-	 		<property name="com.asiainfo.crm.common.bp " value="aibatch" />
+			<property name="com.youngzil.appframe.ext.exeframe.bp" value="aibatch" />
+	 		<property name="com.youngzil.crm.common.bp " value="aibatch" />
 			<!-- BP框架必须依赖 -->
 			<property name="com.ai.cust.client.mgr.dao.msglog" value="msglog" />
 		</mapping>

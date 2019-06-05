@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<msgframeCfg xmlns="http://www.asiainfo.com/msgframe">
+<msgframeCfg xmlns="http://www.youngzil.com/msgframe">
 	<!--［1-＊］ 客户端所属中心，如果是服务端配置centerCfg节点可以有多个，如果是客户端配置centerCfg只有一个 -->
 	<centerCfg>
 		<!--［1-1］ 中心名称 -->

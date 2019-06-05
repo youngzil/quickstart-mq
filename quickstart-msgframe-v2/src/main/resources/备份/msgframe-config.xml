@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<msgframeCfg xmlns="http://www.asiainfo.com/msgframe"> 
+<msgframeCfg xmlns="http://www.youngzil.com/msgframe">
   <!-- 客户端所属中心 -->  
   <name>cust</name>  
   <!--全局配置-->  

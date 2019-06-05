@@ -31,7 +31,7 @@
       <property name="com.ai.comframe.autoform" value="base"/>
       <property name="com.ai.comframe.client" value="base"/>
       <property name="com.ai.comframe.wrap" value="base"/>
-      <property name="com.asiainfo.appframe.ext.exeframe" value="base"/>
+      <property name="com.youngzil.appframe.ext.exeframe" value="base"/>
       
       <property name="com.ai.aif.msgframe" value="base"/>
     </mapping>
@@ -215,13 +215,13 @@
       <property name="com.ai.comframe.test" value="base"/>
       <property name="com.ai.comframe.autoform" value="base"/>
       <property name="com.ai.comframe.wrap" value="base"/>
-      <property name="com.asiainfo.appframe.ext.exeframe" value="base"/>
+      <property name="com.youngzil.appframe.ext.exeframe" value="base"/>
 <!--      <property name="com.ai.comframe.dao" value="base"/>-->  
       <property name="com.ai.common" value="base"/>
       <!--secframe
 	  <property name="com.ai.secframe" value="sec"/>
 	  <property name="com.ai.frame" value="sec"/>
-      <property name="com.asiainfo.crm.sec" value="sec"/> 
+      <property name="com.youngzil.crm.sec" value="sec"/>
        -->
        
       <property name="com.ai.test" value="base"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<destinationRuleCfg xmlns="http://www.asiainfo.com/msgframe/destinationrule"> 
+<destinationRuleCfg xmlns="http://www.youngzil.com/msgframe/destinationrule">
   <subject name="CUST_ACCT_SEND2BILLING"> 
     <area name="ACCT_570" desc="衢州" number="1"/>  
     <area name="ACCT_571" desc="杭州" number="1"/>  

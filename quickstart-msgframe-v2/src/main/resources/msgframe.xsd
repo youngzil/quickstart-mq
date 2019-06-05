@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://www.asiainfo.com/msgframe"
+<schema targetNamespace="http://www.youngzil.com/msgframe"
 	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
-	xmlns:tns="http://www.asiainfo.com/msgframe">
+	xmlns:tns="http://www.youngzil.com/msgframe">
 
 	<element name="msgframeCfg" type="tns:msgframeCfg"></element>
 

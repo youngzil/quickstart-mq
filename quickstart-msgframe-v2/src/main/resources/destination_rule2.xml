@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<destinationRuleCfg xmlns="http://www.asiainfo.com/msgframe/destinationrule">
+<destinationRuleCfg xmlns="http://www.youngzil.com/msgframe/destinationrule">
 	<!-- subject配置的是,name是主题名称-->
 	<subject name="TagTest">
 	<!--area是分地市、分区域、分tag，name是名称，desc是描述，number是分区数量  -->

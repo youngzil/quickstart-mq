@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<destinationRuleCfg xmlns="http://www.asiainfo.com/msgframe/destinationrule">
+<destinationRuleCfg xmlns="http://www.youngzil.com/msgframe/destinationrule">
 	<subject name="AMS_USER_BUSI_DEAL">
 		<area name="A_USER_570" desc="衢州" number="1"/>
 		<area name="A_USER_571" desc="杭州" number="1"/>

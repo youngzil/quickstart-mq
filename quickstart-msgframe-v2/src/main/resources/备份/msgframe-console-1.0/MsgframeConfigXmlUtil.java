@@ -3,7 +3,7 @@
  * 文件名：MsgframeConfigXmlUtil.java
  * 版本信息：
  * 日期：2017年11月9日
- * Copyright asiainfo Corporation 2017
+ * Copyright youngzil Corporation 2017
  * 版权所有 *
  */
 package com.ai.aif.msgframe.common.util;
@@ -29,7 +29,7 @@ public class MsgframeConfigXmlUtil {
         
          //创建根节点
         Element root = doc.createElement("msgframeCfg");
-        root.setAttribute("xmlns", "http://www.asiainfo.com/msgframe");
+        root.setAttribute("xmlns", "http://www.youngzil.com/msgframe");
        //将根节点添加到Document对象中
         doc.appendChild(root);
         
@@ -42,7 +42,7 @@ public class MsgframeConfigXmlUtil {
         
          //创建根节点
         Element root = doc.createElement("msgframeCfg");
-        root.setAttribute("xmlns", "http://www.asiainfo.com/msgframe");
+        root.setAttribute("xmlns", "http://www.youngzil.com/msgframe");
        //将根节点添加到Document对象中
         doc.appendChild(root);
         
@@ -55,7 +55,7 @@ public class MsgframeConfigXmlUtil {
         
          //创建根节点
         Element root = doc.createElement("msgframeCfg");
-        root.setAttribute("xmlns", "http://www.asiainfo.com/msgframe");
+        root.setAttribute("xmlns", "http://www.youngzil.com/msgframe");
        //将根节点添加到Document对象中
         doc.appendChild(root);
         
@@ -68,7 +68,7 @@ public class MsgframeConfigXmlUtil {
         
          //创建根节点
         Element root = doc.createElement("msgframeCfg");
-        root.setAttribute("xmlns", "http://www.asiainfo.com/msgframe");
+        root.setAttribute("xmlns", "http://www.youngzil.com/msgframe");
        //将根节点添加到Document对象中
         doc.appendChild(root);
         
@@ -81,7 +81,7 @@ public class MsgframeConfigXmlUtil {
         
          //创建根节点
         Element root = doc.createElement("msgframeCfg");
-        root.setAttribute("xmlns", "http://www.asiainfo.com/msgframe");
+        root.setAttribute("xmlns", "http://www.youngzil.com/msgframe");
        //将根节点添加到Document对象中
         doc.appendChild(root);
         

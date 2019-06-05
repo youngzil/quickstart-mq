@@ -3,7 +3,7 @@
  * 文件名：CounterInterceptor.java
  * 版本信息：
  * 日期：2017年10月21日
- * Copyright asiainfo Corporation 2017
+ * Copyright youngzil Corporation 2017
  * 版权所有 *
  */
 package org.quickstart.mq.kafka.sample2.interceptor.producer;

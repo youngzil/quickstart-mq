@@ -3,7 +3,7 @@
  * 文件名：TransactionConsumer.java
  * 版本信息：
  * 日期：2018年6月9日
- * Copyright asiainfo Corporation 2018
+ * Copyright youngzil Corporation 2018
  * 版权所有 *
  */
 package org.quickstart.mq.kafka.sample2;

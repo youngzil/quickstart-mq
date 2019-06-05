@@ -3,7 +3,7 @@
  * 文件名：RocketMQProducer.java
  * 版本信息：
  * 日期：2016年12月6日
- * Copyright asiainfo Corporation 2016
+ * Copyright youngzil Corporation 2016
  * 版权所有 *
  */
 package org.quickstart.mq.rocketmq.simple;

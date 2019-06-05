@@ -3,7 +3,7 @@
  * 文件名：Pull.java
  * 版本信息：
  * 日期：2017年9月8日
- * Copyright asiainfo Corporation 2017
+ * Copyright youngzil Corporation 2017
  * 版权所有 *
  */
 package org.quickstart.mq.zeromq.jeromq;

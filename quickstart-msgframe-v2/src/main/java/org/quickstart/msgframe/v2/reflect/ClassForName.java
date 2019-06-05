@@ -3,7 +3,7 @@
  * 文件名：ClassForName.java
  * 版本信息：
  * 日期：2017年2月18日
- * Copyright asiainfo Corporation 2017
+ * Copyright youngzil Corporation 2017
  * 版权所有 *
  */
 package org.quickstart.msgframe.v2.reflect;
