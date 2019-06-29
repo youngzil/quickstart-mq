@@ -18,6 +18,28 @@ bin/zookeeper-server-stop.sh
 bin/kafka-server-stop.sh 
 
 
+
+列出主题列表
+bin/kafka-topics.sh --list --zookeeper 127.0.0.1:12181
+bin/kafka-topics.sh --list --zookeeper 10.112.56.90:2181,10.112.56.91:2181,10.112.56.94:2181
+
+
+查看主题详细信息
+bin/kafka-topics.sh --describe --zookeeper 10.112.56.90:2181,10.112.56.91:2181,10.112.56.94:2181 --topic event
+
+
+消费主题
+bin/kafka-console-consumer.sh --zookeeper 127.0.0.1:12181 --topic behavior
+bin/kafka-console-consumer.sh --zookeeper 10.112.56.90:2181,10.112.56.91:2181,10.112.56.94:2181 --topic alarm --from-beginning
+bin/kafka-console-consumer.sh --zookeeper 127.0.0.1:12181 --topic behavior
+
+
+删除主题
+bin/kafka-topics.sh --delete --zookeeper 10.112.56.90:2181,10.112.56.91:2181,10.112.56.94:2181 --topic alarm
+
+
+
+
 创建topic：
 #replication-factor 表示该topic需要在不同的broker中保存几份, partitions为几个分区
 现在我们要创建一个含有两个Partition分区和2个备份的broker：
