@@ -1,3 +1,22 @@
+https://www.cnblogs.com/caoshousong/p/10474992.html
+http://activemq.apache.org/replicated-leveldb-store.html
+
+
+
+<!-- 限制大小为50mb -->
+<persistenceAdapter>
+    <levelDB directory="${activemq.data}/levelDB" logSize="52428800"/>
+</persistenceAdapter>
+
+<!-- 改为异步写log文件 -->
+<persistenceAdapter>
+    <levelDB directory="${activemq.data}/levelDB" logSize="52428800" sync="false"/>
+</persistenceAdapter>
+
+
+
+
+
 1、brokerName配置：主备一致
 2、persistenceAdapter配置
 3、服务协议和服务端口配置
