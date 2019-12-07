@@ -8,8 +8,11 @@ https://github.com/apache/rocketmq-externals
 
 学习网站
 https://github.com/a2888409/RocketMQ-Learning
+
 带有注释的源码
 https://codeload.github.com/YunaiV/incubator-rocketmq
+https://github.com/RtwChina/MyRocketMQ
+
 
 http://rocketmq.apache.org/docs/quick-start/
 

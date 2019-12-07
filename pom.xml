@@ -38,6 +38,7 @@
 		<module>quickstart-msgframe-v1</module>
 		<module>quickstart-msgframe-v2</module>
     <module>quickstart-hornetq</module>
+	<module>quickstart-nanomsg</module>
   </modules>
 
 </project>

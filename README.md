@@ -1,5 +1,5 @@
-原项目地址
-https://gitee.com/youngzil/quickstart-all
+项目地址
+https://github.com/youngzil/quickstart-mq
 
 
 
@@ -9,5 +9,8 @@ https://github.com/qunarcorp/qmq
 滴滴的MQ
 https://github.com/didi/DDMQ
 
+
+简略的消息中间件
+http://www.boarsoft.com/download.html
 
 
