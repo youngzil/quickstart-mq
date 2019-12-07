@@ -55,7 +55,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<activemq-client.version>5.15.7</activemq-client.version>
+		<activemq-client.version>5.15.9</activemq-client.version>
 		<rocketmq-client.version>3.2.6</rocketmq-client.version>
 		<kafka-clients.version>0.8.2.2</kafka-clients.version>
 		<amqp-client.version>5.4.3</amqp-client.version>
