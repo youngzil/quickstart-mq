@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<destination-rule-cfg>
-	<subject name="tagTopic">
-	<!--name-名称，number-分区数， desc描述 -->
-		<area name="tag"   desc="tag" number="1" />
-		<area name="tag2"   desc="tag2" number="2" />
-	</subject>
-</destination-rule-cfg>	

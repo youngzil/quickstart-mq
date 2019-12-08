@@ -4,7 +4,6 @@
 		<groupId>org.quickstart</groupId>
 		<artifactId>quickstart-mq</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>..</relativePath> <!-- lookup parent from repository -->
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -15,16 +14,16 @@
 	<description>Demo project for XXX</description>
 
 	<properties>
-		<apache.rocketmq.version>4.3.1</apache.rocketmq.version>
+		<apache.rocketmq.version>4.5.2</apache.rocketmq.version>
 		<alibaba.rocketmq.version>3.5.8</alibaba.rocketmq.version>
 	</properties>
 
 	<dependencies>
-		<!-- <dependency> -->
-		<!-- <groupId>com.alibaba.rocketmq</groupId> -->
-		<!-- <artifactId>rocketmq-client</artifactId> -->
-		<!-- <version>${alibaba.rocketmq.version}</version> -->
-		<!-- </dependency> -->
+		 <dependency>
+		 <groupId>com.alibaba.rocketmq</groupId>
+		 <artifactId>rocketmq-client</artifactId>
+		 <version>${alibaba.rocketmq.version}</version>
+		 </dependency>
 
 		<dependency>
 			<groupId>org.apache.rocketmq</groupId>
