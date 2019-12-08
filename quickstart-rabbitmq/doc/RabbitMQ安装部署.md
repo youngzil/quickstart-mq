@@ -1,4 +1,3 @@
-
 安装后打开浏览器并访问：http://localhost:15672/，并使用默认用户guest登录，密码也为guest。
 执行rabbitmq-plugins enable rabbitmq_management命令，开启Web管理插件，这样我们就可以通过浏览器来进行管理了。
 

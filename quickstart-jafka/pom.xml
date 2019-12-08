@@ -20,6 +20,11 @@
 	</properties>
 
 	<dependencies>
+    <dependency>
+      <groupId>io.jafka</groupId>
+      <artifactId>jafka</artifactId>
+      <version>3.0.6</version>
+    </dependency>
 	</dependencies>
 
 </project>

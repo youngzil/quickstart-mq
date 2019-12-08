@@ -1,10 +1,16 @@
 Kafka生产、保存、消费流程
 Kafka在zk上注册的节点
+
 Producer和Consumer说明.md
-kafka架构内部原理
+
+kafka架构内部原理：
+在一套kafka架构中有多个Producer，多个Broker,多个Consumer，每个Producer可以对应多个Topic，每个Consumer只能对应一个ConsumerGroup。
+整个Kafka架构对应一个ZK集群，通过ZK管理集群配置，选举Leader，以及在consumer group发生变化时进行rebalance。
+
 查找消息
 同一分区消息乱序
 
+kafka监控工具.md
 
 
 ---------------------------------------------------------------------------------------------------------------------

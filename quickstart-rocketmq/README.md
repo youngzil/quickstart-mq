@@ -1,6 +1,4 @@
 http://rocketmq.apache.org/
-
-
 https://github.com/apache/rocketmq
 https://github.com/apache/rocketmq-externals
 

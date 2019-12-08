@@ -1,15 +1,19 @@
 JMS规范
 JMS消息组成：JMS消息由3部分组成：消息头、属性和消息体
 
+Activemq发送的同步和异步设置
 属性设置的三种方式：URL、ConnectionFactory、Connection
 
 Activemq发送的同步和异步设置
 ActiveMQ顺序消息：consumer之独有消费者（exclusive consumer）、 Message Groups特性
 
-activemq开启jmx监控
-ActiveMQ的共享文件方式部署手册
-ActiveMQ+LevelDB+Zookeeper部署
+Activemq顺序消息处理方案：
+1、利用Activemq的高级特性：consumer之独有消费者（exclusive consumer）
+2、利用Activemq的高级特性：Message Groups特性
 
+activemq开启jmx监控
+ActiveMQ的共享文件方式部署手册：kahaDB存储
+ActiveMQ+LevelDB+Zookeeper部署
 
 
 使用常见问题
@@ -37,6 +41,7 @@ ConnectionFactory种类详解.md
 
 ActiveMQ消息持久化.md
 ActiveMQ的消息持久化机制有JDBC，KahaDB和LevelDB，AMQ（废弃）
+
 
 ---------------------------------------------------------------------------------------------------------------------
 https://www.jianshu.com/p/31239f2b5651
