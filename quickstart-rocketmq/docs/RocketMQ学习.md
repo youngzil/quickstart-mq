@@ -1,3 +1,4 @@
+
 RocketMQ系统部署架构：Namesrv 和 Broker（Master、Slave）
 RocketMQ生产者模型、消费者模型
 RocketMQ存储模型:offset-->commitlog-->mmap
@@ -20,12 +21,18 @@ Broker常见问题：
 2、监控数据
 3、本机启动RocketMQ
 RocketMQ部署.md
+顺序写，随机读，
+消息安全性保障：同步双写，同步刷盘，主从同步复制
+写的效率可以很大很大，不存在线程切换，使用map方法利用linux的mmap的内存映射文件，减少linux内存之间的拷贝，利用linux的脏页原理刷盘，保障高可用，只要linux系统不断电，就可以保障消息的安全性
+积压的消息已经被swap交换到磁盘，再消费就会比较慢，读取的时候，使用pagecache,顺序读的时候，效率也可以大大提高
 
 
 生产端注意事项：
 1、生产者属性
 2、发送失败处理
 3、事务消息
+消息重发
+
 
 
 消费端注意事项：
@@ -36,6 +43,8 @@ RocketMQ部署.md
 5、消费失败处理
 6、广播消费
 RocketMQ消费组负载均衡.md
+重复消费，死信消息
+
 
 
 Topic主题：
@@ -67,6 +76,42 @@ RocketMQ运维命令和控制台.md
 3、消费组中的消费者负载均衡
 
 
+顺序消息实现：生产者顺序发送到同一个mq队列（Message queue），消费者就顺序消费了，因为同一个mq队列集群模式下只会有一个消费者消费
+怎么扩容队列的时候，不乱序，要么自己改造路由方法，否则只能生产者停止发送，Consumer消费完消息，然后扩容，然后等待延迟时间同步消息队列信息后，再发送消息
+重写MessageQueueSelector的逻辑，记录下每次orderId对应的mq的信息，这样加入这个mq一直不存在了，这个几个消息就发送不了，但是不会乱序
+
+RocketMQ 4.0.x 正式版顺序消息实现：新增锁定mq队列
+1、Producer 顺序发送到同一个mq队列
+2、Consumer 严格顺序消费
+    Consumer 在严格顺序消费时，通过 三 把锁保证严格顺序消费。
+    Broker 消息队列锁（分布式锁） ：
+        集群模式下，Consumer 从 Broker 获得该锁后，才能进行消息拉取、消费。
+        广播模式下，Consumer 无需该锁。
+        Consumer 消息队列锁（本地锁） ：Consumer 获得该锁才能操作消息队列。
+        Consumer 消息处理队列消费锁（本地锁） ：Consumer 获得该锁才能消费消息队列。
+
+
+
+
+重复消息：发送时候重发送，消费者数量有变动的时候，比如消费者挂了，消费者数量增加，
+去重方案：接口幂等，使用Redis去重setnx命令
+
+
+Topic缩小mq的步骤，先把后面的mq设置为只能读，只能消费，等消费完了，再调整Topic的mq数量就好了
+
+
+Rocketmq和Kafka对象
+1、数据可靠性
+2、单机支持的队列数
+3、消费失败重试
+4、严格的消息顺序
+5、定时消息
+6、分布式事务消息
+7、消息查询、消息回溯、消息轨迹
+
+
+
+
 ---------------------------------------------------------------------------------------------------------------------
 RocketMQ系统部署架构
 Namesrv：多个项目独立，不进行通信
@@ -80,6 +125,18 @@ RocketMQ生产者模型、消费者模型
 
 
 常见问题
+
+
+RocketMQ 4.0.x 正式版顺序消息实现：
+http://www.iocoder.cn/RocketMQ/message-send-and-consume-orderly/
+
+
+参考
+http://www.jiangxinlingdu.com/rocketmq/2017/11/15/al-mq.html
+https://www.cnblogs.com/xuwc/p/9034352.html
+https://dbaplus.cn/news-73-1123-1.html
+
+
 
 
 

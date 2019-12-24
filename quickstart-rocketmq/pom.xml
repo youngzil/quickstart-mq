@@ -14,7 +14,7 @@
 	<description>Demo project for XXX</description>
 
 	<properties>
-		<apache.rocketmq.version>4.5.2</apache.rocketmq.version>
+		<apache.rocketmq.version>4.6.0</apache.rocketmq.version>
 		<alibaba.rocketmq.version>3.5.8</alibaba.rocketmq.version>
 	</properties>
 
