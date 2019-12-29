@@ -34,6 +34,11 @@ RocketMQ部署.md
 消息重发
 
 
+SQL Filter是在服务端处理，可以减轻客户端的处理压力，语法比较灵活，实现方式也相对复杂一些。
+Tags过滤实现比较简单，主要是在客户端实现。
+mq的路由是在客户端
+
+
 
 消费端注意事项：
 1、广播消费重复消费
@@ -246,12 +251,61 @@ PUSH：this.checkConfig();-->  this.copySubscription();-->变量的构建，初�
 
 生产者：
 
+
+
+Broker：
+1、启动类BrokerStartup---》
+2、构建BrokerController并且初始化方法controller.initialize()----》
+3、this.remotingServer = new NettyRemotingServer
+4、remotingServer.registerProcessor，RequestCode注册不同的事件处理类：SEND_MESSAGE，PULL_MESSAGE等
+5、创建BrokerController.start()---->第一个是this.messageStore.start();存储文件等相关，第二个才是remotingServer.start
+6、调用remotingServer.start,也就是启动Netty监听
+7、使用NettyServerHandler是netty里面的hander，来去处理请求，根据REQUEST_COMMAND 还是 RESPONSE_COMMAND的response Callback
+8、根据int变量RequestCode从启动的时候注册的processorTable中取出Processor和对应的线程池对象Pair<NettyRequestProcessor, ExecutorService>
+
+
 broker消息存储过程：
 1、SendMessageProcessor-----》2、this.brokerController.getMessageStore().putMessage(msgInner)【brokerController包含全部的类】-----》3、this.commitLog.putMessage(msg)-----》4、获取mapedFile，然后mapedFile.appendMessage(msg, this.appendMessageCallback);-----》5、回调commitlog的doAppend方法，AppendMessageResult result =
                     cb.doAppend(this.getFileFromOffset(), byteBuffer, this.fileSize - currentPos, msg);-----》6、如果文件满了，就使用特殊字符填充剩下的空间，重新创建新的mapedFile再次存放message
 
 
-broker查找消息过程
+消费消息：PullMessageProcessor
+在一堆校验过后，获取SubscriptionData 和 ConsumerFilterData
+然后调用上面两个条件构建MessageFilter
+最后调用获取消息：参数是requestHeader和MessageFilter
+GetMessageResult getMessageResult =this.brokerController.getMessageStore().getMessage(）
+
+
+
+RocketMQ TAG 过滤原理
+RocketMQ 消息过滤分成TAG过滤和SQL Filter顾虑，
+其中 SQL Filter是在服务端处理，可以减轻客户端的处理压力，语法比较灵活，实现方式也相对复杂一些。
+Tags过滤实现比较简单，主要是在客户端实现。
+
+
+消息消费：
+当用户订阅一个topic准备消费的时候，调用MQPushConsumer的subscribe方法
+
+DefaultMQPushConsumerImpl#pullMessage方法中，通过pull请求到broker端拉取信息，在broker响应的时候，调用pullcallback回调处理拉取的消息
+
+在拉取到消息之后，第一件事情就是调用DefaultMQPushConsumerImpl.this.pullAPIWrapper的processPullResult方法，在这个方法中会对Tags进行过滤  
+在这里，如果订阅的时候有关注Tags，在消息到达的时候，按照订阅的tags进行过滤，用户监听消息的时候就只会收到自己关注的tag。
+
+小结
+总体来说，rocketmq的tag过滤实现比较简单，broker端也不会关注tag，完全由客户端处理。Tag过滤语法简单，灵活性也比较差，比较适合过滤场景简单且客户端对计算资源不是很敏感的用户。如果希望更为复杂消息过滤功能可以尝试使用Sql Filter。
+
+参考  
+https://blog.csdn.net/feiyingHiei/article/details/88371834
+
+
+
+NettyRemotingServer启动的时候，根据不同的RequestCode注册不同的Processor，发送请求的时候，根据RequestCode找到具体的实现处理类Processor
+NettyServerHandler是netty里面的hander，来去实现请求
+
+
+
+broker查找消息过程:
+PullMessageProcessor处理
 消费消息过程：Broker收到pull消息请求，首先从CQ（）
 根据offset找到对应的CQ，从CQ找到需要拉取的size，然后从对应的MapperFile中拉取消息返回Client
 Client接收到消息Buffer，然后根据消息格式decode，然后交给对应的线程处理。
