@@ -14,3 +14,7 @@ https://github.com/didi/DDMQ
 http://www.boarsoft.com/download.html
 
 
+硬件的消息队列中间件 Solace 
+
+
+
