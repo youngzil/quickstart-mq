@@ -73,27 +73,27 @@ JMS consumer
 
 
 /**
-             Session javax.jms.Connection.createSession(boolean transacted, int acknowledgeMode) throws JMSException
-             1.transacted事务，事务成功commit,才会将消息发送到mom中
-             2.acknowledgeMode消息确认机制
-             1）、带事务的session
-             如果session带有事务，并且事务成功提交，则消息被自动签收。如果事务回滚，则消息会被再次传送。
-             消息事务是在生产者producer到broker或broker到consumer过程中同一个session中发生的，
-             保证几条消息在发送过程中的原子性。
-             在支持事务的session中，producer发送message时在message中带有transactionID。
-             broker收到message后判断是否有transactionID，如果有就把message保存在transaction store中，
-             等待commit或者rollback消息。
-             2）、不带事务的session
-             不带事务的session的签收方式，取决于session的配置。
-             Activemq支持一下三種模式：
-             Session.AUTO_ACKNOWLEDGE  消息自动签收
-             Session.CLIENT_ACKNOWLEDGE  客戶端调用acknowledge方法手动签收
-             Session.DUPS_OK_ACKNOWLEDGE 不是必须签收，消息可能会重复发送。在第二次重新传送消息的时候，消息
-             头的JmsDelivered会被置为true标示当前消息已经传送过一次，客户端需要进行消息的重复处理控制。
-             代码示例如下：
-             session = connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
-             textMsg.acknowledge();
-             */
+ Session javax.jms.Connection.createSession(boolean transacted, int acknowledgeMode) throws JMSException
+ 1.transacted事务，事务成功commit,才会将消息发送到mom中
+ 2.acknowledgeMode消息确认机制
+ 1）、带事务的session
+ 如果session带有事务，并且事务成功提交，则消息被自动签收。如果事务回滚，则消息会被再次传送。
+ 消息事务是在生产者producer到broker或broker到consumer过程中同一个session中发生的，
+ 保证几条消息在发送过程中的原子性。
+ 在支持事务的session中，producer发送message时在message中带有transactionID。
+ broker收到message后判断是否有transactionID，如果有就把message保存在transaction store中，
+ 等待commit或者rollback消息。
+ 2）、不带事务的session
+ 不带事务的session的签收方式，取决于session的配置。
+ Activemq支持一下三種模式：
+ Session.AUTO_ACKNOWLEDGE  消息自动签收
+ Session.CLIENT_ACKNOWLEDGE  客戶端调用acknowledge方法手动签收
+ Session.DUPS_OK_ACKNOWLEDGE 不是必须签收，消息可能会重复发送。在第二次重新传送消息的时候，消息
+ 头的JmsDelivered会被置为true标示当前消息已经传送过一次，客户端需要进行消息的重复处理控制。
+ 代码示例如下：
+ session = connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+ textMsg.acknowledge();
+ */
 
 --------------------- 
 作者：u014401141 
