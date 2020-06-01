@@ -19,7 +19,7 @@
 
   <properties>
     <apollo-version>1.7.1</apollo-version>
-    <netty.version>4.1.16.Final</netty.version>
+    <netty.version>4.1.50.Final</netty.version>
   </properties>
 
   <dependencies>
@@ -27,7 +27,7 @@
     <dependency>
       <groupId>org.eclipse.paho</groupId>
       <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
       <!-- <version>1.0.2</version> -->
     </dependency>
 
