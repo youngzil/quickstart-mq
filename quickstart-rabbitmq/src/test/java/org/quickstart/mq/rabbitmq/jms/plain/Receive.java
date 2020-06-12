@@ -21,7 +21,7 @@ import com.rabbitmq.client.ShutdownSignalException;
 /**
  * Receive
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年2月28日 下午10:27:47
  * @version 1.0
  */

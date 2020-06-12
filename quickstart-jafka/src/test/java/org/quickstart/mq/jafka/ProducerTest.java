@@ -8,7 +8,7 @@ import io.jafka.producer.StringProducerData;
 import io.jafka.producer.serializer.StringEncoder;
 
 /**
- * @author youngzil@163.com
+ * @author yangzl
  * @description TODO
  * @createTime 2019/12/8 23:29
  */

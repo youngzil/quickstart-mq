@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * BrokerFacadeTest
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年8月8日 下午10:42:47
  * @since 1.0
  */

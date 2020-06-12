@@ -21,7 +21,7 @@ import com.ai.appframe2.service.ServiceFactory;
 /**
  * DataInsertTest
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2018年5月7日 上午10:32:12
  * @since 1.0
  */

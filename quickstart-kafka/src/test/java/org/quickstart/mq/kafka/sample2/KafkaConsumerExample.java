@@ -22,7 +22,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 /**
  * KafkaConsumerExample
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月25日 下午9:46:28
  * @since 1.0
  */

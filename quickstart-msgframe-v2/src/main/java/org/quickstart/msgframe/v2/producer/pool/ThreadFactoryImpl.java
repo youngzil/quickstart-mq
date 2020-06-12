@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * ThreadFactoryImpl
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2018年7月3日 下午2:47:58
  * @since 1.0
  */

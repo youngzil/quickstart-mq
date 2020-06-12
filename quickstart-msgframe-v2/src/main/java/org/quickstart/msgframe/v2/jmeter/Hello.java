@@ -11,7 +11,7 @@ package org.quickstart.msgframe.v2.jmeter;
 /**
  * Hello 
  *  
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年5月22日 下午10:32:35 
  * @version 1.0
  */

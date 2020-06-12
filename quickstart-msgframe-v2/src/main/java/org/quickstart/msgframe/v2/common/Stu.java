@@ -13,7 +13,7 @@ import java.io.Serializable;
 /**
  * Stu
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年2月18日 上午10:29:56
  * @version 1.0
  */

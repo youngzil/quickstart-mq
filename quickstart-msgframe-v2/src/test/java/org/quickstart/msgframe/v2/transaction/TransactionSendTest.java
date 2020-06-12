@@ -19,7 +19,7 @@ import com.ai.aif.msgframe.MfProducerTxClient;
 /**
  * TransactionSendTest
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2018年8月22日 下午2:44:22
  * @since 1.0
  */

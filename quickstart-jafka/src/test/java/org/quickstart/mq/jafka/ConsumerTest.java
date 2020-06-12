@@ -7,7 +7,7 @@ import io.jafka.utils.Utils;
 import java.io.IOException;
 
 /**
- * @author youngzil@163.com
+ * @author yangzl
  * @description TODO
  * @createTime 2019/12/8 23:31
  */

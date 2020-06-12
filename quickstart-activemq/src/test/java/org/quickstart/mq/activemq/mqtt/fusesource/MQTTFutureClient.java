@@ -11,7 +11,7 @@ package org.quickstart.mq.activemq.mqtt.fusesource;
 /**
  * MQTTFutureClient 
  *  
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2016年12月22日 下午4:17:12 
  * @version 1.0
  */

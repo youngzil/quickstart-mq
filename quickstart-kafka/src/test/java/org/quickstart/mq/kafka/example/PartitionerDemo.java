@@ -14,7 +14,7 @@ import kafka.utils.VerifiableProperties;
 /**
  * PartitionerDemo
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月25日 下午9:14:14
  * @since 1.0
  */

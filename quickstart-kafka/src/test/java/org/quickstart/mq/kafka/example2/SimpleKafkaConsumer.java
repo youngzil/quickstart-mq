@@ -29,7 +29,7 @@ import kafka.utils.VerifiableProperties;
 /**
  * SimpleKafkaConsumer
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月25日 下午10:18:15
  * @since 1.0
  */

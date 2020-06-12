@@ -23,7 +23,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 /**
  * VirtualTopicTest
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月20日 下午7:50:05
  * @since 1.0
  */

@@ -19,7 +19,7 @@ import kafka.producer.ProducerConfig;
 /**
  * Producer 详细可以参考：https://cwiki.apache.org/confluence/display/KAFKA/0.8.0+Producer+Example
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月25日 下午9:08:58
  * @since 1.0
  */

@@ -27,7 +27,7 @@ import org.apache.kafka.common.requests.IsolationLevel;
  * 
  * 消费端一致性: 通过设置读已提交的数据和同时处理完成每一条消息之后手动提交offset.
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2018年6月9日 下午4:26:43
  * @since 1.0
  */

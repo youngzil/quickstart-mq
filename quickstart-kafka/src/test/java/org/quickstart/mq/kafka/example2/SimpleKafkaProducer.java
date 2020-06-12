@@ -19,7 +19,7 @@ import kafka.producer.ProducerConfig;
 /**
  * SimpleKafkaProducer
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月25日 下午10:17:09
  * @since 1.0
  */

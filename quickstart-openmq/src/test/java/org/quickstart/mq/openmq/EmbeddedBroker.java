@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * EmbeddedBroker
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2018年1月15日 下午10:47:54
  * @since 1.0
  */

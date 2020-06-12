@@ -23,7 +23,7 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 /**
  * KafkaProducerExample
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月25日 下午9:45:49
  * @since 1.0
  */

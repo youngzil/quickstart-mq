@@ -22,7 +22,7 @@ import org.apache.rocketmq.common.message.Message;
 /**
  * RocketMQProducer
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2016年12月6日 下午3:26:02
  * @version 1.0
  */

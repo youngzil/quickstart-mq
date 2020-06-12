@@ -14,7 +14,7 @@ import org.zeromq.ZMQException;
 /**
  * Response2
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月6日 下午7:25:52
  * @since 1.0
  */

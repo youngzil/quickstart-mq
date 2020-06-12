@@ -12,7 +12,7 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 /**
  * PushCallback 
  *  
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2016年12月22日 下午5:24:29 
  * @version 1.0
  */

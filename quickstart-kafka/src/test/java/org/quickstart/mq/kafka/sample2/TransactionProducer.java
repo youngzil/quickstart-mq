@@ -29,7 +29,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
  * 
  * 生产端一致性: 开启幂等和事务, 包含重试, 发送确认, 同一个连接的最大未确认请求数.
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2018年6月9日 下午4:26:33
  * @since 1.0
  */

@@ -23,7 +23,7 @@ import kafka.javaapi.consumer.ConsumerConnector;
 /**
  * ConsumerDemo 详细可以参考：https://cwiki.apache.org/confluence/display/KAFKA/Consumer+Group+Example
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月25日 下午9:10:41
  * @since 1.0
  */

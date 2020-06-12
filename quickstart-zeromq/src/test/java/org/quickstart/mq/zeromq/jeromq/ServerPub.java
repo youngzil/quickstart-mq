@@ -15,7 +15,7 @@ import org.zeromq.ZMQ;
 /**
  * ServerPub
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月6日 下午7:05:16
  * @since 1.0
  */

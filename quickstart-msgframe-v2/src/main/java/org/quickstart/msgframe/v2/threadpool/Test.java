@@ -27,7 +27,7 @@ import org.apache.rocketmq.common.message.MessageExt;
 /**
  * Test
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年2月19日 下午9:33:53
  * @version 1.0
  */

@@ -14,7 +14,7 @@ import javax.jms.*;
 /**
  * ActiveMQProductHelper
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2019年6月27日 上午12:02:33
  * @version 2.0
  */

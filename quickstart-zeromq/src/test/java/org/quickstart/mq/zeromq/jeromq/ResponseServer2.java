@@ -15,7 +15,7 @@ import org.zeromq.ZMQ.Socket;
 /**
  * Server
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月6日 下午6:57:03
  * @since 1.0
  */

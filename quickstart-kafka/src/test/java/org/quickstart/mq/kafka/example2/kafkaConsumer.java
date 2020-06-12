@@ -22,7 +22,7 @@ import kafka.javaapi.consumer.ConsumerConnector;
 /**
  * kafkaConsumer
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月25日 下午9:42:23
  * @since 1.0
  */

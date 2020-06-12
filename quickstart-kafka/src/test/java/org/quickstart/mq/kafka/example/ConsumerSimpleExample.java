@@ -33,7 +33,7 @@ import kafka.message.MessageAndOffset;
 /**
  * ConsumerSimpleExample https://cwiki.apache.org/confluence/display/KAFKA/0.8.0+SimpleConsumer+Example
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月25日 下午9:17:24
  * @since 1.0
  */

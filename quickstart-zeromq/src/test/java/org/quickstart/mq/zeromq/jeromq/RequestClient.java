@@ -13,7 +13,7 @@ import org.zeromq.ZMQ;
 /**
  * Client
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月6日 下午6:58:18
  * @since 1.0
  */

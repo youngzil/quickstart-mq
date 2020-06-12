@@ -35,7 +35,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 /**
  * PahoTlsExample
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月22日 下午11:47:21
  * @since 1.0
  */

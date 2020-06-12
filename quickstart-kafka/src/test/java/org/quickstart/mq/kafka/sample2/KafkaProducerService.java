@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 /**
  * KafkaProducerService
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月25日 下午10:14:31
  * @since 1.0
  */

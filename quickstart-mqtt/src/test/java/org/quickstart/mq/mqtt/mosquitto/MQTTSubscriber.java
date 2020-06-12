@@ -19,7 +19,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 /**
  * ClientMQTT
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月22日 下午11:33:21
  * @since 1.0
  */

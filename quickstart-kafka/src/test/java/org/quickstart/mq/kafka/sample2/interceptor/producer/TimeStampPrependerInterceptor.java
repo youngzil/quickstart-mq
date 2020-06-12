@@ -17,7 +17,7 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 /**
  * TimeStampPrependerInterceptor
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年10月21日 上午9:45:31
  * @since 1.0
  */

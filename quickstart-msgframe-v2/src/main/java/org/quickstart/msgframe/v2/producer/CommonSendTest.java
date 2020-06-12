@@ -34,7 +34,7 @@ import com.ai.aif.msgframe.facade.IMsgForTxProducer;
 /**
  * CommonSendTest
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2018年7月3日 下午1:59:52
  * @since 1.0
  */

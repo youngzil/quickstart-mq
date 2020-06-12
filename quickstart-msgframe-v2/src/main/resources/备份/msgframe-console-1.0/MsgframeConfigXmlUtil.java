@@ -16,7 +16,7 @@ import org.w3c.dom.Element;
 /**
  * MsgframeConfigXmlUtil 
  *  
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年11月9日 上午9:23:06 
  * @since 1.0
  */

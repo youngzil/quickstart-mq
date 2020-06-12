@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * ActiveMQProductHelper
  *
  * @version 2.0
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2019年6月27日 上午12:02:33
  */
 public class ActiveMQProducerPooled {

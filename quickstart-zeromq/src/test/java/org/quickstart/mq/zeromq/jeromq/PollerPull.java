@@ -13,7 +13,7 @@ import org.zeromq.ZMQ;
 /**
  * PollerPull
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月9日 上午11:18:43
  * @since 1.0
  */

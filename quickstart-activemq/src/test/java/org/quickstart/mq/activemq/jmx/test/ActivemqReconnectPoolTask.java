@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 /**
  * ActivemqReconnectPoolTask
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年8月8日 下午10:52:28
  * @since 1.0
  */

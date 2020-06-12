@@ -17,7 +17,7 @@ import org.zeromq.ZMsg;
 /**
  * BalanceTest
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月9日 上午11:42:54
  * @since 1.0
  */

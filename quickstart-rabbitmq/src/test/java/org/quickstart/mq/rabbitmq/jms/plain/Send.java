@@ -18,7 +18,7 @@ import com.rabbitmq.client.ConnectionFactory;
 /**
  * Send
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年2月28日 下午10:25:12
  * @version 1.0
  */

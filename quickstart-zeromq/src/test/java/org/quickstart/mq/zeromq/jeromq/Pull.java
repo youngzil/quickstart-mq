@@ -13,7 +13,7 @@ import org.zeromq.ZMQ;
 /**
  * Pull
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月8日 上午8:43:25
  * @since 1.0
  */

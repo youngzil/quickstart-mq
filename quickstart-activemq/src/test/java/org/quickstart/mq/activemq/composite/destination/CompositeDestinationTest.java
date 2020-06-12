@@ -23,7 +23,7 @@ import org.apache.activemq.command.ActiveMQQueue;
 /**
  * CompositeDestinationsTest
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年9月20日 下午7:26:39
  * @since 1.0
  */

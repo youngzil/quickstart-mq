@@ -17,7 +17,7 @@ import io.netty.util.internal.ConcurrentSet;
 /**
  * MqttManager
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年10月27日 下午6:58:24
  * @since 1.0
  */

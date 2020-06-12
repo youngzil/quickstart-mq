@@ -18,7 +18,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 /**
  * ActiveMQConsumer
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2016年12月23日 下午3:21:06
  * @version 1.0
  */

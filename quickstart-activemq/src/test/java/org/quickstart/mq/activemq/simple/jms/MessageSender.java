@@ -22,7 +22,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 /**
  * MessageSender
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2018年10月30日 下午2:27:53
  * @since 1.0
  */

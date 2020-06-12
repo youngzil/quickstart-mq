@@ -42,7 +42,7 @@ import io.netty.util.internal.ConcurrentSet;
 /**
  * NettyMqttServerHandler
  * 
- * @author：youngzil@163.com
+ * @author：yangzl
  * @2017年10月25日 下午6:30:59
  * @since 1.0
  */
