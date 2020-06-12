@@ -14,9 +14,9 @@
 	<description>Demo project for XXX</description>
 
 	<properties>
-		<rabbitmq.version>4.8.3</rabbitmq.version>
-		<!-- <rabbitmq.version>5.4.3</rabbitmq.version> -->
-	</properties>
+		 <rabbitmq.version>5.9.0</rabbitmq.version>
+    <rabbitmq.version>4.12.0</rabbitmq.version>
+  </properties>
 
 	<dependencies>
 
