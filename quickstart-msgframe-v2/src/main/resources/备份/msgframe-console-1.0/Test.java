@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.DeflaterOutputStream;
 
-import com.itextpdf.text.log.SysoCounter;
-
 /**
  * Test
  * 
