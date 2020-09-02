@@ -6,9 +6,7 @@
  * Copyright youngzil Corporation 2017
  * 版权所有 *
  */
-package org.quickstart.mq.zeromq.jeromq;
-
-import org.zeromq.ZMQ;
+package org.zeromq;
 
 /**
  * PollerPull
@@ -27,7 +25,7 @@ public class PollerPull {
         ZMQ.Socket pull2 = context.socket(ZMQ.PULL);
         pull2.connect("tcp://127.0.0.1:5555");
 
-        ZMQ.Poller poller = new ZMQ.Poller(2); // 创建一个大小为2的poller
+        ZMQ.Poller poller = new ZMQ.Poller(context,2); // 创建一个大小为2的poller
         poller.register(pull1, ZMQ.Poller.POLLIN); // 分别将上述的pull注册到poller上，注册的事件是读
         poller.register(pull2, ZMQ.Poller.POLLIN);
         int i = 0;

@@ -12,6 +12,9 @@ kafka架构内部原理：
 
 kafka监控工具.md
 
+ISR and AR
+ISR 的伸缩性
+
 
 ---------------------------------------------------------------------------------------------------------------------
 kafka架构内部原理
@@ -157,6 +160,25 @@ Consumer消费端：
 深入剖析kafka架构内部原理
 https://blog.csdn.net/w372426096/article/details/81282320
 https://blog.csdn.net/lp284558195/article/details/80297208
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+ISR and AR
+ISR 的伸缩性
+
+
+ISR and AR
+简单来说，分区中的所有副本统称为 AR (Assigned Replicas)。所有与leader副本保持一定程度同步的副本（包括leader副本在内）组成 ISR (In Sync Replicas)。 ISR 集合是 AR 集合的一个子集。消息会先发送到leader副本，然后follower副本才能从leader中拉取消息进行同步。同步期间，follow副本相对于leader副本而言会有一定程度的滞后。前面所说的 ”一定程度同步“ 是指可忍受的滞后范围，这个范围可以通过参数进行配置。于leader副本同步滞后过多的副本（不包括leader副本）将组成 OSR （Out-of-Sync Replied）由此可见，AR = ISR + OSR。正常情况下，所有的follower副本都应该与leader 副本保持 一定程度的同步，即AR=ISR，OSR集合为空。
+
+
+ISR 的伸缩性
+leader副本负责维护和跟踪 ISR 集合中所有follower副本的滞后状态，当follower副本落后太多或失效时，leader副本会把它从 ISR 集合中剔除。如果 OSR 集合中所有follower副本“追上”了leader副本，那么leader副本会把它从 OSR 集合转移至 ISR 集合。默认情况下，当leader副本发生故障时，只有在 ISR 集合中的follower副本才有资格被选举为新的leader，而在 OSR 集合中的副本则没有任何机会（不过这个可以通过配置来改变）。
+
+
+
+
 
 
 

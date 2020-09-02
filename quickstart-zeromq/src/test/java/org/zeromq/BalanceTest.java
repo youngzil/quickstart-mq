@@ -6,13 +6,9 @@
  * Copyright youngzil Corporation 2017
  * 版权所有 *
  */
-package org.quickstart.mq.zeromq.jeromq;
+package org.zeromq;
 
 import java.util.LinkedList;
-
-import org.zeromq.ZFrame;
-import org.zeromq.ZMQ;
-import org.zeromq.ZMsg;
 
 /**
  * BalanceTest
@@ -86,7 +82,7 @@ public class BalanceTest {
             this.workers = new LinkedList<ZFrame>();
             this.requests = new LinkedList<ZMsg>();
             this.context = ZMQ.context(1);
-            this.poller = new ZMQ.Poller(2);
+            this.poller = new ZMQ.Poller(this.context,2);
         }
 
         public void start() {
