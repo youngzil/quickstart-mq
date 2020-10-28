@@ -1,26 +1,30 @@
-Kafka生产、保存、消费流程
-Kafka在zk上注册的节点
-
-Producer和Consumer说明.md
-
-kafka架构内部原理：
-在一套kafka架构中有多个Producer，多个Broker,多个Consumer，每个Producer可以对应多个Topic，每个Consumer只能对应一个ConsumerGroup。
-整个Kafka架构对应一个ZK集群，通过ZK管理集群配置，选举Leader，以及在consumer group发生变化时进行rebalance。
-
-查找消息
-同一分区消息乱序
-
-kafka监控工具.md
-
-ISR and AR
-ISR 的伸缩性
+- [kafka-client-1.0.0说明](kafka-client-1.0.0说明.md)
+- [Kafka在ZK上的注册节点](Kafka在ZK上的注册节点.md)
+- [Kafka监控工具](Kafka监控工具.md)
+- [Kafka部署和命令](Kafka部署和命令.md)
+- [Producer报错](Producer报错.md)
+- [Producer和Consumer说明.md](Producer和Consumer说明.md)
+- [ISR and AR](#ISR-and-AR)
+    ISR 的伸缩性
+- [Kafka架构内部原理](#Kafka架构内部原理)  
+    Kafka生产、保存、消费流程
+    在一套kafka架构中有多个Producer，多个Broker,多个Consumer，每个Producer可以对应多个Topic，每个Consumer只能对应一个ConsumerGroup。
+    整个Kafka架构对应一个ZK集群，通过ZK管理集群配置，选举Leader，以及在consumer group发生变化时进行rebalance。
+    - [查找消息](#查找消息)
+    - [二个位置三个队列](#二个位置三个队列)
+    - [Producer模式](#Producer模式)
+    - [Consumer模式](#Consumer模式)
+    - [同一分区消息乱序](#同一分区消息乱序)
+    - [Kafka消息丢失情况](#Kafka消息丢失情况)
 
 
 ---------------------------------------------------------------------------------------------------------------------
-kafka架构内部原理
-https://blog.csdn.net/lp284558195/article/details/80297208
+## Kafka架构内部原理
 
-在一套kafka架构中有多个Producer，多个Broker,多个Consumer，每个Producer可以对应多个Topic，每个Consumer只能对应一个ConsumerGroup。
+[深入剖析kafka架构内部原理](https://blog.csdn.net/lp284558195/article/details/80297208)
+
+
+在一套kafka架构中有多个Producer，多个Broker,多个Consumer，每个Producer可以对应多个Topic，每个Consumer只能对应一个ConsumerGroup。  
 整个Kafka架构对应一个ZK集群，通过ZK管理集群配置，选举Leader，以及在consumer group发生变化时进行rebalance。
 
 
@@ -43,6 +47,8 @@ partition还可以细分为segment，一个partition物理上由多个segment组
 segment的文件生命周期由服务端配置参数(log.segment.bytes，log.roll.{ms,hours}等若干参数)决定。
 
 
+
+### 查找消息
 那么如何从partition中通过offset查找message呢
 根据offset定位到该partition下面的哪个segment文件和从segment文件的什么位置进行读取。再根据消息的物理结构，从消息头中知道消息体的大小，可以确定一条消息的大小，即读取到哪里截止。
 消息都具有固定的物理结构，包括：offset(8 Bytes)、消息体的大小(4 Bytes)、crc32(4 Bytes)、magic(1 Byte)、attributes(1 Byte)、key length(4 Bytes)、key(K Bytes)、payload(N Bytes)等等字段，可以确定一条消息的大小，即读取到哪里截止。
@@ -54,7 +60,9 @@ segment的文件生命周期由服务端配置参数(log.segment.bytes，log.rol
 对于leader新写入的消息，consumer不能立刻消费，leader会等待该消息被所有ISR中的replicas同步后更新HW，此时消息才能被consumer消费。这样就保证了如果leader所在的broker失效，该消息仍然可以从新选举的leader中获取。对于来自内部broKer的读取请求，没有HW的限制。
 也就是Consumer只能消费到一个partition对应的ISR中最小的LEO作为HW（取一个partition对应的ISR中最小的LEO作为HW）
 
-二个位置三个队列
+
+
+### 二个位置三个队列
 LEO，LogEndOffset的缩写，表示每个partition的log最后一条Message的位置。
 HW俗称高水位，HighWatermark的缩写，是指consumer能够看到的此partition的位置，取一个partition对应的ISR中最小的LEO作为HW，consumer最多只能消费到HW所在的位置。
 
@@ -86,11 +94,13 @@ unclean.leader.election.enable=true：（Kafka默认）选择第一个“活”�
 batch的数量大小可以通过producer的参数(batch.num.messages)控制，在比较新的版本中还有batch.size这个参数
 
 
+
+### Producer模式
 Producer模式：at least once
 Kafka的消息传输保障机制非常直观。当producer向broker发送消息时，一旦这条消息被commit，由于副本机制(replication)的存在，它就不会丢失。但是如果producer发送数据给broker后，遇到的网络问题而造成通信中断，那producer就无法判断该条消息是否已经提交(commit)。虽然Kafka无法确定网络故障期间发生了什么，但是producer可以retry多次，确保消息已经正确传输到broker中，所以目前Kafka实现的是at least once。
 
 
-Consumer模式：
+### Consumer模式
 当consumer读完消息之后先commit再处理消息，在这种模式下，如果consumer在commit后还没来得及处理消息就crash了，下次重新开始工作后就无法读到刚刚已提交而未处理的消息，这就对应于at most once了。
 读完消息先处理再commit。这种模式下，如果处理完了消息在commit之前consumer crash了，下次重新开始工作时还会处理刚刚未commit的消息，实际上该消息已经被处理过了，这就对应于at least once。
 要做到exactly once就需要引入消息去重机制。
@@ -131,14 +141,15 @@ consumer：
 1、enable.auto.commit=false  关闭自动提交位移
 
 
-同一分区消息乱序：
+
+### 同一分区消息乱序
 假设a,b两条消息，a先发送后由于发送失败重试，这时顺序就会在b的消息后面，可以设置max.in.flight.requests.per.connection=1来避免
 
 max.in.flight.requests.per.connection：限制客户端在单个连接上能够发送的未响应请求的个数。设置此值是1表示kafka broker在响应请求之前client不能再向同一个broker发送请求，但吞吐量会下降
 
 
 
-kafka消息丢失情况：
+### Kafka消息丢失情况
 https://www.cnblogs.com/qiaoyihang/p/9229854.html
 https://www.cnblogs.com/huxi2b/p/6056364.html
 https://www.cnblogs.com/felixzh/p/8027584.html
@@ -165,7 +176,7 @@ https://blog.csdn.net/lp284558195/article/details/80297208
 
 
 ---------------------------------------------------------------------------------------------------------------------
-ISR and AR
+## ISR and AR
 ISR 的伸缩性
 
 

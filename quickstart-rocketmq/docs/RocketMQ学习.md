@@ -1,74 +1,61 @@
-RocketMQ学习
+- [RocketMQ实践](RocketMQ实践.md)
+- [RocketMQ部署](RocketMQ部署.md)
+- [阿里云消息中间件](阿里云消息中间件.md)
+- [RocketMQ存储模型](#RocketMQ存储模型)
+    - [存储文件夹和文件说明](#存储文件夹和文件说明)
+- [生产存储消费流程](#生产存储消费流程)
+    - [消息发送到存储再到消费流程](#消息发送到存储再到消费流程)
+    - [Broker消息存储过程](#Broker消息存储过程)
+    - [顺序写，随机读的好处](#顺序写，随机读的好处)
+    - [Broker查找消息过程](#Broker查找消息过程)
+    - [RocketMQ消费组上线问题](#RocketMQ消费组上线问题)
+- [Broker消息存储过程、创建文件机制、刷盘机制](#Broker消息存储过程、创建文件机制、刷盘机制)
+    - [消息的格式](#消息的格式)
+    - [存储流程](#存储流程)
+    - [创建文件机制](#创建文件机制)
+    - [刷盘机制](#刷盘机制)
+    - [MMAP(Memory Mapped Files，内存映射文件)技术](#MMAP(Memory Mapped Files，内存映射文件)技术)
+- [Broker常见问题](#Broker常见问题)
+    - [如何下线一个Broker节点](#如何下线一个Broker节点)
+    - [监控数据](#监控数据)
+    - [本机启动RocketMQ](#本机启动RocketMQ)
+    - [RocketMQ消费组上线问题](#RocketMQ消费组上线问题)
+- [生产端注意事项](#生产端注意事项)
+    - [生产者属性](#生产者属性)
+    - [发送失败处理](#发送失败处理) ：消息重发  
+    - [事务消息](#事务消息)
+    - [顺序消息实现](#顺序消息实现)
+- [消费端注意事项](#消费端注意事项)
+    - [广播消费重复消费](#广播消费重复消费)
+    - [消息重复原因](#消息重复原因)
+    - [消费幂等的必要性](#消费幂等的必要性)
+    - [消息查询功能：SQL92查询](#消息查询功能：SQL92查询)
+    - [消费失败处理](#消费失败处理)
+    - [广播消费](#广播消费)
+    - [RocketMQ消费组负载均衡](RocketMQ消费组负载均衡.md)
+    - [消息的过滤功能实现](#消息的过滤功能实现)
+    - [消息队列的路由](#消息队列的路由)
+    - [消息去重方案](#消息去重方案)
+    - 重复消费，死信消息
+    - 多个消费者只有一个消费者消费：instanceId相同的问题
+    - 全新的消费组第一次上线，设置从尾部开始消费，但是实际从头开始消费，如果是老的消费组重新上线，就从上次消费过的位置继续消费
+    - 消费组中的消费者负载均衡
+- [Topic主题](#Topic主题)
+    - [线上关闭Topic自动创建](#线上关闭Topic自动创建)
+    - Topic保存在broker的存储结构
+    - [Topic的读写队列如何理解](#Topic的读写队列如何理解)
+- [运维监控](#运维监控)
+    - [Console提供的功能](#Console提供的功能)
+    - [Console提供三种查询消息方式](#Console提供三种查询消息方式)
+    - [RocketMQ运维命令和控制台](RocketMQ运维命令和控制台.md)
+    - [RocketMQ命令整理](RocketMQ命令整理.pdf)
+- [常见问题](#常见问题)
+    - [RocketMQ事务的回查](#RocketMQ事务的回查)
+    - [消费端要做好幂等性](#消费端要做好幂等性)
+    - [Rocketmq的内存占用](#Rocketmq的内存占用)
+    - [刷盘方式](#刷盘方式)
 
 
-RocketMQ系统部署架构：Namesrv 和 Broker（Master、Slave）
-RocketMQ生产者模型、消费者模型
-RocketMQ存储模型:offset-->commitlog-->mmap
-1、存储文件夹和文件说明
-
-生产存储消费流程：
-1、消息发送到存储再到消费流程
-2、broker查找消息过程
-3、RocketMQ消费组上线问题
-
-broker消息存储过程、创建文件机制、刷盘机制：
-1、消息的格式
-2、存储流程
-3、创建文件机制
-4、刷盘机制
-5、MMAP(Memory Mapped Files，内存映射文件)技术
-
-Broker常见问题：
-1、下线一个Broker节点
-2、监控数据
-3、本机启动RocketMQ
-RocketMQ部署.md
-顺序写，随机读，
-消息安全性保障：同步双写，同步刷盘，主从同步复制
-写的效率可以很大很大，不存在线程切换，使用map方法利用linux的mmap的内存映射文件，减少linux内存之间的拷贝，利用linux的脏页原理刷盘，保障高可用，只要linux系统不断电，就可以保障消息的安全性
-积压的消息已经被swap交换到磁盘，再消费就会比较慢，读取的时候，使用pagecache,顺序读的时候，效率也可以大大提高
-
-
-生产端注意事项：
-1、生产者属性
-2、发送失败处理
-3、事务消息
-消息重发
-
-
-SQL Filter是在服务端处理，可以减轻客户端的处理压力，语法比较灵活，实现方式也相对复杂一些。
-Tags过滤实现比较简单，主要是在客户端实现。
-mq的路由是在客户端
-
-
-
-消费端注意事项：
-1、广播消费重复消费
-2、消息重复原因
-3、消费幂等的必要性
-4、消息查询功能
-5、消费失败处理
-6、广播消费
-RocketMQ消费组负载均衡.md
-重复消费，死信消息
-
-
-
-Topic主题：
-1、线上关闭topic自动创建
-2、topic保存在broker的存储结构
-3、topic的读写队列
-
-运维监控：
-1、Console提供的功能
-2、Console提供三种查询消息方式
-RocketMQ运维命令和控制台.md
-
-常见问题：
-1、事务的回查
-2、消费端要做好幂等性
-3、rocketmq的内存占用
-4、刷盘方式
 
 
 生产者发送流程
@@ -76,32 +63,6 @@ RocketMQ运维命令和控制台.md
 发送顺序消息
 发送事务消息
 
-
-消费者问题：
-1、多个消费者只有一个消费者消费：instanceId相同的问题
-2、全新的消费组第一次上线，设置从尾部开始消费，但是实际从头开始消费，如果是老的消费组重新上线，就从上次消费过的位置继续消费
-3、消费组中的消费者负载均衡
-
-
-顺序消息实现：生产者顺序发送到同一个mq队列（Message queue），消费者就顺序消费了，因为同一个mq队列集群模式下只会有一个消费者消费
-怎么扩容队列的时候，不乱序，要么自己改造路由方法，否则只能生产者停止发送，Consumer消费完消息，然后扩容，然后等待延迟时间同步消息队列信息后，再发送消息
-重写MessageQueueSelector的逻辑，记录下每次orderId对应的mq的信息，这样加入这个mq一直不存在了，这个几个消息就发送不了，但是不会乱序
-
-RocketMQ 4.0.x 正式版顺序消息实现：新增锁定mq队列
-1、Producer 顺序发送到同一个mq队列
-2、Consumer 严格顺序消费
-    Consumer 在严格顺序消费时，通过 三 把锁保证严格顺序消费。
-    Broker 消息队列锁（分布式锁） ：
-        集群模式下，Consumer 从 Broker 获得该锁后，才能进行消息拉取、消费。
-        广播模式下，Consumer 无需该锁。
-        Consumer 消息队列锁（本地锁） ：Consumer 获得该锁才能操作消息队列。
-        Consumer 消息处理队列消费锁（本地锁） ：Consumer 获得该锁才能消费消息队列。
-
-
-
-
-重复消息：发送时候重发送，消费者数量有变动的时候，比如消费者挂了，消费者数量增加，
-去重方案：接口幂等，使用Redis去重setnx命令
 
 
 Topic缩小mq的步骤，先把后面的mq设置为只能读，只能消费，等消费完了，再调整Topic的mq数量就好了
@@ -131,11 +92,31 @@ RocketMQ生产者模型、消费者模型
 
 
 
-常见问题
+RocketMQ存储模型:offset-->commitlog-->mmap
 
+
+
+
+## 顺序消息实现
 
 RocketMQ 4.0.x 正式版顺序消息实现：
 http://www.iocoder.cn/RocketMQ/message-send-and-consume-orderly/
+
+顺序消息实现：生产者顺序发送到同一个mq队列（Message queue），消费者就顺序消费了，因为同一个mq队列集群模式下只会有一个消费者消费
+怎么扩容队列的时候，不乱序，要么自己改造路由方法，否则只能生产者停止发送，Consumer消费完消息，然后扩容，然后等待延迟时间同步消息队列信息后，再发送消息
+重写MessageQueueSelector的逻辑，记录下每次orderId对应的mq的信息，这样加入这个mq一直不存在了，这个几个消息就发送不了，但是不会乱序
+
+RocketMQ 4.0.x 正式版顺序消息实现：新增锁定mq队列
+1、Producer 顺序发送到同一个mq队列
+2、Consumer 严格顺序消费
+    Consumer 在严格顺序消费时，通过 三 把锁保证严格顺序消费。
+    Broker 消息队列锁（分布式锁） ：
+        集群模式下，Consumer 从 Broker 获得该锁后，才能进行消息拉取、消费。
+        广播模式下，Consumer 无需该锁。
+        Consumer 消息队列锁（本地锁） ：Consumer 获得该锁才能操作消息队列。
+        Consumer 消息处理队列消费锁（本地锁） ：Consumer 获得该锁才能消费消息队列。
+
+
 
 
 参考
@@ -148,15 +129,15 @@ https://dbaplus.cn/news-73-1123-1.html
 
 
 ---------------------------------------------------------------------------------------------------------------------
-RocketMQ存储模型
-1、存储文件夹和文件说明
+## RocketMQ存储模型
 
 
 RocketMQ存储模型
 所有的消息存储在同一个文件，顺序写，随机读
 
 
-存储文件夹和文件说明：
+
+### 存储文件夹和文件说明
 
 Commitlog：存储消息文件
 consumequeue：主题和offset偏移量
@@ -218,12 +199,12 @@ https://blog.csdn.net/StrideBin/article/details/78338686
 
 生产存储消费流程：
 1、消息发送到存储再到消费流程
-2、broker查找消息过程
+2、Broker查找消息过程
 3、RocketMQ消费组上线问题
 
 
 
-消息发送到存储再到消费流程：
+### 消息发送到存储再到消费流程
 
 Producer：
 1、发送消息时候，生产者获取本地topic信息（发布信息publishInfo），获取不到然后再从nameser更新一次，如果还是没获取到到，通过TBW102这个默认tocpic从nameser更新，然后复制它的路由信息创建publishInfo和subscribeInfo。publishInfo（可写mq）和subscribeInfo（可读的mq）都是MessageQueue信息（topic、brokerName，index）。
@@ -266,7 +247,7 @@ Broker：
 8、根据int变量RequestCode从启动的时候注册的processorTable中取出Processor和对应的线程池对象Pair<NettyRequestProcessor, ExecutorService>
 
 
-broker消息存储过程：
+### Broker消息存储过程
 1、SendMessageProcessor-----》2、this.brokerController.getMessageStore().putMessage(msgInner)【brokerController包含全部的类】-----》3、this.commitLog.putMessage(msg)-----》4、获取mapedFile，然后mapedFile.appendMessage(msg, this.appendMessageCallback);-----》5、回调commitlog的doAppend方法，AppendMessageResult result =
                     cb.doAppend(this.getFileFromOffset(), byteBuffer, this.fileSize - currentPos, msg);-----》6、如果文件满了，就使用特殊字符填充剩下的空间，重新创建新的mapedFile再次存放message
 
@@ -306,7 +287,7 @@ NettyServerHandler是netty里面的hander，来去实现请求
 
 
 
-broker查找消息过程:
+### Broker查找消息过程
 PullMessageProcessor处理
 消费消息过程：Broker收到pull消息请求，首先从CQ（）
 根据offset找到对应的CQ，从CQ找到需要拉取的size，然后从对应的MapperFile中拉取消息返回Client
@@ -319,7 +300,10 @@ Client接收到消息Buffer，然后根据消息格式decode，然后交给对�
 
 消费者：
 
-RocketMQ消费组上线问题：
+
+
+### RocketMQ消费组上线问题
+
 如果是老的消费组，就从上次消费过的位置继续消费
 如果是新的消费组，默认从头开始消费，设置CONSUME_FROM_LAST_OFFSET，如果一个queue的minOffset为0时，消费端要从0开始消费这个queue上消息，不会从尾部开始消费，也就是只有一个queue的minOffset不等于0，也就是消息被删除过，这个从尾开始消费才会生效，这是因为避免topic扩容queue的时候，少消费消息，宁可重复消费消息，也绝不少消费消息，至少消费一次的原则
 
@@ -340,7 +324,7 @@ https://docs.google.com/document/d/1IbmWqhkklBw_bIzDdlMx5ViM3WcvJXZWw0y9M0xZ2x0/
 
 
 ---------------------------------------------------------------------------------------------------------------------
-broker消息存储过程、创建文件机制、刷盘机制：
+## Broker消息存储过程、创建文件机制、刷盘机制
 1、消息的格式
 2、存储流程
 3、创建文件机制
@@ -348,10 +332,12 @@ broker消息存储过程、创建文件机制、刷盘机制：
 5、MMAP(Memory Mapped Files，内存映射文件)技术
 
 
+### 消息的格式
+
 消息的格式：17个数据，第一个是整个消息的大小
 
 
-存储流程：
+### 存储流程
 Commitlog-->MappedFile-->MappedByteBuffer刷到内存
 
 保存消息（handleDiskFlush中可以看出，即使配置同步，基本就可以100%保证存储成功，除非os宕机或者断电，甚至宕机都可以刷到磁盘）
@@ -360,7 +346,17 @@ this.brokerController.getMessageStore()获取的是AbstractPluginMessageStore对
 2、再调用 this.commitLog.putMessage(msg);，首先获取MappedFile mappedFile = this.mappedFileQueue.getLastMappedFile();，获取锁（rocketmq的写文件锁使用的就是可重入锁或自旋锁（可配置）），再mappedFile.appendMessage(msg, this.appendMessageCallback);【此处其实只是构建内存对象，在后面的handleDiskFlush中从内存flush文件中】然后统计，然后根据配置，handleDiskFlush本机同步或者异步刷盘，handleHA主备同步或异步保存
 3、第2步中，mappedFile.appendMessage，再调用AppendMessageCallback的doAppend方法，最后构建一个对象。
 
-创建文件机制：
+
+
+
+### 顺序写，随机读的好处
+消息安全性保障：同步双写，同步刷盘，主从同步复制
+写的效率可以很大很大，不存在线程切换，使用map方法利用linux的mmap的内存映射文件，减少linux内存之间的拷贝，利用linux的脏页原理刷盘，保障高可用，只要linux系统不断电，就可以保障消息的安全性
+积压的消息已经被swap交换到磁盘，再消费就会比较慢，读取的时候，使用pagecache,顺序读的时候，效率也可以大大提高
+
+
+
+### 创建文件机制
 预先创建两个1G大小的空洞文件（文件大小可配置），直接把next和nextNext文件都创建好，如第一次接收消息的时候，就会创建两个文件如下，占用空间为2个1G（两个空洞文件），文件名字就是第一个offset的值，1073741824 = 1024 * 1024 * 1024 = 默认1G
 -rw-rw-r--. 1 aifqa aifqa 1073741824 12月 22 15:13 00000000000000000000
 -rw-rw-r--. 1 aifqa aifqa 1073741824 12月 22 15:12 00000000001073741824
@@ -369,6 +365,8 @@ this.brokerController.getMessageStore()获取的是AbstractPluginMessageStore对
 空洞文件作用很大，例如迅雷下载文件，在未下载完成时就已经占据了全部文件大小的空间，这时候就是空洞文件。下载时如果没有空洞文件，多线程下载时文件就都只能从一个地方写入，这就不是多线程了。如果有了空洞文件，可以从不同的地址写入，就完成多线程的优势任务
 
 
+
+### 刷盘机制
 刷盘机制：RocketMQ启动至少需要2G内存
 使用java的文件映射内存机制，FileChannel提供了map方法把文件映射到虚拟内存，通常情况可以映射整个文件，如果文件比较大，可以进行分段映射。
 java.nio.channels.FileChannel.force
@@ -390,7 +388,7 @@ MappedByteBuffer在处理大文件时的确性能很高，但也存在一些问�
 javadoc中也提到：A mapped byte buffer and the file mapping that it represents remain valid until the buffer itself is garbage-collected.*
 
 
-MMAP(Memory Mapped Files，内存映射文件)技术
+### MMAP(Memory Mapped Files，内存映射文件)技术
 Linux 内存映射函数 mmap（）函数详解
 http://blog.csdn.net/yangle4695/article/details/52139585
 
@@ -424,27 +422,27 @@ Dirty Page
 上下文切换 非常厉害的，不一定多线程就比 单线程快。
 
 ---------------------------------------------------------------------------------------------------------------------
-Broker常见问题：
-1、下线一个Broker节点
+## Broker常见问题
+1、如何下线一个Broker节点
 2、监控数据
 3、本机启动RocketMQ
 
 
 
-下线一个Broker节点：
+### 如何下线一个Broker节点
 如果想把一台broker下掉，但不能影响线上消息。
 wipeWritePerm这个命令会通知nsr，把指定broker的写权限禁用了，但读不受影响。-b后面只能写brokerName不能写IP，运维命令文档指导有误。
 wipeWritePerm命令原理：发送命令到namesrv，namesrv把此broker的队列数据的权限的写权限给禁了（其实就是把所有的queue的写权限给关闭了）
 理想的操作步骤是：1，修改当前broker上的所有队列为只读，2.等待所有消息都消费完成。3.执行shutdowm下线。
 
 
-监控数据
+### 监控数据
 RocketMQ消息缓存在pagecache中，当消费及时的时候，直接从pagecache中拉取消息，整个链路的RT会很短，否则出现堆积，要从disk拉取消息，就会比较慢，通过运维命令，查询哪些订阅组在消费磁盘的消息，把这些订阅组降级
 broker记录了很多Statistics log，可以直接拿出来导入ELK平台，也可以直接查询，
 
 
 
-本机启动RocketMQ
+### 本机启动RocketMQ
 本地rocketmq debug环境构建：
 NamesrvStartup中添加：namesrvConfig.setRocketmqHome("/Users/yangzl/src/RocketMQ-3.5.8");
 BrokerStartup中添加如下：brokerConfig.setRocketmqHome("/Users/yangzl/src/RocketMQ-3.5.8");
@@ -461,27 +459,27 @@ DataVersion记录broker更新配置次数和最后更新时间
 
 
 ---------------------------------------------------------------------------------------------------------------------
-生产端注意事项：
+## 生产端注意事项
 1、生产者属性
 2、发送失败处理
 3、事务消息
 
 
 
-生产者属性：
+### 生产者属性
 多个节点需要保证producerInstanceName 实例名称唯一
 若需要在同一台机器上启动多个produer  则需要设置不同的producerInstanceName
 producerGroup这个东东建议保持全局唯一
 
 
 
-发送失败处理
+### 发送失败处理
 Producer send fail：
 放在log、mem、外部存储hbase、redis等，等待合适的时机再次发送
 
 
 
-事务消息：
+### 事务消息
 
 V4.3.0开始，支持事务消息
 事务消息是先把消息存放在RMQ_SYS_TRANS_HALF_TOPIC主题中，当endTransaction时，-》Commit时候把消息放在原来的正常队列中然后deletePrepareMessage，Rollback就直接deletePrepareMessage，deletePrepareMessage就是把消息放到操作队列RMQ_SYS_TRANS_OP_HALF_TOPIC中，消息体存放消息在HALF_TOPIC主题中的offset。
@@ -490,7 +488,7 @@ Broker启动的时候启动一个事务扫描线程，使用自己重写的Count
 主题RMQ_SYS_TRANS_HALF_TOPIC和主题RMQ_SYS_TRANS_OP_HALF_TOPIC的队列一一对应（队列数一样），
 
 ---------------------------------------------------------------------------------------------------------------------
-消费端注意事项：
+## 消费端注意事项
 1、广播消费重复消费
 2、消息重复原因
 3、消费幂等的必要性
@@ -506,7 +504,7 @@ Broker启动的时候启动一个事务扫描线程，使用自己重写的Count
 
 
 
-广播消费重复消费：
+### 广播消费重复消费
 重启会重新消费的问题，是不是你重启的时候，改变了消费者的消费组
 对于广播消息，同一个消费组的消费者，已经被消费掉的消息，重启的消费者就不会再收到之前的消息的
 如果你起的消费者是一个完全新的消费组，就会从新消费全部消息的
@@ -515,7 +513,7 @@ Broker启动的时候启动一个事务扫描线程，使用自己重写的Count
 
 
 
-消息重复原因：
+### 消息重复原因
 生产端同步发送，未接收到ack，重试发送，次数设置：defaultMQProducer.getRetryTimesWhenSendFailed()
 消费端消费未返回ack，broker重复投递：msg.getReconsumeTimes()
 消费者数量变动（宕机或者新增）带来的重新负载，导致的消费offset丢失，导致消费重复
@@ -525,7 +523,7 @@ RocketMQ Consumer去重：
 消费端去重，使用业务端唯一的key保存在第三方存储来鉴别去重，不要使用msgId，在producer因为网络问题重发时，可能会导致msgId重复
 
 
-消费幂等的必要性
+### 消费幂等的必要性
 在互联网应用中，尤其在网络不稳定的情况下，MQ 的消息有可能会出现重复，这个重复简单可以概括为以下两种情况：
 发送时消息重复【消息 Message ID 不同】：
 MQ Producer 发送消息场景下，消息已成功发送到服务端并完成持久化，此时网络闪断或者客户端宕机导致服务端应答给客户端失败。如果此时 MQ Producer 意识到消息发送失败并尝试再次发送消息，MQ 消费者后续会收到两条内容相同但是 Message ID 不同的消息。
@@ -535,11 +533,12 @@ MQ Consumer 消费消息场景下，消息已投递到消费者并完成业务�
 
 
 
-消息查询功能：SQL92查询
+### 消息查询功能：SQL92查询
 重试队列和DLQ队列：重试和死信：会创建%RETRY%或%DLQ%+consumerGroup的主题，把消息发进去，在消费组重置消费
 
 
-消费失败处理：
+
+### 消费失败处理
 BROADCASTING模式，直接drop，跳过
 CLUSTERING模式，重试发送服务端失败或异常，会再次在本地重试消费，所以说RocketMQ提供的是At Least Once语义
 
@@ -580,7 +579,7 @@ Consumer端的ConsumeFromWhere在数据量小的时候，是不生效的，始�
 
 
 
-广播消费：
+### 广播消费
 集群模式：一条消息被集群中任何一个消费者消费
 广播模式：每条消息都被每一个消费者消费。
 
@@ -593,14 +592,36 @@ Consumer端的ConsumeFromWhere在数据量小的时候，是不生效的，始�
 广播模式消息，如果返回CONSUME_LATER,竟然不会重试，而是直接丢弃
 
 
+
+
+
+### 消息的过滤功能实现
+
+SQL Filter是在服务端处理，可以减轻客户端的处理压力，语法比较灵活，实现方式也相对复杂一些。
+Tags过滤实现比较简单，主要是在客户端实现。
+
+
+
+### 消息队列的路由
+mq的路由是在客户端
+
+
+
+
+### 消息去重方案
+重复消息：发送时候重发送，消费者数量有变动的时候，比如消费者挂了，消费者数量增加，
+去重方案：接口幂等，使用Redis去重setnx命令
+
+
+
 ---------------------------------------------------------------------------------------------------------------------
-Topic主题：
+## Topic主题
 1、线上关闭topic自动创建
 2、topic保存在broker的存储结构
 3、topic的读写队列
 
 
-线上关闭Topic自动创建：
+### 线上关闭Topic自动创建
 
 topic自动创建过程：
 在broker的sendMessage中的，有super.msgCheck(ctx, requestHeader, response);，在这个方法里面发现topic不存在，就会创建，并register到所有的broker（其实是所有的nameSrv）
@@ -617,7 +638,7 @@ topic保存在broker的TopicConfigManger数据结构中，持久化在：
 在创建 topic 的时候，会同时推送 topic 的信息到 name srv 中，也会同时里面进行持久化，保存 topic 的相关信息。configManager类里有一个persist方法
 
 
-topic的读写队列如何理解
+### Topic的读写队列如何理解
 读写数量设置的不一样：都是从前面来循环，所以如果设置的写大于读，会导致后面的mq数据无法消费，读大于写，会导致部分mq的消费者空轮询
 比如说有一个topic原来有8个queue，要缩小为4个queue，你就会发现有用了，就是动态调整过程中，会出现重复消费、丢失数据等情况，比较敏感
 可以先把readQueueNums缩小，禁写后面的mq，等后面的mq消费完，再缩小writeQueueNums即可，未验证，不知是否可行
@@ -627,13 +648,13 @@ topic的读写队列如何理解
 
 
 ---------------------------------------------------------------------------------------------------------------------
-运维监控：
+## 运维监控
 1、Console提供的功能
 2、Console提供三种查询消息方式
 
 
 
-Console提供的功能：
+### Console提供的功能
 生产者、消费者、Broker、Topic、Message消息
 
 
@@ -648,7 +669,7 @@ RequestCode和ResponseCode定义了请求和响应的类型
 通过MQAdmin或CLI方式创建topic：先更新this.brokerController.getTopicConfigManager().updateTopicConfig(topicConfig);包括保存在缓存topicConfigTable中和this.persist();持久化到文件，再注册到全部Broker中this.brokerController.registerBrokerAll(false, true);，其实是把本地的全部topic配置register到全部的nameSrv中去，nameSrv接收到后，更新本地的mq信息。
 
 
-Console提供三种查询消息方式:
+### Console提供三种查询消息方式
 1、根据Topic+beginTime+endTime【使用DefaultMQPullConsumer获取Topic的全部mq，循环mq，使用mq+begin获取minOffset，mq+begin获取maxOffset，使用consumer.pull(mq, subExpression, offset, 32)拉取消息，从minOffset开始，最大拉取到maxOffset，直到达到消息数量】
 2、根据Topic+Key（+beginTime+endTime，默认是0到当前时间，就是当前存在的全部消息）【根据Topic+Key+maxNum+beginTime+endTime从Broker的index文件夹下的文件中搜索消息（数量是maxNum和Broker部署时候配置的MaxMsgsNumBatch中的min的那个决定）】
 3、根据MessageId【根据MessageId可以解析出brokerAddr和commitLogOffset，传到对应的Broker，Broker根据commitLogOffset查询消息并返回】
@@ -661,7 +682,7 @@ Console：
 2、前台页面查询慢，建立连接和属性拷贝慢：1、建立连接慢，查询rocketmq一次，第一次查询260ms左右，不建立连接就是50ms左右，2、循环查询导致很慢，去除后台循环查询，简化前台查询功能，每次只查询一次，在前台分页，3、属性拷贝大概2~3个1ms，进来避免大数据属性拷贝
 
 ---------------------------------------------------------------------------------------------------------------------
-常见问题：
+## 常见问题
 1、事务的回查
 2、消费端要做好幂等性
 3、rocketmq的内存占用
@@ -669,6 +690,9 @@ Console：
 5、RocketMQ和ActiveMQ的区别
 6、Rocketmq和kafka的区别
 
+
+
+### RocketMQ事务的回查
 rocketmq的回调检查这块
 应该是用数据库或者REDIS作为QUEUE然后模拟实现prepared加扫描回调吧
 1）本地事务：业务操作+消息本地存储；
@@ -679,7 +703,8 @@ rocketmq的回调检查这块
 这个设计，不需要依赖RMQ的事务消息，自己实现的难度也很低。
 
 
-消费端要做好幂等性，
+
+### 消费端要做好幂等性
 消费端无论如何，总是要消息的幂等处理。消息幂等也很容易，你用你的消息的业务ID来做幂等判断就行了
 消费失败就重试啊，直到成功为止
 这个重试，是几乎所有MQ都支持的能力
@@ -701,7 +726,9 @@ Java里面有Netty这种好东西，所以TCP通信业变得很easy了
 SQL是个好东西
 
 
-rocketmq的内存占用
+
+
+### Rocketmq的内存占用
 堆外内存越大越好，堆内不大
 都是利用操作系统的文件映射
 所以会一直吃内存，不够的话会缺页
@@ -710,7 +737,7 @@ rocketmq的内存占用
 
 
 
-刷盘方式：
+### 刷盘方式
 同步刷盘就是立刻刷盘，不管内存页是否满一页，同步复制就是集群中，至少有一个slave的pagecache中与master的offset一致，即可认为高可用成功
 如果数据写入分页，但未刷盘，这时，JVM 退出（kill -9 pid 这种），未刷盘的数据应该都会刷盘
 操作系统会帮你做吧  
@@ -744,13 +771,8 @@ consumer group 消费进度重置，根据时间重置
 拉取消息的线程数，由于使用了无界队列，所以最大线程数不会生效，一定是最小线程数
 
 
----------------------------------------------------------------------------------------------------------------------
 
-
-Rocketmq介绍文章
-https://blog.csdn.net/prestigeding/article/details/78888290
-
-
+[源码分析RocketMQ系列](https://blog.csdn.net/prestigeding/article/details/78888290)
 
 ---------------------------------------------------------------------------------------------------------------------
 

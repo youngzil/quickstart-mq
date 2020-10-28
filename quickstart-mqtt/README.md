@@ -1,6 +1,8 @@
 client发送消息时候，每个消息请求时候，都有对应的类型，比如CONNECT、PUBLISH、SUBSCRIBE、UNSUBSCRIBE、PINGREQ、DISCONNECT等
 server回应时候，要根据client的类型作对应的回应，比如CONNACK、PUBACK、SUBACK、UNSUBACK、PINGRESP等（netty中的MqttMessageType枚举类和MqttMessageFactory类）
 
+
+
 全部类型如下：
 CONNECT(1),
    CONNACK(2),
@@ -16,9 +18,10 @@ CONNECT(1),
    PINGREQ(12),
    PINGRESP(13),
    DISCONNECT(14);
-   
-   
-   
+
+
+
+
  车联网遇到的问题：
  
  1、启动只建立连接，初始化5个连接，实际5个连接都超时关闭了，但是只有2个连接在连接超时关闭的时候，执行了MqttCallback.connectionLost

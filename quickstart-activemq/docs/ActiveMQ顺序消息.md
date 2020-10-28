@@ -2,12 +2,27 @@ Activemq顺序消息处理方案：
 1、利用Activemq的高级特性：consumer之独有消费者（exclusive consumer）
 2、利用Activemq的高级特性：Message Groups特性
 
+
+
 ---------------------------------------------------------------------------------------------------------------------
 常mq可以保证先到队列的消息按照顺序分发给消费者消费来保证顺序，但是一个队列有多个消费者消费的时候，那将失去这个保证，因为这些消息被多个线程并发的消费。但是有的时候消息按照顺序处理是很重要的，那我们该如何来保证消息的顺序呢，下面将从activemq和rocketmq来看看，它们是如何来保证消息的顺序问题的？我们还可以有别的处理方案么？
 
 Activemq处理方案
 
 1、利用Activemq的高级特性：consumer之独有消费者（exclusive consumer）
+
+ActiveMQ从4.x版本起开始支持Exclusive Consumer。 Broker会从多个consumers中挑选一个consumer来处理queue中
+
+所有的消息，从而保证了消息的有序处理。如果这个consumer失效，那么broker会自动切换到其它的consumer。 
+
+可以通过DestinationOptions 来创建一个Exclusive Consumer，如下：
+
+queue = new ActiveMQQueue("TEST.QUEUE?consumer.exclusive=true");
+consumer = session.createConsumer(queue);
+
+[JMS学习十一(ActiveMQ Consumer高级特性之独有消费者（Exclusive Consumer）)](https://www.cnblogs.com/alter888/p/8978463.html)
+
+
 
 在ActiveMQ4.x中可以采用Exclusive Consumer，broker会从queue中，一次发送消息给一个消费者，这样就避免了多个消费者并发消费的问题，从而保证顺序，配置如下：
 
@@ -23,7 +38,26 @@ consumer = session.createConsumer(queue);
 
 
 
+
+
+
 2、利用Activemq的高级特性：messageGroups
+
+
+Message Groups就是对消息分组，它是Exclusive Consumer功能的增强。
+
+逻辑上，Message Groups 可以看成是一种并发的Exclusive Consumer。跟所有的消息都由唯一的consumer处理不同，JMS 消息属性JMSXGroupID 被用来区分message group。Message Groups特性保证所有具有相同JMSXGroupID的消息会被分发到相同的consumer（只要这个consumer保持active）。
+
+另外一方面，Message Groups特性也是一种负载均衡的机制。在一个消息被分发到consumer之前，broker首先检查消息JMSXGroupID属性。如果存在，那么broker会检查是否有某个consumer拥有这个message group。如果没有，那么broker会选择一个consumer，并将它关联到这个message group。此后，这个consumer会接收这个message group的所有消息，直到：
+
+  1：Consumer被关闭
+
+  2：Message group被关闭，通过发送一个消息，并设置这个消息的JMSXGroupSeq为-1
+
+[ActiveMQ（22）：Consumer高级特性之消息分组（Message Groups）](https://blog.51cto.com/1754966750/1924848)
+
+
+
 
 Message Groups特性是一种负载均衡的机制。在一个消息被分发到consumer之前，broker首先检查消息JMSXGroupID属性。如果存在，那么broker会检查是否有某个consumer拥有这个message group。如果没有，那么broker会选择一个consumer，并将它关联到这个message group。此后，这个consumer会接收这个message group的所有消息，直到：
 

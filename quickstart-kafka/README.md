@@ -1,24 +1,8 @@
-http://kafka.apache.org/
+[Kafka官网](http://kafka.apache.org/)  
+[Kafka文档](http://kafka.apache.org/documentation.html)  
+[Kafka Github](https://github.com/apache/kafka)  
+[Kafka介绍](https://www.oschina.net/p/kafka)  
 
-http://kafka.apache.org/documentation.html
-http://kafka.apache.org/downloads.html
-
-
-https://github.com/apache/kafka
-
-
-
-kafka监控
-https://www.oschina.net/p/kafka-manager
-https://www.oschina.net/p/kafka-monitor
-
-
-
-客户端可视化工具
-https://blog.csdn.net/Dongguabai/article/details/86526299
-
-
-https://www.oschina.net/p/kafka
 
 
 kafka是一种高吞吐量的分布式发布订阅消息系统，她有如下特性：

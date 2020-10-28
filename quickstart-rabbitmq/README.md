@@ -1,18 +1,17 @@
-官网http://www.rabbitmq.com
-下载http://www.rabbitmq.com/download.html
-官方文档http://www.rabbitmq.com/documentation.html
+[RabbitMQ官网](http://www.rabbitmq.com)  
+[RabbitMQ官方文档](http://www.rabbitmq.com/documentation.html)  
+[RabbitMQ Github](https://github.com/rabbitmq/rabbitmq-server)  
+[RabbitMQ Java客户端主页](http://www.rabbitmq.com/java-client.html)  
+[RabbitMQ Java客户端 Github地址](https://github.com/rabbitmq/rabbitmq-java-client)  
+[RabbitMQ MQTT地址](https://github.com/rabbitmq/rabbitmq-mqtt)  
+[RabbitMQ介绍](https://www.oschina.net/p/rabbitmq)  
 
-https://github.com/rabbitmq/rabbitmq-server
-java客户端：http://www.rabbitmq.com/java-client.html
-客户端github：https://github.com/rabbitmq/rabbitmq-java-client
-MQTT：https://github.com/rabbitmq/rabbitmq-mqtt
 
-Erlang：
-http://www.erlang.org/
-http://erlang.org/doc/
-https://github.com/erlang/otp
+[Erlang官网](http://www.erlang.org/)  
+[Erlang文档](http://erlang.org/doc/)  
+[Erlang/OTP](https://github.com/erlang/otp)  
 
-https://www.oschina.net/p/rabbitmq
+
 
 RabbitMQ 3.7.0 发布，正式支持 Erlang/OTP 20
 （OTP 20.1.4 已发布，OTP (Open Telecom Platform) 是一个开源的 Erlang 分发和一个用 Erlang 编写的应用服务器。）
@@ -29,11 +28,13 @@ OTP 包含：
 一个分布式的数据库服务 Mnesia
 大量的开发库
 
-https://www.oschina.net/p/otp
 
-官网：http://www.erlang.org/
-文档：http://erlang.org/doc/design_principles/users_guide.html
-下载：http://www.erlang.org/downloads
+[OTP介绍](https://www.oschina.net/p/otp)  
+
+[OTP官网](http://www.erlang.org/)  
+[OTP文档](http://erlang.org/doc/design_principles/users_guide.html)  
+[OTP下载](http://www.erlang.org/downloads)  
+
 
 RabbitMQ 是由 LShift 提供的一个 Advanced Message Queuing Protocol (AMQP) 的开源实现，由以高性能、健壮以及可伸缩性出名的 Erlang 写成，因此也是继承了这些优点。
 

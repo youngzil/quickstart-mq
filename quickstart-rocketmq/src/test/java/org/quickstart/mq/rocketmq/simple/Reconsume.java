@@ -81,7 +81,8 @@ public class Reconsume {
         consumer.start();
         System.out.printf("Consumer Started.%n");
 
-        MQClientInstance clientInstance = MQClientManager.getInstance().getAndCreateMQClientInstance(consumer, null);
+        MQClientInstance clientInstance = MQClientManager.getInstance().getOrCreateMQClientInstance(consumer);
+        //MQClientInstance clientInstance = MQClientManager.getInstance().getAndCreateMQClientInstance(consumer, null);
         LocalFileOffsetStore offsetStore = new LocalFileOffsetStore(clientInstance, "");
         Set<MessageQueue> set = consumer.fetchSubscribeMessageQueues("TopicTestA");
         if (null != set) {

@@ -1,6 +1,9 @@
 参考文章：http://blog.csdn.net/suifeng3051/article/details/38321043
 http://kafka.apache.org/082/documentation.html#quickstart
 
+[安装脚本](install)
+
+
 部署集群至少修改三个：config/server.properties
 brokerid=2
 port=9093
