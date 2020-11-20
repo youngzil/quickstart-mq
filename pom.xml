@@ -47,8 +47,6 @@
     <module>quickstart-jafka</module>
     <module>quickstart-kafka</module>
     <module>quickstart-pulsar</module>
-    <module>quickstart-msgframe-v1</module>
-    <module>quickstart-msgframe-v2</module>
     <module>quickstart-hornetq</module>
     <module>quickstart-nanomsg</module>
   </modules>

@@ -14,12 +14,12 @@
 			"retryQueueNums":1,
 			"whichBrokerWhenConsumeSlowly":1
 		},
-		"CONSUMER_MONITOR_TEST_ALL_MSGFRAME_CLUSTER_GROUP":{
+		"CONSUMER_MONITOR_TEST_ALL_MSGTEST_CLUSTER_GROUP":{
 			"brokerId":0,
 			"consumeBroadcastEnable":true,
 			"consumeEnable":true,
 			"consumeFromMinEnable":true,
-			"groupName":"CONSUMER_MONITOR_TEST_ALL_MSGFRAME_CLUSTER_GROUP",
+			"groupName":"CONSUMER_MONITOR_TEST_ALL_MSGTEST_CLUSTER_GROUP",
 			"retryMaxTimes":16,
 			"retryQueueNums":1,
 			"whichBrokerWhenConsumeSlowly":1
@@ -44,12 +44,12 @@
 			"retryQueueNums":1,
 			"whichBrokerWhenConsumeSlowly":1
 		},
-		"CONSUMER_TAGTEST_MYTAG_MSGFRAME_CLUSTER2_GROUP":{
+		"CONSUMER_TAGTEST_MYTAG_MSGTEST_CLUSTER2_GROUP":{
 			"brokerId":0,
 			"consumeBroadcastEnable":false,
 			"consumeEnable":true,
 			"consumeFromMinEnable":false,
-			"groupName":"CONSUMER_TAGTEST_MYTAG_MSGFRAME_CLUSTER2_GROUP",
+			"groupName":"CONSUMER_TAGTEST_MYTAG_MSGTEST_CLUSTER2_GROUP",
 			"retryMaxTimes":16,
 			"retryQueueNums":1,
 			"whichBrokerWhenConsumeSlowly":1
@@ -74,12 +74,12 @@
 			"retryQueueNums":1,
 			"whichBrokerWhenConsumeSlowly":1
 		},
-		"CONSUMER_TAGTEST_ALL_MSGFRAME_CLUSTER2_GROUP":{
+		"CONSUMER_TAGTEST_ALL_MSGTEST_CLUSTER2_GROUP":{
 			"brokerId":0,
 			"consumeBroadcastEnable":true,
 			"consumeEnable":true,
 			"consumeFromMinEnable":true,
-			"groupName":"CONSUMER_TAGTEST_ALL_MSGFRAME_CLUSTER2_GROUP",
+			"groupName":"CONSUMER_TAGTEST_ALL_MSGTEST_CLUSTER2_GROUP",
 			"retryMaxTimes":16,
 			"retryQueueNums":1,
 			"whichBrokerWhenConsumeSlowly":1
@@ -124,12 +124,12 @@
 			"retryQueueNums":1,
 			"whichBrokerWhenConsumeSlowly":1
 		},
-		"CONSUMER_MONITOR_TEST11_ALL_MSGFRAME_CLUSTER_GROUP":{
+		"CONSUMER_MONITOR_TEST11_ALL_MSGTEST_CLUSTER_GROUP":{
 			"brokerId":0,
 			"consumeBroadcastEnable":true,
 			"consumeEnable":true,
 			"consumeFromMinEnable":true,
-			"groupName":"CONSUMER_MONITOR_TEST11_ALL_MSGFRAME_CLUSTER_GROUP",
+			"groupName":"CONSUMER_MONITOR_TEST11_ALL_MSGTEST_CLUSTER_GROUP",
 			"retryMaxTimes":16,
 			"retryQueueNums":1,
 			"whichBrokerWhenConsumeSlowly":1

@@ -1,5 +1,5 @@
 /**
- * 项目名称：msgframe-console 
+ * 项目名称：console
  * 文件名：ActiveMQConsumer.java
  * 版本信息：
  * 日期：2016年12月23日
@@ -9,13 +9,11 @@
 package org.quickstart.mq.activemq.expiration;
 
 import javax.jms.ConnectionFactory;
-import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 

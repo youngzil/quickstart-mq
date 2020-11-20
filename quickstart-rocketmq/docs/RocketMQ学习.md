@@ -54,6 +54,7 @@
     - [消费端要做好幂等性](#消费端要做好幂等性)
     - [Rocketmq的内存占用](#Rocketmq的内存占用)
     - [刷盘方式](#刷盘方式)
+    - [RocketMQ主备切换原理](#RocketMQ主备切换原理)
 
 
 
@@ -776,4 +777,47 @@ consumer group 消费进度重置，根据时间重置
 
 ---------------------------------------------------------------------------------------------------------------------
 
+## RocketMQ主备切换原理
+
+使用DLedger实现
+
+RocketMQ使用DLedger  
+[RocketMQ原理学习--多副本实现 DLedger](https://blog.csdn.net/qq924862077/article/details/104547599)  
+[RocketMQ 是如何使用dledger 模式保证故障自动恢复的](https://blog.csdn.net/trntaken/article/details/105694384)  
+
+[RocketMQ系列：FAQ之dledger4.7.1集群问题](https://my.oschina.net/u/4300877/blog/4658645)  
+[RocketMQ实现高可用多副本架构的关键：基于Raft协议的commitlog存储库DLedger](https://www.infoq.cn/article/7xeJrpDZBa9v*GDZOFS6)  
+
+
+
+
+
+DLedger  
+
+[DLedger Github](https://github.com/openmessaging/openmessaging-storage-dledger)  
+
+A raft-based java library for building high-available, high-durable, strong-consistent commitlog, which could act as the persistent layer for distributed storage system, i.e. messaging, streaming, kv, db, etc.
+
+基于Raft的Java库，用于构建高可用性，高耐用性，强一致性的提交日志，该日志可以充当分布式存储系统的持久层，即消息传递，流，kv，db等。
+
+DLedger 现在是在 OpenMessaging 下的一个项目  
+DLedger 就是一个基于 raft 协议的 commitlog 存储库
+
+根据 DLedger 定位，它是一个基于 raft 协议的 commitlog 存储库，是一个 append only 的日志系统，采用 Jepsen 的 Set模型进行测试。
+
+Set 模型的测试流程分为两个阶段。
+- 第一阶段由不同的客户端并发地向待测试集群添加不同的数据，中间会进行故障注入。
+- 第二阶段，向待测试集群进行一次最终读取，获得读取的结果集。最后验证每一个成功添加的元素都在最终结果集中，并且最终的结果集也仅包含企图添加的元素。
+
+
+[DLedger-Commitlog storage library based on Raft](https://www.programmersought.com/article/10675738450/)  
+[DLedger——基于 Raft 的 Commitlog 存储 Library](https://www.jianshu.com/p/05b64a6242f6)  
+
+
+
+参考 [Jepsen框架](Jepsen框架.md)  
+
+
+
+---------------------------------------------------------------------------------------------------------------------
 

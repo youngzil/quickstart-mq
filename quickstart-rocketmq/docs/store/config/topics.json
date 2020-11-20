@@ -49,21 +49,21 @@
 			"topicSysFlag":0,
 			"writeQueueNums":1
 		},
-		"%RETRY%CONSUMER_MONITOR_TEST11_ALL_MSGFRAME_CLUSTER_GROUP":{
+		"%RETRY%CONSUMER_MONITOR_TEST11_ALL_MSGTEST_CLUSTER_GROUP":{
 			"order":false,
 			"perm":6,
 			"readQueueNums":1,
 			"topicFilterType":"SINGLE_TAG",
-			"topicName":"%RETRY%CONSUMER_MONITOR_TEST11_ALL_MSGFRAME_CLUSTER_GROUP",
+			"topicName":"%RETRY%CONSUMER_MONITOR_TEST11_ALL_MSGTEST_CLUSTER_GROUP",
 			"topicSysFlag":0,
 			"writeQueueNums":1
 		},
-		"%RETRY%CONSUMER_TAGTEST_ALL_MSGFRAME_CLUSTER2_GROUP":{
+		"%RETRY%CONSUMER_TAGTEST_ALL_MSGTEST_CLUSTER2_GROUP":{
 			"order":false,
 			"perm":6,
 			"readQueueNums":1,
 			"topicFilterType":"SINGLE_TAG",
-			"topicName":"%RETRY%CONSUMER_TAGTEST_ALL_MSGFRAME_CLUSTER2_GROUP",
+			"topicName":"%RETRY%CONSUMER_TAGTEST_ALL_MSGTEST_CLUSTER2_GROUP",
 			"topicSysFlag":0,
 			"writeQueueNums":1
 		},
@@ -94,12 +94,12 @@
 			"topicSysFlag":0,
 			"writeQueueNums":8
 		},
-		"%RETRY%CONSUMER_MONITOR_TEST_ALL_MSGFRAME_CLUSTER_GROUP":{
+		"%RETRY%CONSUMER_MONITOR_TEST_ALL_MSGTEST_CLUSTER_GROUP":{
 			"order":false,
 			"perm":6,
 			"readQueueNums":1,
 			"topicFilterType":"SINGLE_TAG",
-			"topicName":"%RETRY%CONSUMER_MONITOR_TEST_ALL_MSGFRAME_CLUSTER_GROUP",
+			"topicName":"%RETRY%CONSUMER_MONITOR_TEST_ALL_MSGTEST_CLUSTER_GROUP",
 			"topicSysFlag":0,
 			"writeQueueNums":1
 		},
@@ -121,12 +121,12 @@
 			"topicSysFlag":0,
 			"writeQueueNums":4
 		},
-		"%RETRY%CONSUMER_TAGTEST_MYTAG_MSGFRAME_CLUSTER2_GROUP":{
+		"%RETRY%CONSUMER_TAGTEST_MYTAG_MSGTEST_CLUSTER2_GROUP":{
 			"order":false,
 			"perm":6,
 			"readQueueNums":1,
 			"topicFilterType":"SINGLE_TAG",
-			"topicName":"%RETRY%CONSUMER_TAGTEST_MYTAG_MSGFRAME_CLUSTER2_GROUP",
+			"topicName":"%RETRY%CONSUMER_TAGTEST_MYTAG_MSGTEST_CLUSTER2_GROUP",
 			"topicSysFlag":0,
 			"writeQueueNums":1
 		},

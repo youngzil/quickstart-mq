@@ -128,7 +128,7 @@ bin/kafka-console-consumer.sh --zookeeper 192.168.100.125:2181 --topic DreamTopi
 
 bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list 10.1.243.23:59092,10.1.243.23:59093,10.1.243.23:59094 --topic topicTest --time -1
 
-bin/kafka-run-class.sh kafka.tools.ConsumerOffsetChecker --broker-info --group CONSUMER_TOPICTEST_ALL_MSGFRAME_CLUSTER_GROUP --topic topicTest --zookeeper 10.1.243.23:52181
+bin/kafka-run-class.sh kafka.tools.ConsumerOffsetChecker --broker-info --group CONSUMER_TOPICTEST_ALL_MSGTEST_CLUSTER_GROUP --topic topicTest --zookeeper 10.1.243.23:52181
 
 
 

@@ -1,5 +1,5 @@
 /**
- * 项目名称：msgframe-console 
+ * 项目名称：
  * 文件名：ActiveMQConsumer.java
  * 版本信息：
  * 日期：2016年12月23日

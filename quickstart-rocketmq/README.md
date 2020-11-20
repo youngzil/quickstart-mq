@@ -1,7 +1,7 @@
 [RocketMQ官网](http://rocketmq.apache.org/)  
+[RocketMQ文档](http://rocketmq.apache.org/docs/quick-start/)  
 [RocketMQ Github](https://github.com/apache/rocketmq)  
 [RocketMQ扩展项目](https://github.com/apache/rocketmq-externals)  
-
 
 
 [RocketMQ学习网站](https://github.com/a2888409/RocketMQ-Learning)  
@@ -12,7 +12,6 @@ https://codeload.github.com/YunaiV/incubator-rocketmq
 https://github.com/RtwChina/MyRocketMQ
 
 
-http://rocketmq.apache.org/docs/quick-start/
 
 druid-rocketmq项目（是druid.io，大数据分析系统）
 https://github.com/druid-io/druid/tree/master/extensions-contrib/druid-rocketmq
