@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    volumes:
+      - ./data:/data
+      - /etc/localtime:/etc/localtime
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 0
+      KAFKA_ADVERTISED_HOST_NAME: 172.16.185.76
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_CREATE_TOPICS: "netmusic"   #kafka启动后初始化一个有2个partition(分区)0个副本名叫netmusic的topic
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181/kafka
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.16.185.76:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+
+    volumes:
+      - ./kafka-logs:/kafka
+      - /etc/localtime:/etc/localtime
+    depends_on:
+      - zookeeper
