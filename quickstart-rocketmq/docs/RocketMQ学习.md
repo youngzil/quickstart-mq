@@ -55,6 +55,15 @@
     - [Rocketmq的内存占用](#Rocketmq的内存占用)
     - [刷盘方式](#刷盘方式)
     - [RocketMQ主备切换原理](#RocketMQ主备切换原理)
+- 4.X之后的主要功能：  
+    - [事务消息](#事务消息)
+    - [消息轨迹(Message Trace)](#消息轨迹(Message-Trace))
+    - [Topic权限管理(Auth Management)](#Topic权限管理(Auth-Management))
+    - [Dledger集群搭建](#Dledger集群搭建)
+
+
+参考  
+[Apache RocketMQ开发者指南](http://www.itmuch.com/books/rocketmq/dledger/deploy_guide.html)  
 
 
 
@@ -393,7 +402,7 @@ javadoc中也提到：A mapped byte buffer and the file mapping that it represen
 Linux 内存映射函数 mmap（）函数详解
 http://blog.csdn.net/yangle4695/article/details/52139585
 
-参考文章
+参考文章  
 https://www.jianshu.com/p/f90866dcbffc
 http://blog.csdn.net/xx_ytm/article/details/54801983
 http://blog.csdn.net/jdsjlzx/article/details/51648044
@@ -414,9 +423,11 @@ pagecache 有 4k 。8k 各种规格的，可以自己设定
 
 缓存
 缓存是用来减少高速设备访问低速设备所需平均时间的组件，文件读写涉及到计算机内存和磁盘，内存操作速度远远大于磁盘，如果每次调用read,write都去直接操作磁盘，一方面速度会被限制，一方面也会降低磁盘使用寿命，因此不管是对磁盘的读操作还是写操作，操作系统都会将数据缓存起来
-Page Cache
+
+Page Cache  
 页缓存（Page Cache）是位于内存和文件之间的缓冲区，它实际上也是一块内存区域，所有的文件IO（包括网络文件）都是直接和页缓存交互，操作系统通过一系列的数据结构，比如inode, address_space, struct page，实现将一个文件映射到页的级别，这些具体数据结构及之间的关系我们暂且不讨论，只需知道页缓存的存在以及它在文件IO中扮演着重要角色，很大一部分程度上，文件读写的优化就是对页缓存使用的优化
-Dirty Page
+
+Dirty Page  
 页缓存对应文件中的一块区域，如果页缓存和对应的文件区域内容不一致，则该页缓存叫做脏页（Dirty Page）。对页缓存进行修改或者新建页缓存，只要没有刷磁盘，都会产生脏页
 
 
@@ -487,6 +498,30 @@ V4.3.0开始，支持事务消息
 Broker启动的时候启动一个事务扫描线程，使用自己重写的CountDownLatch2类await定时回查客户端事务消息的状态，客户端根据事务ID查询到消息状态后进行endTransaction
 
 主题RMQ_SYS_TRANS_HALF_TOPIC和主题RMQ_SYS_TRANS_OP_HALF_TOPIC的队列一一对应（队列数一样），
+
+
+
+总体而言RocketMQ事务消息分为两条主线
+- 发送流程：发送half message(半消息)，执行本地事务，发送事务执行结果
+- 定时任务回查流程：MQ定时任务扫描半消息，回查本地事务，发送事务执行结果
+
+
+事务消息有专门的一个队列RMQ_SYS_TRANS_HALF_TOPIC,用来存放半消息(half message)
+
+如果是提交动作，就恢复原消息的主题与队列，再次存入commitlog文件进而转到消息消费队列，供消费者消费，然后将原预处理消息存入一个新的主题RMQ_SYS_TRANS_OP_HALF_TOPIC，代表该消息已被处理
+
+回滚消息，则直接将原预处理消息存入一个新的主题RMQ_SYS_TRANS_OP_HALF_TOPIC，代表该消息已被处理
+
+[RocketMq之事务消息实现原理](https://juejin.cn/post/6844904193526857742#heading-9)  
+
+
+
+
+
+
+
+
+
 
 ---------------------------------------------------------------------------------------------------------------------
 ## 消费端注意事项
@@ -820,4 +855,37 @@ Set 模型的测试流程分为两个阶段。
 
 
 ---------------------------------------------------------------------------------------------------------------------
+
+## 消息轨迹(Message Trace)
+
+Broker根据配置开启消息跟踪，创建主题或者默认的主题RMQ_SYS_TRACE_TOPIC
+
+Producer和Consumer都是通过Hook实现的
+
+Trace消息发送通过Hook方式进行发送，开启一个新的线程池，定时批量（批量数量）发送
+
+[RocketMQ之消息轨迹实战与源码分析](http://wuwenliang.net/2019/07/04/%E8%B7%9F%E6%88%91%E5%AD%A6RocketMQ%E4%B9%8B%E6%B6%88%E6%81%AF%E8%BD%A8%E8%BF%B9%E5%AE%9E%E6%88%98%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/)
+
+
+
+
+## Topic权限管理(Auth Management)
+
+通过Broker端开启权限控制属性，读取distribution/conf/plain_acl.yml配置文件
+
+在配置文件中配置accessKey（用户）和secretKey（密码）、topicPerms（各个Topic的权限）、groupPerms（各个ConsumerGroup的权限）
+
+- 用户在使用RocketMQ权限控制时，可以在Client客户端通过 RPCHook注入AccessKey和SecretKey签名；
+- 同时，将对应的权限控制属性（包括Topic访问权限、IP白名单和AccessKey和SecretKey签名等）设置在distribution/conf/plain_acl.yml的配置文件中。Broker端对AccessKey所拥有的权限进行校验，校验不过，抛出异常； 
+- ACL客户端可以参考：org.apache.rocketmq.example.simple包下面的AclClient代码。
+
+
+
+
+## Dledger集群搭建
+
+DLedger 就是一个基于 raft 协议的 commitlog 存储库
+
+虽然 RocketMQ-on-DLedger Group 也可以以 2 节点方式部署，但其会丧失容灾切换能力（2n + 1 原则，至少需要3个节点才能容忍其中 1 个宕机）。
+
 

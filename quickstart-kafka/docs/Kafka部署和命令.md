@@ -141,3 +141,6 @@ kafka删除topic方法
 
 
 
+[Kafka常用命令收录](https://cloud.tencent.com/developer/article/1350788)  
+
+

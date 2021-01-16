@@ -5,7 +5,7 @@
 - [Producer报错](Producer报错.md)
 - [Producer和Consumer说明.md](Producer和Consumer说明.md)
 - [ISR and AR](#ISR-and-AR)
-    ISR 的伸缩性
+    - [ISR的伸缩性](#ISR的伸缩性)
 - [Kafka架构内部原理](#Kafka架构内部原理)  
     Kafka生产、保存、消费流程
     在一套kafka架构中有多个Producer，多个Broker,多个Consumer，每个Producer可以对应多个Topic，每个Consumer只能对应一个ConsumerGroup。
@@ -64,8 +64,10 @@ segment的文件生命周期由服务端配置参数(log.segment.bytes，log.rol
 
 ### 二个位置三个队列
 LEO，LogEndOffset的缩写，表示每个partition的log最后一条Message的位置。
-HW俗称高水位，HighWatermark的缩写，是指consumer能够看到的此partition的位置，取一个partition对应的ISR中最小的LEO作为HW，consumer最多只能消费到HW所在的位置。
+HW（High Watermark高水位）俗称高水位，HighWatermark的缩写，是指consumer能够看到的此partition的位置，取一个partition对应的ISR中最小的LEO作为HW，consumer最多只能消费到HW所在的位置。
 
+
+AR，简单来说，分区中的所有副本统称为 AR (Assigned Replicas)。
 ISR (In-Sync Replicas)，这个是指副本同步队列。副本数对Kafka的吞吐率是有一定的影响，但极大的增强了可用性。
 所有的副本(replicas)统称为Assigned Replicas，即AR
 OSR(Outof-Sync Replicas)列表，新加入的follower也会先存放在OSR中。AR=ISR+OSR。
@@ -92,6 +94,11 @@ unclean.leader.election.enable=true：（Kafka默认）选择第一个“活”�
 如果需要确保消息的可靠性，必须要将producer.type设置为sync。
 如果设置成异步的模式，即producer.type=async，可以是producer以batch的形式push数据，这样会极大的提高broker的性能，但是这样会增加丢失数据的风险
 batch的数量大小可以通过producer的参数(batch.num.messages)控制，在比较新的版本中还有batch.size这个参数
+
+
+
+[Kafka-LEO和HW概念及更新流程](https://www.cnblogs.com/youngchaolin/p/12641463.html)  
+[kafka中关于HW,LEO，offset之间的关系](https://blog.csdn.net/qq_37714755/article/details/105119682)  
 
 
 
@@ -122,7 +129,7 @@ acks=0/1时，TPS与min.insync.replicas参数以及副本数无关，仅受acks�
 acks=0时，TPS最高，其次为1，最差为-1，即TPS：acks_0 > acks_1 > ack_-1
 min.insync.replicas参数不影响TPS;
 partition的不同会影响TPS，随着partition的个数的增长TPS会有所增长，但并不是一直成正比关系，到达一定临界值时，partition数量的增加反而会使TPS略微降低;
-Kafka在acks=-1,min.insync.replicas>=1时，具有高可靠性，所有成功返回的消息都可以落盘。 
+Kafka在acks=-1,min.insync.replicas>=1时，具有高可靠性，所有成功返回的消息都可以落盘。
 
 
 
@@ -138,7 +145,7 @@ producer：
 8、客户端缓冲区满了也可能会丢消息；或者异步情况下消息在客户端缓冲区还未发送，客户端就宕机
 9、block.on.buffer.full = true
 consumer：
-1、enable.auto.commit=false  关闭自动提交位移
+1、enable.auto.commit=false 关闭自动提交位移
 
 
 
@@ -177,21 +184,23 @@ https://blog.csdn.net/lp284558195/article/details/80297208
 
 ---------------------------------------------------------------------------------------------------------------------
 ## ISR and AR
-ISR 的伸缩性
 
 
 ISR and AR
-简单来说，分区中的所有副本统称为 AR (Assigned Replicas)。所有与leader副本保持一定程度同步的副本（包括leader副本在内）组成 ISR (In Sync Replicas)。 ISR 集合是 AR 集合的一个子集。消息会先发送到leader副本，然后follower副本才能从leader中拉取消息进行同步。同步期间，follow副本相对于leader副本而言会有一定程度的滞后。前面所说的 ”一定程度同步“ 是指可忍受的滞后范围，这个范围可以通过参数进行配置。于leader副本同步滞后过多的副本（不包括leader副本）将组成 OSR （Out-of-Sync Replied）由此可见，AR = ISR + OSR。正常情况下，所有的follower副本都应该与leader 副本保持 一定程度的同步，即AR=ISR，OSR集合为空。
+简单来说，分区中的所有副本统称为 AR (Assigned Replicas)。
+
+所有与leader副本保持一定程度同步的副本（包括leader副本在内）组成 ISR (In Sync Replicas)。 ISR 集合是 AR 集合的一个子集。
+
+消息会先发送到leader副本，然后follower副本才能从leader中拉取消息进行同步。同步期间，follow副本相对于leader副本而言会有一定程度的滞后。前面所说的 ”一定程度同步“ 是指可忍受的滞后范围，这个范围可以通过参数进行配置。于leader副本同步滞后过多的副本（不包括leader副本）将组成 OSR （Out-of-Sync Replied）由此可见，AR = ISR + OSR。
+
+正常情况下，所有的follower副本都应该与leader 副本保持 一定程度的同步，即AR=ISR，OSR集合为空。
 
 
-ISR 的伸缩性
-leader副本负责维护和跟踪 ISR 集合中所有follower副本的滞后状态，当follower副本落后太多或失效时，leader副本会把它从 ISR 集合中剔除。如果 OSR 集合中所有follower副本“追上”了leader副本，那么leader副本会把它从 OSR 集合转移至 ISR 集合。默认情况下，当leader副本发生故障时，只有在 ISR 集合中的follower副本才有资格被选举为新的leader，而在 OSR 集合中的副本则没有任何机会（不过这个可以通过配置来改变）。
 
+## ISR的伸缩性
+leader副本负责维护和跟踪 ISR 集合中所有follower副本的滞后状态，当follower副本落后太多或失效时，leader副本会把它从 ISR 集合中剔除。如果 OSR 集合中所有follower副本“追上”了leader副本，那么leader副本会把它从 OSR 集合转移至 ISR 集合。
 
-
-
-
-
+默认情况下，当leader副本发生故障时，只有在 ISR 集合中的follower副本才有资格被选举为新的leader，而在 OSR 集合中的副本则没有任何机会（不过这个可以通过配置来改变）。
 
 
 ---------------------------------------------------------------------------------------------------------------------
