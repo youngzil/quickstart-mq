@@ -2,6 +2,7 @@
 [Kafka文档](http://kafka.apache.org/documentation.html)  
 [Kafka Github](https://github.com/apache/kafka)  
 [Kafka介绍](https://www.oschina.net/p/kafka)  
+[Kafka中文文档](https://kafka.apachecn.org/documentation.html)  
 
 [wurstmeister Kafka Docker Github](https://github.com/wurstmeister/kafka-docker)  
 [wurstmeister Kafka Docker文档](http://wurstmeister.github.io/kafka-docker/)  
@@ -22,6 +23,10 @@ kafka的目的是提供一个发布订阅解决方案，它可以处理消费者
 这些数据通常是由于吞吐量的要求而通过处理日志和日志聚合来解决。   
 对于像Hadoop的一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案。  
 kafka的目的是通过Hadoop的并行加载机制来统一线上和离线的消息处理，也是为了通过集群机来提供实时的消费。  
+
+
+Kafka本身没有提供批量发送。不过由于消息发送是异步而且本身在内存中已经做了批量化处理，因此我们通常不需要关心发送时是否是批量的。  
+至于高效的发送消息，Kafka producer提供了一些参数帮助你调优它的性能。常见的参数包括但不限于：batch.size, linger.ms, compression.type, buffer.memory等
 
 
 

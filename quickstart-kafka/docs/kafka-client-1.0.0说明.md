@@ -4,6 +4,8 @@ producer.send
 2、在doSend时，首先进行校验、初始化、选择partition，构建回调函数interceptCallback，accumulator.append添加消息到缓存，判断已满或是新建，就唤醒sender，获取返回结果
 3、accumulator.append时候，获取本分区的Deque<ProducerBatch>，tryAppend就是从Deque中获取peekLast的ProducerBatch，然后把消息追加进去
 
+
+
 Broker：
 启动：kafka.Kafka
 
