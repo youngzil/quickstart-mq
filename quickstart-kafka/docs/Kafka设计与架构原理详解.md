@@ -1,7 +1,9 @@
 - [Kafka的介绍](#Kafka的介绍)
+- [Kafka应用场景](#Kafka应用场景)
 - [Kafka的架构](#Kafka的架构)
 - [Kafka的概念名词](#Kafka的概念名词)
-
+- [kafka消息保证机制](#kafka消息保证机制)
+- [Kafka高可用Kafka High Availability](#Kafka高可用Kafka-High-Availability)
 
 
 ---------------------------------------------------------------------------------------------------------------------
@@ -93,7 +95,7 @@ Producers和consumers可以同时从多个topic读写数据。
 
 
 
-### Kafka High Availability
+### Kafka高可用Kafka High Availability
 - 一个partition只能被一个消费者消费（一个消费者可以同时消费多个partition），因此，如果设置的partition的数量小于consumer的数量，就会有消费者消费不到数据。所以，推荐partition的数量一定要大于同时运行的consumer的数量。
 - 另外一方面，建议partition的数量大于集群broker的数量，这样leader partition就可以均匀的分布在各个broker中，最终使得集群负载均衡。  
   为了更好的做负载均衡，Kafka 尽量将所有的 Partition 均匀分配到整个集群上。一个典型的部署方式是一个 Topic 的 Partition 数量大于 Broker 的数量。

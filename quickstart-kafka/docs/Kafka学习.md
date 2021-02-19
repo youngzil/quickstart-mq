@@ -72,6 +72,32 @@ ISR (In-Sync Replicas)，这个是指副本同步队列。副本数对Kafka的�
 所有的副本(replicas)统称为Assigned Replicas，即AR
 OSR(Outof-Sync Replicas)列表，新加入的follower也会先存放在OSR中。AR=ISR+OSR。
 
+LogStartOffset：表示一个Partition的起始位移，初始为0，虽然消息的增加以及日志清除策略的影响，这个值会阶段性的增大。  
+ConsumerOffset：消费位移，表示Partition的某个消费者消费到的位移位置。  
+
+消费Lag=HW - ConsumerOffset  
+Consumer Lag（滞后程度）：消费者当前落后于生产者的程度  
+Lag的单位是消息数，一般是在主题的级别上讨论Lag，但Kafka是在分区的级别上监控Lag  
+
+
+
+
+如何计算Lag
+在计算Lag之前先普及几个基本常识
+
+LEO(LogEndOffset): 这里说的和官网说的LEO有点区别，主要是指堆consumer可见的offset.即HW(High Watermark)
+
+CURRENT OFFSET: consumer消费到的具体位移
+
+知道以上信息后，可知Lag=HW - ConsumerOffset。计算出来的值即为消费延迟情况。
+
+参考  
+[Kafka的Lag计算误区及正确实现](https://blog.csdn.net/u013256816/article/details/79955578 )  
+[Kafka -- 监控消费进度](http://zhongmingmao.me/2019/09/12/kafka-monitor-consume-progress/)  
+
+
+
+
 
 而对于producer而言，它可以选择是否等待消息commit，这可以通过request.required.acks来设置。这种机制确保了只要ISR中有一个或者以上的follower，一条被commit的消息就不会丢失。
 当producer向leader发送数据时，可以通过request.required.acks参数来设置数据可靠性的级别

@@ -1,11 +1,10 @@
 package org.quickstart.mq.kafka.sample;
 
-import org.apache.kafka.clients.CommonClientConfigs;
+import kafka.admin.TopicCommand;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.DescribeClusterResult;
 import org.apache.kafka.clients.admin.DescribeTopicsResult;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
-import org.apache.kafka.clients.admin.ListConsumerGroupsResult;
 import org.apache.kafka.clients.admin.ListTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.admin.TopicDescription;
@@ -37,9 +36,12 @@ import java.util.concurrent.TimeUnit;
 
 public class KafkaBasic {
 
+    //    private static final String brokerList = "localhost:9092";
+    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+
     public static Producer<String, String> createProducer() {
         Properties props = new Properties();
-        props.put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "DemoProducer");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -57,6 +59,38 @@ public class KafkaBasic {
         return producer;
     }
 
+    public static Consumer<String, String> createConsumer() {
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+
+        // 2 构建滤器链
+        List<String> interceptors = new ArrayList<>();
+        interceptors.add(SimpleConsumerInterceptor.class.getName());
+        props.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
+
+        Consumer<String, String> consumer = new KafkaConsumer<>(props);
+        return consumer;
+    }
+
+    public static KafkaAdminClient createAdminClient() {
+
+        Properties props = new Properties();
+        //配置kafka的服务连接
+        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
+        props.put(AdminClientConfig.REQUEST_TIMEOUT_MS_CONFIG, 30000);
+
+        //KafkaUtils.getTopicNames(zkAddress)
+
+        //创建KafkaAdminClient
+        KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
+        return adminClient;
+    }
+
     @Test
     public void asyncProducer() throws InterruptedException {
 
@@ -68,7 +102,7 @@ public class KafkaBasic {
             long runtime = new Date().getTime();
             String ip = "192.168.2." + rnd.nextInt(255);
             String msg = runtime + ",www.example.com," + ip;
-            ProducerRecord<String, String> data = new ProducerRecord<String, String>("topic03", ip, msg);
+            ProducerRecord<String, String> data = new ProducerRecord<>("topic03", ip, msg);
             producer.send(data, (metadata, exception) -> {
                 if (exception != null) {
                     exception.printStackTrace();
@@ -111,20 +145,7 @@ public class KafkaBasic {
     @Test
     public void consumer() {
 
-        Properties props = new Properties();
-        props.put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-
-        // 2 构建滤器链
-        List<String> interceptors = new ArrayList<>();
-        interceptors.add(SimpleConsumerInterceptor.class.getName());
-        props.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
-
-        Consumer<String, String> consumer = new KafkaConsumer<>(props);
+        Consumer<String, String> consumer = createConsumer();
 
         // 使用消费者对象订阅这些主题
         consumer.subscribe(Arrays.asList("topic03"));
@@ -151,33 +172,48 @@ public class KafkaBasic {
     @Test
     public void topic() throws ExecutionException, InterruptedException {
 
-        Properties props = new Properties();
-        //配置kafka的服务连接
-        props.put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        //获取KafkaAdminClient
+        KafkaAdminClient adminClient = createAdminClient();
 
-        //KafkaUtils.getTopicNames(zkAddress)
-
-        //创建KafkaAdminClient
-        KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
+        //查看topic列表
+        ListTopicsResult topicsResult2 = adminClient.listTopics();
+        Set<String> names2 = topicsResult2.names().get();
+        names2.stream().forEach(System.out::println);
 
         //创建topic
         adminClient.createTopics(Arrays.asList(new NewTopic("topic01", 2, (short)1),//(名称，分区数，副本因子)
-            new NewTopic("topic02", 2, (short)1), new NewTopic("topic03", 2, (short)1)));
+            new NewTopic("topic02", 2, (short)2), new NewTopic("topic03", 6, (short)3)));
+
+        System.out
+            .println("TopicDescription:" + adminClient.describeTopics(Arrays.asList("topic01", "topic02", "topic03")).
+                all().get());
+
+        TopicCommand.TopicCommandOptions topicCommandOptions = new TopicCommand.TopicCommandOptions(
+            new String[] {"--alter", "--topic", "topic01", "--partitions", "" + 6});
+
+        TopicCommand.AdminClientTopicService adminClientTopicService =
+            new TopicCommand.AdminClientTopicService(adminClient);
+
+//        adminClientTopicService.alterTopic(topicCommandOptions);
 
         //查看topic列表
         ListTopicsResult topicsResult = adminClient.listTopics();
+
+
         Set<String> names = topicsResult.names().get();
         names.stream().forEach(name -> System.out.println(name));
 
         //查看topic详细信息：主题的属性、主题的partition分区信息
         // name、partitions（partition、leader、replicas、isr）、authorizedOperations、internal
-        DescribeTopicsResult topic = adminClient.describeTopics(Arrays.asList("topic01"));
+
+
+        DescribeTopicsResult topic = adminClient.describeTopics(Arrays.asList("topic01", "topic02", "topic03"));
         Map<String, TopicDescription> map = topic.all().get();
         System.out.println("TopicDescription:" + map);
 
         //删除topic
-        adminClient.deleteTopics(Arrays.asList("topic01", "topic02"));
+//        adminClient.deleteTopics(Arrays.asList("topic01", "topic02", "topic03"));
+
 
         //查看topic列表
         topicsResult = adminClient.listTopics();
@@ -198,14 +234,8 @@ public class KafkaBasic {
         //生产者的信息，主题、发送速率等
         // 具体某个生产者的操作等
 
-        Properties props = new Properties();
-        //配置kafka的服务连接
-        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-
-        //KafkaUtils.getTopicNames(zkAddress)
-
-        //创建KafkaAdminClient
-        KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
+        //获取KafkaAdminClient
+        KafkaAdminClient adminClient = createAdminClient();
 
     }
 
@@ -219,16 +249,10 @@ public class KafkaBasic {
         //生产者的信息，主题、发送速率等
         // 具体某个生产者的操作等
 
-        Properties props = new Properties();
-        //配置kafka的服务连接
-        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        //获取KafkaAdminClient
+        KafkaAdminClient adminClient = createAdminClient();
 
-        //KafkaUtils.getTopicNames(zkAddress)
-
-        //创建KafkaAdminClient
-        KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
-
-        ListConsumerGroupsResult consumerGroupsResult = adminClient.listConsumerGroups();
+        //        ListConsumerGroupsResult consumerGroupsResult = adminClient.listConsumerGroups();
 
         // dminClient.listConsumerGroupOffsets();
         //        adminClient.alterConsumerGroupOffsets();
@@ -250,14 +274,8 @@ public class KafkaBasic {
         //生产者的信息，主题、发送速率等
         // 具体某个生产者的操作等
 
-        Properties props = new Properties();
-        //配置kafka的服务连接
-        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-
-        //KafkaUtils.getTopicNames(zkAddress)
-
-        //创建KafkaAdminClient
-        KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
+        //获取KafkaAdminClient
+        KafkaAdminClient adminClient = createAdminClient();
 
     }
 
@@ -271,14 +289,8 @@ public class KafkaBasic {
         //生产者的信息，主题、发送速率等
         // 具体某个生产者的操作等
 
-        Properties props = new Properties();
-        //配置kafka的服务连接
-        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-
-        //KafkaUtils.getTopicNames(zkAddress)
-
-        //创建KafkaAdminClient
-        KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
+        //获取KafkaAdminClient
+        KafkaAdminClient adminClient = createAdminClient();
 
         DescribeClusterResult clusterResult = adminClient.describeCluster();
 
@@ -291,14 +303,8 @@ public class KafkaBasic {
 
         // ACL控制和Token控制等
 
-        Properties props = new Properties();
-        //配置kafka的服务连接
-        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-
-        //KafkaUtils.getTopicNames(zkAddress)
-
-        //创建KafkaAdminClient
-        KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
+        //获取KafkaAdminClient
+        KafkaAdminClient adminClient = createAdminClient();
 
     }
 
