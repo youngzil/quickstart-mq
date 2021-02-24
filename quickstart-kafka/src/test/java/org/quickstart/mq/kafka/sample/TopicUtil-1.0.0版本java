@@ -1,0 +1,114 @@
+import kafka.admin.AdminUtils;
+import kafka.admin.RackAwareMode;
+import kafka.admin.TopicCommand;
+import kafka.server.ConfigType;
+import kafka.utils.ZkUtils;
+import org.apache.kafka.common.errors.TopicExistsException;
+import org.apache.kafka.common.utils.Time;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import scala.collection.JavaConverters;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+public class TopicUtil {
+    private static final Logger LOG = LoggerFactory.getLogger(TopicUtil.class);
+
+    public static List<String> listTopics(String zkServer) {
+        List<String> topics = new ArrayList<>();
+        ZkUtils zkUtils = ZkUtils.withMetrics(zkServer, 30000, 30000, false, Time.SYSTEM);
+        try {
+            Iterator<String> it = JavaConverters.asJavaIterable(zkUtils.getAllTopics()).iterator();
+            while (it.hasNext()) {
+                topics.add(it.next());
+            }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            zkUtils.close();
+        }
+        return topics;
+    }
+
+    public static boolean createTopic(String zkServer, String topic, int partitions, int replicas) {
+        ZkUtils zkUtils = ZkUtils.withMetrics(zkServer, 30000, 30000, false, Time.SYSTEM);
+        Properties configs = new Properties();
+        try {
+            AdminUtils.createTopic(zkUtils, topic, partitions, replicas, configs, RackAwareMode.Enforced$.MODULE$);
+            return true;
+        } catch (TopicExistsException e) {
+            LOG.warn("topic已经存在,topic:" + topic);
+            return false;
+        } finally {
+            zkUtils.close();
+        }
+    }
+
+    public static boolean alterTopicPartition(String zkServer, String topic, int partitions) {
+        ZkUtils zkUtils = null;
+        try {
+            zkUtils = ZkUtils.withMetrics(zkServer, 30000, 30000, false, Time.SYSTEM);
+            TopicCommand.TopicCommandOptions topicCommandOptions = new TopicCommand.TopicCommandOptions(
+                new String[] {"--alter", "--topic", topic, "--partitions", "" + partitions});
+            TopicCommand.alterTopic(zkUtils, topicCommandOptions);
+        } finally {
+            if (zkUtils != null) {
+                zkUtils.close();
+            }
+        }
+        return true;
+    }
+
+    public static void alterTopicConfigs(String zkServer, String topic, Map<String, String> paraMap) {
+        List<String> params = new ArrayList<>();
+        params.add("--describe");
+        params.add("--topic");
+        params.add(topic);
+        for (Map.Entry entry : paraMap.entrySet()) {
+            params.add("--config");
+            params.add(entry.getKey() + "=" + entry.getValue());
+        }
+        String[] commands = new String[params.size()];
+        params.toArray(commands);
+        ZkUtils zkUtils = null;
+        try {
+            zkUtils = ZkUtils.withMetrics(zkServer, 30000, 30000, false, Time.SYSTEM);
+            TopicCommand.TopicCommandOptions topicCommandOptions = new TopicCommand.TopicCommandOptions(commands);
+            TopicCommand.alterTopic(zkUtils, topicCommandOptions);
+        } finally {
+            if (zkUtils != null) {
+                zkUtils.close();
+            }
+        }
+    }
+
+    public static Properties getTopicProperties(String zkServer, String topic) {
+        ZkUtils zkUtils = null;
+        try {
+            zkUtils = ZkUtils.withMetrics(zkServer, 30000, 30000, false, Time.SYSTEM);
+            TopicCommand.TopicCommandOptions topicCommandOptions =
+                new TopicCommand.TopicCommandOptions(new String[] {"--describe", "--topic", topic});
+
+            Properties props = AdminUtils.fetchEntityConfig(zkUtils, ConfigType.Topic(), topic);
+            return props;
+        } finally {
+            if (zkUtils != null) {
+                zkUtils.close();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        String zkServer = "172.16.48.179:2181,172.16.48.180:2181,172.16.48.181:2181/kfk1";
+        Map<String, String> map = new HashMap<>();
+        map.put("retention.bytes", "2000000");
+        alterTopicConfigs(zkServer, "test", map);
+        System.out.println(getTopicProperties(zkServer, "test"));
+    }
+}

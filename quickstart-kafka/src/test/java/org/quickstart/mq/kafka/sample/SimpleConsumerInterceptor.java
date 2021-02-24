@@ -10,7 +10,7 @@ import java.util.Map;
 public class SimpleConsumerInterceptor implements ConsumerInterceptor<String, String> {
     @Override
     public ConsumerRecords<String, String> onConsume(ConsumerRecords<String, String> records) {
-        return null;
+        return records;
     }
 
     @Override

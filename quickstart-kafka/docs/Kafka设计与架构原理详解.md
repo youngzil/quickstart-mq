@@ -135,7 +135,8 @@ Kafka的[README.md](../README.md)
 []()  
 []()  
 
-
+[深入浅出理解基于 Kafka 和 ZooKeeper 的分布式消息队列
+应书澜](https://gitbook.cn/books/5ae1e77197c22f130e67ec4e/index.html)
 
 
 [从0开始学Kafka（上）](https://zhuanlan.zhihu.com/p/93403426)  
@@ -143,6 +144,15 @@ Kafka的[README.md](../README.md)
 
 
 [分布式消息Kafka的原理、基础架构、使用场景](https://aijishu.com/a/1060000000080308)  
+
+
+
+
+
+
+
+
+
 
 
 

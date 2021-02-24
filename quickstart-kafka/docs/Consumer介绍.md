@@ -5,6 +5,8 @@
     - [0.9后kafka对Rebalance过程进行了改进](#0.9后kafka对Rebalance过程进行了改进)
     - [如何避免不必要的Rebalance](#如何避免不必要的Rebalance)
 - [Kafka高级API和低级API](#Kafka高级API和低级API)
+- [Kafka消息积压堆积](#Kafka消息积压堆积)
+- [Kafka消费参数](#Kafka消费参数)
 
 
 ---------------------------------------------------------------------------------------------------------------------
@@ -78,6 +80,20 @@ kafka提供了两套consumer API：高级Consumer API和低级API。
 
 根据Kafka提供的API不同，可以讲Consumer划分为：High Level Consumer和Low Level Consumer（也叫Simple Consumer）。虽然说0.9版本开始讲两种Consumer合二为一了，但在API上还是有assign和subscribe的区分的。
 
+但是assign的consumer不会拥有kafka的group management机制，也就是当group内消费者数量变化的时候不会有reblance行为发生。
+
+
+
+
+使用Apache Kafka消费者组时，有一个为消费者分配对应分区partition的过程，我们可以使用“自动”subscribe和“手动”assign的方式。
+- KafkaConsumer.subscribe()：为consumer自动分配partition，有内部算法保证topic-partition以最优的方式均匀分配给同group下的不同consumer。
+- KafkaConsumer.assign()：为consumer手动、显示的指定需要消费的topic-partitions，不受group.id限制，相当与指定的group无效（this method does not use the consumer’s group management）。
+
+~~注意：consumer.assign()是不会被消费者的组管理功能管理的，他相对于是一个临时的，不会改变当前group.id的offset，比如：在使用consumer.subscribe(Arrays.asList(topicName));时offset为20，如果再通过assign方式已经获取了消息后，在下次通过consumer.subscribe(Arrays.asList(topicName));来获取消息时offset还是20，还是会获取20以后的消息。~~
+
+**在2.7.0版本中，实际测试， “手动”assign的方式也是有Group管理功能的，【应该就是上面说的0.9版本就功能合并了，只是接口写法上的区别了】**
+
+
 
 高级API优点：
 1. 高级API 写起来简单
@@ -104,16 +120,88 @@ kafka提供了两套consumer API：高级Consumer API和低级API。
 [Kafka High Level API vs. Low Level API](https://blog.csdn.net/yjgithub/article/details/78559094)  
 [Kafka:High level consumer vs. Low level consumer](https://blog.csdn.net/WangQYoho/article/details/78358715)  
 
+
+[kafka consumer assign 和 subscribe模式差异分析](https://www.cnblogs.com/dongxiao-yang/p/7200971.html)  
+[Kafka的assign和subscribe订阅模式和手动提交偏移量](https://blog.csdn.net/m0_37739193/article/details/105477686)  
+[Apache Kafka消费者组subscribe和assign的正确使用](https://www.jianshu.com/p/b09c28d45b82)  
+[]()  
+
+
 ---------------------------------------------------------------------------------------------------------------------
+
+## Kafka消息积压堆积
+
+
+
+
+[Kafka的Lag计算误区及正确实现](https://blog.csdn.net/u013256816/article/details/79955578)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+## Kafka消费参数
+
 
 [消费者配置官方文档](http://kafka.apache.org/documentation.html#consumerconfigs)  
 
+[Kafka Consumer参数控制](https://www.cnblogs.com/zackstang/p/11515203.html)  
+[kafka消费者Consumer参数设置及参数调优建议](https://juejin.cn/post/6844903713916583944)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
+
+Kafka Consumer
+
+
+
+kafka消费这块应该来说是重点，毕竟大部分的时候，我们主要使用的是将数据进行消费。
+
+kafka消费的配置如下:
+
+bootstrap.servers： kafka的地址。
+group.id：组名 不同组名可以重复消费。例如你先使用了组名A消费了kafka的1000条数据，但是你还想再次进行消费这1000条数据，并且不想重新去产生，那么这里你只需要更改组名就可以重复消费了。
+enable.auto.commit：是否自动提交，默认为true。
+auto.commit.interval.ms: 从poll(拉)的回话处理时长。
+session.timeout.ms:超时时间。
+max.poll.records:一次最大拉取的条数。
+auto.offset.reset：消费规则，默认earliest 。
+earliest: 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费 。
+latest: 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，消费新产生的该分区下的数据 。
+none: topic各分区都存在已提交的offset时，从offset后开始消费；只要有一个分区不存在已提交的offset，则抛出异常。
+key.serializer: 键序列化，默认org.apache.kafka.common.serialization.StringDeserializer。
+value.deserializer:值序列化，默认org.apache.kafka.common.serialization.StringDeserializer。
 
 
 
 
 
 
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+
+[Kafka Consumer 管理 Offset 原理](https://zhmin.github.io/2019/04/08/kafka-consumer-offset/)  
+
+
+
+[kafka的使用示例](https://github.com/cocowool/sh-valley/tree/master/java/java-kafka)  
 
 
 

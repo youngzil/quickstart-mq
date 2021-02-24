@@ -34,7 +34,6 @@ import java.util.concurrent.TimeUnit;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class KafkaAdminUtil {
 
-
     // [](https://gist.github.com/yangl/6f5b31ec656c07aa1cbe06b6ed5babb4)
 
     //    使用kafka admin api操作topic、partition、分组信息；使用jackson-module-scala来序列化scala返回的对象；
@@ -158,7 +157,7 @@ public class KafkaAdminUtil {
             new ConsumerGroupCommand.ConsumerGroupCommandOptions(args);
         // kafaka 2.x版本已不支持zookeeper存储offsets了
         // ConsumerGroupCommand.ConsumerGroupService service = new ConsumerGroupCommand.KafkaConsumerGroupService(options);
-        ConsumerGroupCommand.ConsumerGroupService service = new ConsumerGroupCommand.ConsumerGroupService(options,new HashMap<>());
+        ConsumerGroupCommand.ConsumerGroupService service = new ConsumerGroupCommand.ConsumerGroupService(options, new HashMap<>());
 
         try {
             FutureTask<String> task =

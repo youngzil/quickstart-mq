@@ -1,3 +1,36 @@
+kafka的术语
+- Broker：Kafka集群包含一个或多个服务器，这种服务器被称为broker。
+- Topic：每条发布到Kafka集群的消息都有一个类别，这个类别被称为Topic。（物理上不同Topic的消息分开存储，逻辑上一个Topic的消息虽然保存于一个或多个broker上但用户只需指定消息的Topic即可生产或消费数据而不必关心数据存于何处）
+- Partition：Partition是物理上的概念，每个Topic包含一个或多个Partition。
+- Producer：负责发布消息到Kafka broker。
+- Consumer：消息消费者，向Kafka broker读取消息的客户端。
+- Consumer Group:每个Consumer属于一个特定的Consumer Group（可为每个Consumer指定group name，若不指定group name则属于默认的group）。
+
+
+
+客户端通过API与Kafka进行集成，Kafka的五类客户端API类型如下：
+- AdminClient API：允许管理和检测Topic、broker以及其他Kafka实例，与Kafka自带的脚本命令作用类似
+- Producer API：发布消息到1个或多个Topic，也就是生产者或者说发布方需要用到的API
+- Consumer API：订阅1个或多个Topic，并处理产生的消息，也就是消费者或者说订阅方需要用到的API
+- Stream API：高效地将输入流转换到输出流，通常应用在一些流处理场景
+- Connector API：从一些源系统或应用程序拉取数据到Kafka，如上图中的DB
+
+
+
+[Kafka 使用Java实现数据的生产和消费demo](http://www.panchengming.com/2018/01/28/pancm71/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+ 
+
+
+
+
+
+
 Kafka Producer
 消息发送
 producer直接将数据发送到broker的leader(主节点)，不需要在多个节点进行分发。为了帮助producer做到这点，所有的Kafka节点都可以及时的告知:哪些节点是活动的，目标topic目标分区的leader在哪。这样producer就可以直接将消息发送到目的地了。
