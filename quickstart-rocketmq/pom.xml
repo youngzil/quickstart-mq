@@ -1,43 +1,44 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<parent>
-		<groupId>org.quickstart</groupId>
-		<artifactId>quickstart-mq</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <parent>
+        <groupId>org.quickstart</groupId>
+        <artifactId>quickstart-mq</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
 
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>quickstart-rocketmq</artifactId>
-	<packaging>jar</packaging>
-	<name>${project.artifactId}-${project.version}</name>
-	<url>http://maven.apache.org</url>
-	<description>Demo project for XXX</description>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>quickstart-rocketmq</artifactId>
+    <packaging>jar</packaging>
+    <name>${project.artifactId}-${project.version}</name>
+    <url>http://maven.apache.org</url>
+    <description>Demo project for XXX</description>
 
-	<properties>
-		<alibaba.rocketmq.version>3.5.8</alibaba.rocketmq.version>
-    <apache.rocketmq.version>4.8.0</apache.rocketmq.version>
-  </properties>
+    <properties>
+        <alibaba.rocketmq.version>3.5.8</alibaba.rocketmq.version>
+        <rocketmq.version>4.8.0</rocketmq.version>
+    </properties>
 
-	<dependencies>
-		 <dependency>
-		 <groupId>com.alibaba.rocketmq</groupId>
-		 <artifactId>rocketmq-client</artifactId>
-		 <version>${alibaba.rocketmq.version}</version>
-		 </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+            <version>${alibaba.rocketmq.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.rocketmq</groupId>
-			<artifactId>rocketmq-client</artifactId>
-			<version>${apache.rocketmq.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+            <version>${rocketmq.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.rocketmq</groupId>
-			<artifactId>rocketmq-tools</artifactId>
-			<version>${apache.rocketmq.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-tools</artifactId>
+            <version>${rocketmq.version}</version>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 
 </project>

@@ -203,7 +203,7 @@ value.deserializer:值序列化，默认org.apache.kafka.common.serialization.St
 
 [kafka的使用示例](https://github.com/cocowool/sh-valley/tree/master/java/java-kafka)  
 
-
+[Kafka系列之(6)——Kafka Consumer](https://www.jianshu.com/p/c4b3c658e86c)  
 
 
 

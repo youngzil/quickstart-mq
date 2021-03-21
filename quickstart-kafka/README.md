@@ -47,3 +47,5 @@ Kafka本身没有提供批量发送。不过由于消息发送是异步而且本
 [Apache Kafka 2.7.0 稳定版新功能介绍](https://blog.csdn.net/yangyijun1990/article/details/111874790)  
 
 
+[Kafka的概念和常见模式](http://www.beyondthelines.net/computing/kafka-patterns/)  
+

@@ -29,21 +29,36 @@ public class LowLevelConsumer {
 
     private static final long POLL_TIMEOUT = 100;
 
-    public static void main2(String args[]) {
+    @Test
+    public void testAssign() {
 
         Consumer<String, String> consumer = createConsumer();
 
-        String topic = "test";
+        String topic = "topic03";
         consumer.assign(Arrays.asList(new TopicPartition(topic, 0), new TopicPartition(topic, 1)));
 
         // consumer从指定的offset处理,其实是重置这个TopicPartition的offset
-         //consumer.seek(partition, seekOffset);
+        //consumer.seek(partition, seekOffset);
 
+        int count = 0;
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(100);
-            records.forEach(record -> System.out
-                .printf("client: %s,topic: %s,partition: %d,AotoCommitDemo: %d,key: %s", record.partition(),
-                    record.offset(), record.key(), record.value()));
+            // records.forEach(record -> System.out
+            //     .printf("topic: %s,partition: %f,offset: %f,key: %s,value: %s", record.topic(), record.partition(), record.offset(), record.key(),
+            //         record.value()));
+
+            if (records.isEmpty()) {
+                System.out.println("ddddd，count=" + count++);
+                if (count > 100 && count < 399) {
+                    System.out.println("assign23 ");
+                    consumer.assign(Arrays.asList(new TopicPartition(topic, 2), new TopicPartition(topic, 3)));
+                } else if (count > 400) {
+                    System.out.println("assign01");
+                    consumer.assign(Arrays.asList(new TopicPartition(topic, 0), new TopicPartition(topic, 1)));
+                }
+            }
+
+            records.forEach(System.out::println);
         }
 
     }
@@ -61,8 +76,8 @@ public class LowLevelConsumer {
         ExecutorService executorService = Executors.newFixedThreadPool(consumeThreadNum);
 
         //循环遍历创建消费线程
-        IntStream.range(0, consumeThreadNum).forEach(partitionIndex -> executorService
-            .submit(() -> startConsume(partitionIndex, partitionOffsets, consumeThreadNum)));
+        IntStream.range(0, consumeThreadNum)
+            .forEach(partitionIndex -> executorService.submit(() -> startConsume(partitionIndex, partitionOffsets, consumeThreadNum)));
 
         System.in.read();
     }
@@ -109,8 +124,7 @@ public class LowLevelConsumer {
                     records.forEach((k) -> handleKafkaInput(k));
 
                     String currentOffset = String.valueOf(consumer.position(partition));
-                    log.info("current records size is：{}, partition is: {}, offset is:{}", records.count(),
-                        consumer.assignment(), currentOffset);
+                    log.info("current records size is：{}, partition is: {}, offset is:{}", records.count(), consumer.assignment(), currentOffset);
                 }
 
                 //offset提交
@@ -122,8 +136,7 @@ public class LowLevelConsumer {
     }
 
     private void handleKafkaInput(ConsumerRecord<String, String> record) {
-        System.out
-            .printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
+        System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
     }
 
     public static Consumer<String, String> createConsumer() {
@@ -131,7 +144,7 @@ public class LowLevelConsumer {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "group2");
         props.put(ConsumerConfig.CLIENT_ID_CONFIG, "consumer3");
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false"); // 是否自动提交进度
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
