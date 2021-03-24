@@ -1,20 +1,10 @@
 package org.quickstart.mq.kafka.sample;
 
 import com.google.common.collect.Lists;
-import kafka.admin.TopicCommand;
 import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.ConsumerGroupDescription;
+import org.apache.kafka.clients.admin.Config;
 import org.apache.kafka.clients.admin.DescribeClusterResult;
-import org.apache.kafka.clients.admin.DescribeTopicsResult;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
-import org.apache.kafka.clients.admin.ListConsumerGroupOffsetsResult;
-import org.apache.kafka.clients.admin.ListConsumerGroupsResult;
-import org.apache.kafka.clients.admin.ListOffsetsResult;
-import org.apache.kafka.clients.admin.ListTopicsResult;
-import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.admin.OffsetSpec;
-import org.apache.kafka.clients.admin.PartitionReassignment;
-import org.apache.kafka.clients.admin.TopicDescription;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -28,19 +18,18 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.config.ConfigResource;
+import org.apache.kafka.common.config.ConfigResource.Type;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -397,93 +386,6 @@ public class KafkaBasic {
     }
 
     @Test
-    public void topicCRUD() throws ExecutionException, InterruptedException {
-
-        // 获取KafkaAdminClient
-        KafkaAdminClient adminClient = createAdminClient();
-
-        // 创建topic
-        // adminClient.createTopics(Arrays.asList(new NewTopic("topic01", 2, (short)1), // (名称，分区数，副本因子)
-        //     new NewTopic("topic02", 2, (short)2), new NewTopic("topic03", 6, (short)3)));
-
-        TopicCommand.TopicCommandOptions topicCommandOptions =
-            new TopicCommand.TopicCommandOptions(new String[] {"--alter", "--topic", "topic01", "--partitions", "" + 6});
-
-        TopicCommand.AdminClientTopicService adminClientTopicService = new TopicCommand.AdminClientTopicService(adminClient);
-
-        // Topic修改
-        // adminClientTopicService.alterTopic(topicCommandOptions);
-
-        // 查看topic列表
-        ListTopicsResult topicsResult = adminClient.listTopics();
-        Set<String> names = topicsResult.names().get();
-        names.stream().forEach(name -> System.out.println(name));
-
-        // 查看topic详细信息：主题的属性、主题的partition分区信息
-        // name、partitions（partition、leader、replicas、isr）、authorizedOperations、internal
-        DescribeTopicsResult topic = adminClient.describeTopics(Arrays.asList("topic01", "topic02", "topic03"));
-        Map<String, TopicDescription> map = topic.all().get();
-        System.out.println("TopicDescription:" + map);
-
-        // 删除topic
-        // adminClient.deleteTopics(Arrays.asList("topic01", "topic02", "topic03"));
-
-        // 查看topic列表
-        topicsResult = adminClient.listTopics();
-        names = topicsResult.names().get();
-        names.stream().forEach(System.out::println);
-
-        // adminClient.listOffsets()
-        // adminClient.listPartitionReassignments()
-
-        Map<TopicPartition, OffsetSpec> topicPartitionOffsets = new HashMap<>();
-        topicPartitionOffsets.put(new TopicPartition("lengfeng.test4.test", 0), new OffsetSpec());
-        Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> ffff = adminClient.listOffsets(topicPartitionOffsets).all().get();
-        System.out.println(ffff);
-
-        Map<TopicPartition, PartitionReassignment> partitionPartitionReassignmentMap =
-            adminClient.listPartitionReassignments(Collections.singleton(new TopicPartition("topic03", 0)))//
-                .reassignments().get();
-        System.out.println(partitionPartitionReassignmentMap);
-
-        // 关闭AdminClient
-        adminClient.close();
-    }
-
-    // 获取某个Topic的所有分区以及分区最新的Offset
-    @Test
-    public void getPartitionsForTopic() throws IOException {
-
-        // 脚本方式获取
-        // ./bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic test
-
-        final Consumer<String, String> consumer = createConsumer();
-
-        String topic = "topic03";
-
-        Collection<PartitionInfo> partitionInfos = consumer.partitionsFor(topic);
-        System.out.println("Get the partition info as below:");
-        List<TopicPartition> tp = new ArrayList<>();
-        partitionInfos.forEach(partitionInfo -> {
-            System.out.println("Partition Info:" + partitionInfo);
-
-            TopicPartition topicPartition = new TopicPartition(partitionInfo.topic(), partitionInfo.partition());
-            tp.add(topicPartition);
-            consumer.assign(tp);
-            consumer.seekToEnd(tp);
-
-            System.out.println(topicPartition + " 's latest offset is '" + consumer.position(topicPartition));
-
-            Map<TopicPartition, Long> beginningOffsets = consumer.beginningOffsets(Collections.singleton(topicPartition));
-            Map<TopicPartition, Long> endOffsets = consumer.endOffsets(Collections.singleton(topicPartition));
-            System.out.println("topicPartition=" + topicPartition + ",beginningOffsets=" + beginningOffsets + ",endOffsets=" + endOffsets);
-
-        });
-
-        System.in.read();
-    }
-
-    @Test
     public void producerMonitor() {
 
         // 生产者的信息，主题、发送速率等
@@ -491,152 +393,6 @@ public class KafkaBasic {
 
         // 获取KafkaAdminClient
         KafkaAdminClient adminClient = createAdminClient();
-    }
-
-    @Test
-    public void listAllConsumerGroups() throws IOException, ExecutionException, InterruptedException {
-
-        // 消费者的信息、主题等、消费速率、拉取消息配置策略等
-        // 具体某个消费者的操作：暂停消费、开始消费、消费重置、重置到最新、回溯消费
-        // 消费的offset信息
-
-        // 生产者的信息，主题、发送速率等
-        // 具体某个生产者的操作等
-
-        Consumer<String, String> consumer = createConsumer();
-
-        String topic = "lengfeng.test3.test";
-
-        // 使用消费者对象订阅这些主题
-        // consumer.subscribe(Arrays.asList(topic), new SaveOffsetOnRebalance(consumer));
-        // consumer.poll(1000);
-
-        // 获取KafkaAdminClient
-        KafkaAdminClient adminClient = createAdminClient();
-
-        // 删除消费组
-        /*adminClient.deleteConsumerGroups(Collections.singleton("lengfeng.consumer.group")).all().whenComplete(
-            (Void,throwable)->{
-                if (null != throwable) {
-                    System.out.println("删除消费者Exception" + throwable.getMessage());
-                    try {
-                        throw throwable;
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                    return;
-                }
-                System.out.println("删除消费者成功");
-            }
-        );*/
-
-        // adminClient.deleteConsumerGroupOffsets("lengfeng.consumer.group",Collections.singleton(new TopicPartition(topic,0))).all().get();
-
-        ListConsumerGroupsResult consumerGroupsResult = adminClient.listConsumerGroups();
-
-        consumerGroupsResult.all().thenApply(consumerGroupList -> {
-            consumerGroupList.stream().forEach(group -> {
-                System.out.println("groupId=" + group.groupId());
-
-                // 消费组信息
-                /*Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap = null;
-                try {
-                    consumerGroupDescriptionMap = adminClient.describeConsumerGroups(Collections.singleton(group.groupId())).all().get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(consumerGroupDescriptionMap);*/
-
-                // 消费组的消费进度信息
-                ListConsumerGroupOffsetsResult consumerGroupOffsetsResult = adminClient.listConsumerGroupOffsets(group.groupId());
-
-                consumerGroupOffsetsResult.partitionsToOffsetAndMetadata().whenComplete((topicPartitionOffsetMap, throwable) -> {
-                    if (null != throwable) {
-                        System.out.println("Exception" + throwable.getMessage());
-                        return;
-                    }
-
-                    topicPartitionOffsetMap.forEach((topicPartition, offsetMetadata) -> {
-                        System.out.printf("group=%s, topic = %s, partition = %d, offset = %d%n", group.groupId(), topicPartition.topic(),
-                            topicPartition.partition(), offsetMetadata.offset());
-
-                        Map<TopicPartition, Long> beginningOffsets = consumer.beginningOffsets(Collections.singleton(topicPartition));
-                        Map<TopicPartition, Long> endOffsets = consumer.endOffsets(Collections.singleton(topicPartition));
-                        System.out
-                            .println("topicPartition=" + topicPartition + ",beginningOffsets=" + beginningOffsets + ",endOffsets=" + endOffsets);
-
-                    });
-                });
-
-            });
-            return null;
-        });
-
-        //        adminClient.alterConsumerGroupOffsets();
-        //        adminClient.deleteConsumerGroupOffsets();
-
-        //        adminClient.listConsumerGroups();
-        //        adminClient.deleteConsumerGroups();
-        //        adminClient.describeConsumerGroups();
-
-        //        adminClient.removeMembersFromConsumerGroup();
-
-        System.in.read();
-    }
-
-    @Test
-    public void testConsumerGroup() throws ExecutionException, InterruptedException {
-
-        // 消费者的信息、主题等、消费速率、拉取消息配置策略等
-        // 具体某个消费者的操作：暂停消费、开始消费、消费重置、重置到最新、回溯消费
-        // 消费的offset信息
-
-        // 生产者的信息，主题、发送速率等
-        // 具体某个生产者的操作等
-
-        // 获取KafkaAdminClient
-        KafkaAdminClient adminClient = createAdminClient();
-
-        String groupId = "legion-object";
-
-        // 消费组信息
-        Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap =
-            adminClient.describeConsumerGroups(Collections.singleton(groupId)).all().get();
-        System.out.println(consumerGroupDescriptionMap);
-
-        // 消费组的消费进度信息
-        Map<TopicPartition, OffsetAndMetadata> offsetAndMetadataMap =
-            adminClient.listConsumerGroupOffsets(groupId).partitionsToOffsetAndMetadata().get();
-        System.out.println(offsetAndMetadataMap);
-
-        Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();
-        offsets.put(new TopicPartition("lengfeng.test4.test", 0), new OffsetAndMetadata(2000));
-        // adminClient.alterConsumerGroupOffsets(groupId, offsets);
-
-        long startTime = System.currentTimeMillis();
-        boolean running = false;
-        while (running) {
-            // 消费组的消费进度信息
-            Map<TopicPartition, OffsetAndMetadata> offsetAndMetadataMap2 =
-                adminClient.listConsumerGroupOffsets(groupId).partitionsToOffsetAndMetadata().get();
-            System.out.println(offsetAndMetadataMap2);
-
-            System.out.println("time=" + (System.currentTimeMillis() - startTime));
-            TimeUnit.MILLISECONDS.sleep(10);
-        }
-
-        // adminClient.listConsumerGroups();
-        // adminClient.deleteConsumerGroups();
-        // adminClient.describeConsumerGroups();
-
-        // adminClient.listConsumerGroupOffsets
-        // adminClient.alterConsumerGroupOffsets();
-        // adminClient.deleteConsumerGroupOffsets();
-
-        // adminClient.removeMembersFromConsumerGroup();
-
     }
 
     @Test
@@ -694,7 +450,7 @@ public class KafkaBasic {
     }
 
     @Test
-    public void broker() {
+    public void broker() throws ExecutionException, InterruptedException {
 
         // broker的信息等
 
@@ -708,7 +464,23 @@ public class KafkaBasic {
 
         DescribeClusterResult clusterResult = adminClient.describeCluster();
 
-        //        adminClient.describeConfigs()
+        ConfigResource resource = new ConfigResource(Type.BROKER, "0");
+        Map<ConfigResource, Config> configMap = adminClient.describeConfigs(Collections.singleton(resource)).all().get();
+        System.out.println(configMap);
+
+        Map<ConfigResource, Config> topicConfigMap =
+            adminClient.describeConfigs(Collections.singleton(new ConfigResource(Type.TOPIC, "lengfeng.test3.test"))).all().get();
+        System.out.println(topicConfigMap);
+
+        Map<ConfigResource, Config> brokerLoggerConfigMap =
+            adminClient.describeConfigs(Collections.singleton(new ConfigResource(Type.BROKER_LOGGER, "0"))).all().get();
+        System.out.println(brokerLoggerConfigMap);
+
+        System.out.println("sss");
+
+        // adminClient.describeFeatures();
+        // adminClient.describeLogDirs()
+        // adminClient.describeReplicaLogDirs()
 
     }
 
