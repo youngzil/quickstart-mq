@@ -19,17 +19,21 @@
         <!-- 0.8.X 和之前的版本，包路径改为kafka.*、kafka.javaapi.* -->
         <!-- 大于0.9.X and 0.10.X and 0.11.X接口都更加简便，且兼容之前的版本，包路径改为org.apache.kafka.clients -->
 
-       <!-- <kafka.scala.version>2.11</kafka.scala.version>
-        <kafka.version>0.8.2.2</kafka.version>-->
+        <!-- <kafka.scala.version>2.11</kafka.scala.version>
+         <kafka.version>0.8.2.2</kafka.version>-->
 
         <kafka.scala.version>2.12</kafka.scala.version>
         <kafka.version>0.11.0.3</kafka.version>
 
+
+        <kafka.scala.version>2.12</kafka.scala.version>
+        <kafka.version>2.2.0</kafka.version>
+
         <kafka.scala.version>2.13</kafka.scala.version>
         <kafka.version>2.7.0</kafka.version>
 
-<!--        <kafka.scala.version>2.12</kafka.scala.version>-->
-<!--        <kafka.version>1.0.0</kafka.version>-->
+        <!--        <kafka.scala.version>2.12</kafka.scala.version>-->
+        <!--        <kafka.version>1.0.0</kafka.version>-->
 
         <confluent.version>2.0.0</confluent.version>
         <avro.version>1.7.7</avro.version>
@@ -89,7 +93,6 @@
             <artifactId>commons-cli</artifactId>
             <version>1.4</version>
         </dependency>
-
 
 
         <!-- log start -->

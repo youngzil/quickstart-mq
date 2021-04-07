@@ -1,13 +1,13 @@
 package org.quickstart.mq.kafka.sample;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 public class SaveOffsetOnRebalance implements ConsumerRebalanceListener {
 
@@ -49,7 +49,9 @@ public class SaveOffsetOnRebalance implements ConsumerRebalanceListener {
             System.out.println("Assigned partition:" + partition);
 
             //获取消费偏移量，实现原理是向协调者发送获取请求
-            OffsetAndMetadata committedOffset = consumer.committed(partition);
+            // OffsetAndMetadata committedOffset = consumer.committed(partition);
+            Map<TopicPartition, OffsetAndMetadata> committedOffsetMap = consumer.committed(Collections.singleton(partition));
+            OffsetAndMetadata committedOffset = committedOffsetMap.get(partition);
             System.out.println(committedOffset);
             //设置本地拉取分量，下次拉取消息以这个偏移量为准
             // consumer.seek(partition, offset.offset());
@@ -59,7 +61,6 @@ public class SaveOffsetOnRebalance implements ConsumerRebalanceListener {
             Map<TopicPartition, Long> beginningOffsets = consumer.beginningOffsets(Collections.singleton(partition));
             Map<TopicPartition, Long> endOffsets = consumer.endOffsets(Collections.singleton(partition));
             System.out.println("beginningOffsets=" + beginningOffsets + ",endOffsets=" + endOffsets);
-
 
         }
 

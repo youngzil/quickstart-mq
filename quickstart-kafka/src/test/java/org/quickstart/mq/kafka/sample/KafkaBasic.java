@@ -19,8 +19,6 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.TopicPartition;
-import org.apache.kafka.common.config.ConfigResource;
-import org.apache.kafka.common.config.ConfigResource.Type;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -60,6 +58,33 @@ public class KafkaBasic {
         props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
         props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+
+        // oauth2认证
+
+        // OAuth Settings
+        //	- sasl.jaas.config=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
+        // props.put("sasl.jaas.config", "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;");
+        //
+        //	- security.protocol=SASL_PLAINTEXT
+        // props.put("security.protocol", "SASL_PLAINTEXT");
+
+        //	- sasl.mechanism=OAUTHBEARER
+        // props.put("sasl.mechanism", "OAUTHBEARER");
+
+        //	- sasl.login.callback.handler.class=com.bfm.kafka.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler
+        // props.put("sasl.login.callback.handler.class", "com.oauth2.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler");
+
+
+        // System.setProperty("OAUTH_LOGIN_SERVER","dev-276677.okta.com");
+        // System.setProperty("OAUTH_LOGIN_ENDPOINT","/oauth2/default/v1/token");
+        // System.setProperty("OAUTH_LOGIN_GRANT_TYPE","client_credentials");
+        // System.setProperty("OAUTH_LOGIN_SCOPE","kafka");
+        // System.setProperty("OAUTH_AUTHORIZATION","Basic MG9hOGtoYnI0eHIyVUJ2U1IzNTc6VWk1aUo0TTFMcjR1cmdELXFmTzRxdHlnMDF0REFhaWlqSUpMZS1Wbg==");
+        // System.setProperty("OAUTH_INTROSPECT_SERVER","dev-276677.okta.com");
+        // System.setProperty("OAUTH_INTROSPECT_ENDPOINT","/oauth2/default/v1/introspect");
+        // System.setProperty("OAUTH_INTROSPECT_AUTHORIZATION","Basic MG9hOGtoYnI0eHIyVUJ2U1IzNTc6VWk1aUo0TTFMcjR1cmdELXFmTzRxdHlnMDF0REFhaWlqSUpMZS1Wbg==");
+
+
         // 配置partitionner选择策略，可选配置
         //        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,
         // "cn.ljh.kafka.kafka_helloworld.SimplePartitioner");
@@ -80,6 +105,7 @@ public class KafkaBasic {
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "3");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         // 2 构建滤器链
         List<String> interceptors = new ArrayList<>();
@@ -111,7 +137,7 @@ public class KafkaBasic {
         Producer<String, String> producer = createProducer();
 
         String topic = "topic03";
-        long events = 100;
+        long events = 1000000;
         Random rnd = new Random();
         for (long nEvents = 0; nEvents < events; nEvents++) {
             long runtime = new Date().getTime();
@@ -129,7 +155,7 @@ public class KafkaBasic {
                 }
             });
 
-            TimeUnit.MILLISECONDS.sleep(10);
+            TimeUnit.MILLISECONDS.sleep(100);
         }
 
         producer.close();
@@ -151,7 +177,7 @@ public class KafkaBasic {
             ProducerRecord<String, String> data = new ProducerRecord<>(topic, ip, msg);
             RecordMetadata record = producer.send(data).get();
             System.out.println("Producer msg: partition=" + record.partition() + ", offset=" + record.offset());
-            TimeUnit.MICROSECONDS.sleep(1);
+            TimeUnit.MICROSECONDS.sleep(100);
         }
 
         producer.close();
@@ -181,11 +207,13 @@ public class KafkaBasic {
                             record.offset(), record.key(), record.value());
                     });
 
+                    TimeUnit.SECONDS.sleep(2);
+
                     consumer.commitSync();
                 }
             }
 
-        } catch (WakeupException e) {
+        } catch (WakeupException | InterruptedException e) {
             // 不用处理这个异常，它只是用来停止循环的
         } finally {
             consumer.close();
@@ -449,49 +477,7 @@ public class KafkaBasic {
 
     }
 
-    @Test
-    public void broker() throws ExecutionException, InterruptedException {
 
-        // broker的信息等
-
-        // 消息的查询等
-
-        // 生产者的信息，主题、发送速率等
-        // 具体某个生产者的操作等
-
-        // 获取KafkaAdminClient
-        KafkaAdminClient adminClient = createAdminClient();
-
-        DescribeClusterResult clusterResult = adminClient.describeCluster();
-
-        ConfigResource resource = new ConfigResource(Type.BROKER, "0");
-        Map<ConfigResource, Config> configMap = adminClient.describeConfigs(Collections.singleton(resource)).all().get();
-        System.out.println(configMap);
-
-        Map<ConfigResource, Config> topicConfigMap =
-            adminClient.describeConfigs(Collections.singleton(new ConfigResource(Type.TOPIC, "lengfeng.test3.test"))).all().get();
-        System.out.println(topicConfigMap);
-
-        Map<ConfigResource, Config> brokerLoggerConfigMap =
-            adminClient.describeConfigs(Collections.singleton(new ConfigResource(Type.BROKER_LOGGER, "0"))).all().get();
-        System.out.println(brokerLoggerConfigMap);
-
-        System.out.println("sss");
-
-        // adminClient.describeFeatures();
-        // adminClient.describeLogDirs()
-        // adminClient.describeReplicaLogDirs()
-
-    }
-
-    @Test
-    public void acl() {
-
-        // ACL控制和Token控制等
-
-        // 获取KafkaAdminClient
-        KafkaAdminClient adminClient = createAdminClient();
-    }
 
     public static Field getFieldByFieldName(Object object, String fieldName) throws NoSuchFieldException {
         Field field = object.getClass().getDeclaredField(fieldName);

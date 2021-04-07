@@ -56,10 +56,7 @@ public class ExactlyOnceMessageProcessor extends Thread {
 
     private final CountDownLatch latch;
 
-    public ExactlyOnceMessageProcessor(final String inputTopic,
-                                       final String outputTopic,
-                                       final int instanceIdx,
-                                       final CountDownLatch latch) {
+    public ExactlyOnceMessageProcessor(final String inputTopic, final String outputTopic, final int instanceIdx, final CountDownLatch latch) {
         this.inputTopic = inputTopic;
         this.outputTopic = outputTopic;
         this.transactionalId = "Processor-" + instanceIdx;
@@ -70,8 +67,7 @@ public class ExactlyOnceMessageProcessor extends Thread {
         // Consumer must be in read_committed mode, which means it won't be able to read uncommitted data.
         // Consumer could optionally configure groupInstanceId to avoid unnecessary rebalances.
         this.groupInstanceId = "Txn-consumer-" + instanceIdx;
-        consumer = new Consumer(inputTopic, "Eos-consumer",
-            Optional.of(groupInstanceId), READ_COMMITTED, -1, null).get();
+        consumer = new Consumer(inputTopic, "Eos-consumer", Optional.of(groupInstanceId), READ_COMMITTED, -1, null).get();
         this.latch = latch;
     }
 

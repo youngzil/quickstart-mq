@@ -38,3 +38,7 @@ bin/kafka-topics.sh --describe --topic quickstart-events --bootstrap-server loca
 #You can stop the consumer client with Ctrl-C at any time.
 #bin/kafka-console-consumer.sh --topic quickstart-events --from-beginning --bootstrap-server localhost:9092
 
+
+# bin/kafka-server-stop.sh
+# bin/zookeeper-server-stop.sh
+
