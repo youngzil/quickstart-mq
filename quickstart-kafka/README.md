@@ -30,6 +30,14 @@ Kafka本身没有提供批量发送。不过由于消息发送是异步而且本
 
 
 
+Apache Kafka 在 Exactly-Once Semantics（EOS）上三种粒度的保证如下（来自 [Exactly-once Semantics in Apache Kafka](https://www.slideshare.net/ConfluentInc/exactlyonce-semantics-in-apache-kafka) ）：
+1. Idempotent Producer：Exactly-once，in-order，delivery per partition；
+2. Transactions：Atomic writes across partitions；
+3. Exactly-Once stream processing across read-process-write tasks；
+
+
+
+
 
 [Kafka AdminClient配置](https://www.orchome.com/677) 
 
@@ -48,4 +56,11 @@ Kafka本身没有提供批量发送。不过由于消息发送是异步而且本
 
 
 [Kafka的概念和常见模式](http://www.beyondthelines.net/computing/kafka-patterns/)  
+
+
+[kafka中文教程](https://www.orchome.com/kafka/index)  
+[kafka中文](https://xiaomingtongxie.gitbooks.io/kafka-tutorial-cn/content/)  
+[Kafka管理](https://blog.51cto.com/9291927/2497842)  
+
+[Kafka快速入门](https://blog.51cto.com/9291927/2497822)  
 

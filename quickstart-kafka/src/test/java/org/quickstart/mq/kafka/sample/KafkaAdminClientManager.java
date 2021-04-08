@@ -63,21 +63,6 @@ public class KafkaAdminClientManager {
         props.put(SaslConfigs.SASL_MECHANISM, ScramMechanism.SCRAM_SHA_256.mechanismName());
         props.put(SaslConfigs.SASL_JAAS_CONFIG, jaasCfg);
 
-        // oauth2认证
-
-        // OAuth Settings
-        //	- sasl.jaas.config=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
-        // props.put("sasl.jaas.config", "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;");
-
-        //	- security.protocol=SASL_PLAINTEXT
-        // props.put("security.protocol", "SASL_PLAINTEXT");
-
-        //	- sasl.mechanism=OAUTHBEARER
-        // props.put("sasl.mechanism", "OAUTHBEARER");
-
-        //	- sasl.login.callback.handler.class=com.bfm.kafka.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler
-        // props.put("sasl.login.callback.handler.class", "com.oauth2.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler");
-
         // 创建KafkaAdminClient
         KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
         return adminClient;

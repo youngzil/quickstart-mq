@@ -54,28 +54,13 @@ public class SaslScramTest {
 
         // System.setProperty("java.security.auth.login.config",jaasCfg);
 
-        // oauth2认证
-
-        // OAuth Settings
-        //	- sasl.jaas.config=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
-        // props.put("sasl.jaas.config", "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;");
-
-        //	- security.protocol=SASL_PLAINTEXT
-        // props.put("security.protocol", "SASL_PLAINTEXT");
-
-        //	- sasl.mechanism=OAUTHBEARER
-        // props.put("sasl.mechanism", "OAUTHBEARER");
-
-        //	- sasl.login.callback.handler.class=com.bfm.kafka.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler
-        // props.put("sasl.login.callback.handler.class", "com.oauth2.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler");
-
         // 配置partitionner选择策略，可选配置
         // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "cn.ljh.kafka.kafka_helloworld.SimplePartitioner");
 
         // 2 构建滤器链
-        /*List<String> interceptors = new ArrayList<>();
-        interceptors.add("org.quickstart.mq.kafka.v2.sample.ProducerInterceptor");
-        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);*/
+        List<String> interceptors = new ArrayList<>();
+        interceptors.add(SimpleProducerInterceptor.class.getName());
+        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
 
         Producer<String, String> producer = new KafkaProducer<>(props);
         return producer;

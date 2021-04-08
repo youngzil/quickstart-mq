@@ -2,8 +2,6 @@ package org.quickstart.mq.kafka.sample;
 
 import com.google.common.collect.Lists;
 import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.Config;
-import org.apache.kafka.clients.admin.DescribeClusterResult;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -59,38 +57,13 @@ public class KafkaBasic {
         props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
 
-        // oauth2认证
-
-        // OAuth Settings
-        //	- sasl.jaas.config=org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;
-        // props.put("sasl.jaas.config", "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required;");
-        //
-        //	- security.protocol=SASL_PLAINTEXT
-        // props.put("security.protocol", "SASL_PLAINTEXT");
-
-        //	- sasl.mechanism=OAUTHBEARER
-        // props.put("sasl.mechanism", "OAUTHBEARER");
-
-        //	- sasl.login.callback.handler.class=com.bfm.kafka.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler
-        // props.put("sasl.login.callback.handler.class", "com.oauth2.security.oauthbearer.OAuthAuthenticateLoginCallbackHandler");
-
-
-        // System.setProperty("OAUTH_LOGIN_SERVER","dev-276677.okta.com");
-        // System.setProperty("OAUTH_LOGIN_ENDPOINT","/oauth2/default/v1/token");
-        // System.setProperty("OAUTH_LOGIN_GRANT_TYPE","client_credentials");
-        // System.setProperty("OAUTH_LOGIN_SCOPE","kafka");
-        // System.setProperty("OAUTH_AUTHORIZATION","Basic MG9hOGtoYnI0eHIyVUJ2U1IzNTc6VWk1aUo0TTFMcjR1cmdELXFmTzRxdHlnMDF0REFhaWlqSUpMZS1Wbg==");
-        // System.setProperty("OAUTH_INTROSPECT_SERVER","dev-276677.okta.com");
-        // System.setProperty("OAUTH_INTROSPECT_ENDPOINT","/oauth2/default/v1/introspect");
-        // System.setProperty("OAUTH_INTROSPECT_AUTHORIZATION","Basic MG9hOGtoYnI0eHIyVUJ2U1IzNTc6VWk1aUo0TTFMcjR1cmdELXFmTzRxdHlnMDF0REFhaWlqSUpMZS1Wbg==");
-
-
         // 配置partitionner选择策略，可选配置
-        //        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,
-        // "cn.ljh.kafka.kafka_helloworld.SimplePartitioner");
+        // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "cn.ljh.kafka.kafka_helloworld.SimplePartitioner");
 
-        //        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,
-        // "org.quickstart.mq.kafka.v2.sample.ProducerInterceptor");
+        // 2 构建滤器链
+        List<String> interceptors = new ArrayList<>();
+        interceptors.add(SimpleProducerInterceptor.class.getName());
+        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
 
         Producer<String, String> producer = new KafkaProducer<>(props);
         return producer;
@@ -166,7 +139,7 @@ public class KafkaBasic {
 
         Producer<String, String> producer = createProducer();
 
-        String topic = "topic03";
+        String topic = "topic02";
         long events = 10000;
         Random rnd = new Random();
 
@@ -229,7 +202,7 @@ public class KafkaBasic {
         String topic = "org.*.datatype";
         Pattern pattern = Pattern.compile(topic);
         consumer.subscribe(pattern);
-        // consumer.subscribe(Pattern.compile("topic-.*"));
+        consumer.subscribe(Pattern.compile("topic.+"));
 
         // 不断的轮询获取主题中的消息
         try {
@@ -476,8 +449,6 @@ public class KafkaBasic {
         }
 
     }
-
-
 
     public static Field getFieldByFieldName(Object object, String fieldName) throws NoSuchFieldException {
         Field field = object.getClass().getDeclaredField(fieldName);

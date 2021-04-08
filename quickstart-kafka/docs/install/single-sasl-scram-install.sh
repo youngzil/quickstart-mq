@@ -99,6 +99,7 @@ authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
 
 # 设置本例中admin为超级用户
 super.users=User:admin
+# super.users=User:admin;User:ANONYMOUS
 
 # 认证配置
 # 启用SCRAM机制，采用SCRAM-SHA-512算法
