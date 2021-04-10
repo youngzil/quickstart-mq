@@ -63,4 +63,5 @@ Apache Kafka 在 Exactly-Once Semantics（EOS）上三种粒度的保证如下�
 [Kafka管理](https://blog.51cto.com/9291927/2497842)  
 
 [Kafka快速入门](https://blog.51cto.com/9291927/2497822)  
+[Kafka concepts and common patterns](http://www.beyondthelines.net/computing/kafka-patterns/)  
 

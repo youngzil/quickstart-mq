@@ -1,9 +1,42 @@
-brokers
-config
-consumers
-admin
+/
+cluster
 controller
+brokers
+    ids
+    topics
+    seqid
+zookeeper
+kafka-acl   ACL权限的信息
+    Cluster
+    Group
+        test-group
+    Topic
+        quickstart-events
+    TransactionalId
+    DelegationToken
+kafka-acl-changes
+admin
+isr_change_notification
+log_dir_event_notification
 controller_epoch
+feature
+kafka-acl-extended
+kafka-acl-extended-changes
+consumers
+latest_producer_id_block
+config
+    changes
+    clients
+    brokers
+    topics
+    users   权限用户的信息
+
+
+
+
+
+
+
 
 
 

@@ -223,6 +223,7 @@ public class OAuthHttpCalls {
 
     private static Object getPropertyValue(Map<String, String> options, String propertyName, Object defaultValue) {
         Object result = null;
+        // String env = System.getenv(envName);
         String env = options.get(propertyName) != null ? options.get(propertyName): System.getProperty(propertyName);
         if ("OAUTH_AUTHORIZATION".equals(propertyName) || "OAUTH_INTROSPECT_AUTHORIZATION".equals(propertyName)) {
             env = env.replace("%20", " ");

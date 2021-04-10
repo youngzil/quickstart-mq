@@ -244,3 +244,22 @@ bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server local
 bin/kafka-console-consumer.sh --topic quickstart-events --from-beginning --group test-group --bootstrap-server localhost:9092 --consumer.config config/client-sasl.properties
 
 
+
+
+zkCli -server 127.0.0.1:2181
+
+#权限用户信息
+ls /config/users
+get /config/users/admin
+get /config/users/reader
+get /config/users/writer
+
+#ACL权限信息
+ls /kafka-acl/Group
+get /kafka-acl/Group/test-group
+
+ls /kafka-acl/Topic
+get /kafka-acl/Topic/quickstart-events
+
+
+
