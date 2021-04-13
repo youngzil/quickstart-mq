@@ -96,8 +96,10 @@ public class SaslScramTest {
     @Test
     public void asyncProducer() throws InterruptedException {
 
-        String username = "admin";
-        String password = "admin";
+        // String username = "admin";
+        // String password = "admin";
+        String username = "writer";
+        String password = "writer-pwd";
 
         Producer<String, String> producer = createProducer(username, password);
 
@@ -129,8 +131,11 @@ public class SaslScramTest {
     @Test
     public void consumer() {
 
-        String username = "admin";
-        String password = "admin";
+        // String username = "admin";
+        // String password = "admin";
+
+        String username = "reader";
+        String password = "reader-pwd";
 
         Consumer<String, String> consumer = createConsumer(username, password);
 

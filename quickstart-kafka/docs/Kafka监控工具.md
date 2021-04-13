@@ -1,8 +1,11 @@
 通过研究，发现主流的三种kafka监控程序分别为：
 
 [Kafka Web Conslole](https://github.com/claudemamo/kafka-web-console)  
-[Kafka Manager](https://github.com/yahoo/kafka-manager)  
+[Cluster Manager for Apache Kafka](https://github.com/yahoo/CMAK) ：以前叫[Kafka Manager](https://github.com/yahoo/kafka-manager)  
 [KafkaOffsetMonitor](https://github.com/quantifind/KafkaOffsetMonitor)  
+
+
+KafkaOffsetMonitor：监控消费者和延迟的队列
 
 
 

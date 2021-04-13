@@ -38,6 +38,18 @@ Apache Kafka 在 Exactly-Once Semantics（EOS）上三种粒度的保证如下�
 
 
 
+- Kafka Stream：同一个集群，从一个Topic清洗处理数据后保存到另一个Topic  
+- Kafka Connect API：Kafka集群和外部数据源之间的转换，文件到kafka、kafka到ES/DB
+- MirrorMaker：Kafka跨集群数据镜像工具MirrorMaker  
+
+
+
+
+在Kafka和其他系统之间复制数据，用户创建自定义的从系统中pull数据或push数据到系统的Connector（连接器）。  
+Connector有两种形式：SourceConnectors从其他系统导入数据（如：JDBCSourceConnector将导入一个关系型数据库到Kafka）和SinkConnectors导出数据（如：HDFSSinkConnector将kafka主题的内容导出到HDFS文件）。  
+
+
+
 
 [Kafka AdminClient配置](https://www.orchome.com/677) 
 

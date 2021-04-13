@@ -39,6 +39,7 @@ public class KafkaAdminClientManager {
         // 配置kafka的服务连接
         props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(AdminClientConfig.REQUEST_TIMEOUT_MS_CONFIG, 30000);
+        props.put(AdminClientConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG, 10000);
 
         // 创建KafkaAdminClient
         KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
@@ -55,6 +56,7 @@ public class KafkaAdminClientManager {
         // 配置kafka的服务连接
         props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(AdminClientConfig.REQUEST_TIMEOUT_MS_CONFIG, 30000);
+        props.put(AdminClientConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG, 10000);
 
         String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
         String jaasCfg = String.format(jaasTemplate, username, password);

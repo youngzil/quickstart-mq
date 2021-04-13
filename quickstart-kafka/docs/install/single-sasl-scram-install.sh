@@ -237,6 +237,13 @@ bin/kafka-acls.sh --authorizer-properties zookeeper.connect=localhost:2181 --all
 bin/kafka-acls.sh --authorizer-properties zookeeper.connect=localhost:2181 --allow-principal User:reader --consumer --group test-group --topic quickstart-events --add
 
 
+查询
+bin/kafka-acls.sh --authorizer-properties zookeeper.connect=localhost:2181 --list --topic quickstart-events
+
+查询
+bin/kafka-acls.sh --authorizer-properties zookeeper.connect=localhost:2181 --list --group test-group
+
+
 启动发送脚本
 bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092 --producer.config config/client-sasl.properties
 

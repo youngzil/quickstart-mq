@@ -36,7 +36,7 @@ SASL/OAUTHBEARER | 2.0.0 | 需自己实现接口实现token的创建和验证，
 
 
 [Kafka权限管理](https://www.jianshu.com/p/09129c9f4c80)  
-
+[概念参考 GSSAPI介绍.md 中的JAAS/GSS-API/SASL/Kerberos简介](https://github.com/youngzil/notes/blob/master/docs/base/GSSAPI介绍.md)  
 
 
 ---------------------------------------------------------------------------------------------------------------------
