@@ -9,6 +9,32 @@
 
 
 
+[Kafka Clients](https://cwiki.apache.org/confluence/display/KAFKA/Clients)
+
+
+Kafka Python客户端
+
+[kafka-python Github](https://github.com/dpkp/kafka-python)  
+[kafka-python pypi](https://pypi.org/project/kafka-python/)  
+[confluent-kafka-python Github](https://github.com/confluentinc/confluent-kafka-python)  
+[confluent-kafka-python介绍](https://blog.51cto.com/9291927/2504495)  
+[如何在 kafka-python 和 confluent-kafka 之间做出选择？](https://www.infoq.cn/article/2017/09/kafka-python-confluent-kafka)
+
+
+
+
+Kafka Go客户端
+
+[kafka-go Github](https://github.com/segmentio/kafka-go)  
+[confluent-kafka-go Github](https://github.com/confluentinc/confluent-kafka-go)  
+[confluent-kafka-go文档](https://docs.confluent.io/clients-confluent-kafka-go/current/overview.html#ak-go)  
+[Kafka Golang 客户端介绍](https://my.oschina.net/zhangyangyang/blog/3147619)  
+
+
+
+
+
+
 Kafka是由Apache软件基金会开发的一个开源流处理平台，由Scala和Java编写。
 
 
