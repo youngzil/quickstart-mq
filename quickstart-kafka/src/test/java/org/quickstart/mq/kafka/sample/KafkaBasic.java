@@ -58,7 +58,7 @@ public class KafkaBasic {
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
 
         // 配置partitionner选择策略，可选配置
-        // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "cn.ljh.kafka.kafka_helloworld.SimplePartitioner");
+        // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, SimplePartitioner.class.getName());
 
         // 2 构建滤器链
         List<String> interceptors = new ArrayList<>();

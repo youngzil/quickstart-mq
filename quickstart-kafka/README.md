@@ -12,6 +12,8 @@
 [Kafka Clients](https://cwiki.apache.org/confluence/display/KAFKA/Clients)
 
 
+
+
 Kafka Python客户端
 
 [kafka-python Github](https://github.com/dpkp/kafka-python)  
@@ -71,8 +73,19 @@ Apache Kafka 在 Exactly-Once Semantics（EOS）上三种粒度的保证如下�
 
 
 
-在Kafka和其他系统之间复制数据，用户创建自定义的从系统中pull数据或push数据到系统的Connector（连接器）。  
-Connector有两种形式：SourceConnectors从其他系统导入数据（如：JDBCSourceConnector将导入一个关系型数据库到Kafka）和SinkConnectors导出数据（如：HDFSSinkConnector将kafka主题的内容导出到HDFS文件）。  
+
+
+
+[Confluent社区](https://www.confluent.io/)
+使用kafka用于云原生和容器的社区
+
+Confluent 是当初 Linkin 的几位 kafka 核心开发者创业成立的公司，致力于 kafka 的商业化，  
+该团队基于 kafka 给社区贡献了几个优质的开源项目 Schema Registry、Kafka Rest、KSQL，还有很多 kafka connectors 组件。
+
+Confluent 包含了从 kafka 集群搭建到 connector 组件部署，再到 connect 监控的一站式集成，使用非常方便，但是核心的 Confluent Control Center 及周边支持是企业版才有的特性，免费版只能试用一段时间，而且功能特性还有限制，社区版功能更是甚少，所以准备自己搭建监控平台。
+
+
+
 
 
 
@@ -102,4 +115,11 @@ Connector有两种形式：SourceConnectors从其他系统导入数据（如：J
 
 [Kafka快速入门](https://blog.51cto.com/9291927/2497822)  
 [Kafka concepts and common patterns](http://www.beyondthelines.net/computing/kafka-patterns/)  
+[Apache Kafka 概览](https://blog.csdn.net/u010862794/article/details/103124579)  
+[kafka能够从follower副本读数据](https://zhuanlan.zhihu.com/p/324497008)  
 
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  

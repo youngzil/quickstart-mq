@@ -44,7 +44,7 @@ public class AdminAPITest {
     @Test
     public void testTopic() throws ExecutionException, InterruptedException {
         CreateTopicsResult createTopicsResult = adminClient.createTopics(Arrays.asList(//
-            new NewTopic("topic1", 1, (short)1),//
+            new NewTopic("topic01", 1, (short)1),//
             new NewTopic("topic2", 1, (short)1),//
             new NewTopic("topic3", 1, (short)1)//
         ));

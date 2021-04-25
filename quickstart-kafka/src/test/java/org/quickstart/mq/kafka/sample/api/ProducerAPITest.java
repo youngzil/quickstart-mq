@@ -4,6 +4,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.errors.AuthorizationException;
 import org.apache.kafka.common.errors.OutOfOrderSequenceException;
@@ -37,7 +38,7 @@ public class ProducerAPITest {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 
         // 配置partitionner选择策略，可选配置
-        // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "cn.ljh.kafka.kafka_helloworld.SimplePartitioner");
+        // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, SimplePartitioner.class.getName());
 
         // 2 构建滤器链
         List<String> interceptors = new ArrayList<>();
@@ -47,7 +48,7 @@ public class ProducerAPITest {
     }
 
     @Test
-    public void testBasic() {
+    public void testBasic() throws ExecutionException, InterruptedException {
 
         // InterruptException - 如果线程在阻塞中断。
         // SerializationException - 如果key或value不是给定有效配置的serializers。
@@ -56,8 +57,9 @@ public class ProducerAPITest {
 
         Producer<String, String> producer = new KafkaProducer<>(props);
         for (int i = 0; i < 100; i++) {
-            ProducerRecord<String, String> data = new ProducerRecord<>("my-topic", Integer.toString(i), Integer.toString(i));
-            producer.send(data);
+            ProducerRecord<String, String> data = new ProducerRecord<>("topic01", Integer.toString(i), Integer.toString(i));
+            RecordMetadata metadata = producer.send(data).get();
+            System.out.println("metadata=" + metadata);
 
             // 由于send调用是异步的，它将为分配消息的此消息的RecordMetadata返回一个Future。
             // 如果future调用get()，则将阻塞，直到相关请求完成并返回该消息的metadata，或抛出发送异常。

@@ -12,6 +12,7 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.Before;
 import org.junit.Test;
+import org.quickstart.mq.kafka.sample.SaveOffsetOnRebalance;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class ConsumerAPITest {
@@ -56,11 +58,13 @@ public class ConsumerAPITest {
 
         Consumer<String, String> consumer = new KafkaConsumer<>(props);
 
-        String topic = "topic03";
+        String topic = "topic01";
 
         // 使用消费者对象订阅这些主题
         // consumer.subscribe(Arrays.asList(topic), new SaveOffsetOnRebalance(consumer));
-        consumer.subscribe(Arrays.asList(topic));
+        // consumer.subscribe(Arrays.asList(topic));
+        // 使用消费者对象订阅这些主题
+        consumer.subscribe(Arrays.asList(topic), new SaveOffsetOnRebalance(consumer));
 
         // 不断的轮询获取主题中的消息
         try {
@@ -69,6 +73,7 @@ public class ConsumerAPITest {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(POLL_TIMEOUT));
                 if (records.isEmpty()) {
                     System.out.println("no message");
+                    TimeUnit.SECONDS.sleep(1);
                     continue;
                 }
 
@@ -82,7 +87,7 @@ public class ConsumerAPITest {
 
             }
 
-        } catch (WakeupException e) {
+        } catch (WakeupException | InterruptedException e) {
             // 不用处理这个异常，它只是用来停止循环的
         } finally {
             consumer.close();

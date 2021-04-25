@@ -30,7 +30,42 @@ Kafka的Consumer Rebalance方案是基于Zookeeper的Watcher来实现的。consu
 
 
 
-### 0.9之前kafka的Rebalance算法
+### Kafka的Rebalance算法
+
+Kafka中提供了多重分区分配算法（PartitionAssignor）的实现：RangeAssigor、RoundRobinAssignor、StickyAssignor。
+- RangeAssignor范围分区
+- RoundRobinAssignor轮询分区
+- StickyAssignor粘性分区：1. 分区的分配尽量的均衡 2. 每一次重分配的结果尽量与上一次分配结果保持一致
+- CooperativeStickyAssignor协作粘性分区：它既粘性又具有协作性。
+
+分区实现的接口是ConsumerPartitionAssignor（2.4版本之前的接口是PartitionAssignor，目前已被废弃@Deprecated）
+
+
+join group, join 完成后会根据是不是 leader 来执行不同的操作; 在此会设置对应的 assignment 等信息。为 leader 时，需要执行分配策略分配 topicpartition 并 同步到 followers，策略有
+- RangeAssignor范围分区
+- RoundRobinAssignor轮询分区
+- StickyAssignor粘性分区：1. 分区的分配尽量的均衡 2. 每一次重分配的结果尽量与上一次分配结果保持一致
+- CooperativeStickyAssignor协作粘性分区：它既粘性又具有协作性。
+  具体说明参考文章 [Kafka分区分配策略](https://blog.csdn.net/u013256816/article/details/81123600)
+
+
+尽管RoundRobinAssignor已经在RangeAssignor上做了一些优化来更均衡的分配分区，但是在一些情况下依旧会产生严重的分配偏差，比如消费组中订阅的Topic列表不相同的情况下（这个情况可能更多的发生在发布阶段，但是这真的是一个问题吗？——可以参照Kafka官方的说明：KIP-49 Fair Partition Assignment Strategy）。
+
+更核心的问题是无论是RangeAssignor，还是RoundRobinAssignor，当前的分区分配算法都没有考虑上一次的分配结果。显然，在执行一次新的分配之前，如果能考虑到上一次分配的结果，尽量少的调整分区分配的变动，显然是能节省很多开销的。
+
+
+StickyAssignor
+目标  
+从字面意义上看，Sticky是“粘性的”，可以理解为分配结果是带“粘性的”——每一次分配变更相对上一次分配做最少的变动（上一次的结果是有粘性的），其目标有两点：
+1. 分区的分配尽量的均衡
+2. 每一次重分配的结果尽量与上一次分配结果保持一致
+
+
+[Kafka分区分配策略分析——重点：StickyAssignor](https://cloud.tencent.com/developer/article/1553585)  
+[Apache Kafka 概览](https://blog.csdn.net/u010862794/article/details/103124579)  
+[事件驱动架构(http://jiagoushi.pro/book/export/html/76)  
+
+
 
 
 
@@ -57,6 +92,16 @@ rebalance过程分为2步：Join和Sync
 1 Join， 顾名思义就是加入组。这一步中，所有成员都向coordinator发送JoinGroup请求，请求入组。一旦所有成员都发送了JoinGroup请求，coordinator会从中选择一个consumer担任leader的角色，并把组成员信息以及订阅信息发给leader——注意leader和coordinator不是一个概念。leader负责消费分配方案的制定。
 
 2 Sync，这一步leader开始分配消费方案，即哪个consumer负责消费哪些topic的哪些partition。一旦完成分配，leader会将这个方案封装进SyncGroup请求中发给coordinator，非leader也会发SyncGroup请求，只是内容为空。coordinator接收到分配方案之后会把方案塞进SyncGroup的response中发给各个consumer。这样组内的所有成员就都知道自己应该消费哪些分区了。
+
+
+
+join group, join 完成后会根据是不是 leader 来执行不同的操作; 在此会设置对应的 assignment 等信息。为 leader 时，需要执行分配策略分配 topicpartition 并 同步到 followers，策略有
+- RangeAssignor
+- RoundRobinAssignor
+- StickyAssignor
+- CooperativeStickyAssignor
+具体说明参考文章 [Kafka分区分配策略](https://blog.csdn.net/u013256816/article/details/81123600)  
+
 
 
 

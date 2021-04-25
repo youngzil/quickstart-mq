@@ -6,7 +6,7 @@
 [去哪儿网MQ](https://github.com/qunarcorp/qmq)  
 [滴滴的MQ](https://github.com/didi/DDMQ)  
 [简略的消息中间件](http://www.boarsoft.com/download.html)  
-硬件的消息队列中间件Solace
+基于硬件的消息队列中间件Solace（收费）
 
 
 

@@ -47,8 +47,8 @@ import static org.apache.kafka.clients.admin.ConfigEntry.ConfigSource.DYNAMIC_TO
 @Slf4j
 public class TopicTest {
 
-    private static final String brokerList = "localhost:9092";
-    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    // private static final String brokerList = "localhost:9092";
+    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     private KafkaAdminClient adminClient;
     private Consumer consumer;
 
@@ -71,7 +71,7 @@ public class TopicTest {
     public void queryTopicDetail() throws ExecutionException, InterruptedException {
 
         // String topic = "lengfeng.topic.test";
-        String topic = "topic-name";
+        String topic = "test";
 
         Map<String, List<PartitionInfo>> listMap = consumer.listTopics();
         System.out.println(listMap);

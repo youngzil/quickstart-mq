@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ConsumerGroupTest {
 
-    private static final String brokerList = "localhost:9092";
-    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    // private static final String brokerList = "localhost:9092";
+    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     private KafkaAdminClient adminClient;
     private Consumer consumer;
 
@@ -45,7 +45,7 @@ public class ConsumerGroupTest {
     @Test
     public void queryConsumerGroupDetail() throws ExecutionException, InterruptedException {
 
-        String groupId = "lengfeng.consumer.group";
+        String groupId = "legion-object";
 
         // 消费组信息
         Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap =
