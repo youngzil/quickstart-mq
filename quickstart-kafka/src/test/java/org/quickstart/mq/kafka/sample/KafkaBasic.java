@@ -24,6 +24,8 @@ import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -57,7 +59,7 @@ public class KafkaBasic {
         props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
 
-        // 配置partitionner选择策略，可选配置
+        // 配置partition选择策略，可选配置
         // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, SimplePartitioner.class.getName());
 
         // 2 构建滤器链
@@ -71,14 +73,17 @@ public class KafkaBasic {
 
     public static Consumer<String, String> createConsumer() {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "lengfeng.consumer.group");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false"); // 是否自动提交进度
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "3");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        // props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+
+        // 配置partition分配策略，可选配置
+        props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, Collections.singletonList(SimplePartitionAssignor.class));
 
         // 2 构建滤器链
         List<String> interceptors = new ArrayList<>();
@@ -159,6 +164,8 @@ public class KafkaBasic {
     @Test
     public void consumer() {
 
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss:SSS");
+
         Consumer<String, String> consumer = createConsumer();
 
         String topic = "topic03";
@@ -170,8 +177,10 @@ public class KafkaBasic {
         try {
             // poll() 获取消息列表，可以传入超时时间
             while (true) {
-                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(30*1000));
+
                 if (records.isEmpty()) {
+                    System.out.println(dateTimeFormatter.format(LocalDateTime.now()));
                     System.out.println("no message");
                 } else {
                     records.forEach(record -> {

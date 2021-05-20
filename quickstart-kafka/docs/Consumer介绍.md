@@ -32,7 +32,7 @@ Kafka的Consumer Rebalance方案是基于Zookeeper的Watcher来实现的。consu
 
 ### Kafka的Rebalance算法
 
-Kafka中提供了多重分区分配算法（PartitionAssignor）的实现：RangeAssigor、RoundRobinAssignor、StickyAssignor。
+Kafka中提供了多重分区分配算法（PartitionAssignor）的实现：RangeAssignor、RoundRobinAssignor、StickyAssignor。
 - RangeAssignor范围分区
 - RoundRobinAssignor轮询分区
 - StickyAssignor粘性分区：1. 分区的分配尽量的均衡 2. 每一次重分配的结果尽量与上一次分配结果保持一致
@@ -64,7 +64,7 @@ StickyAssignor
 [Kafka分区分配策略分析——重点：StickyAssignor](https://cloud.tencent.com/developer/article/1553585)  
 [Apache Kafka 概览](https://blog.csdn.net/u010862794/article/details/103124579)  
 [事件驱动架构(http://jiagoushi.pro/book/export/html/76)  
-
+[Kafka分区分配策略（Partition Assignment Strategy）](https://cloud.tencent.com/developer/article/1708388)  
 
 
 
@@ -225,7 +225,7 @@ enable.auto.commit：是否自动提交，默认为true。
 auto.commit.interval.ms: 从poll(拉)的回话处理时长。
 session.timeout.ms:超时时间。
 max.poll.records:一次最大拉取的条数。
-auto.offset.reset：消费规则，默认earliest 。
+auto.offset.reset：消费规则，默认latest。
 earliest: 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费 。
 latest: 当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，消费新产生的该分区下的数据 。
 none: topic各分区都存在已提交的offset时，从offset后开始消费；只要有一个分区不存在已提交的offset，则抛出异常。

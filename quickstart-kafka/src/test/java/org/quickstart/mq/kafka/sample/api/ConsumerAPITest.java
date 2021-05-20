@@ -34,7 +34,7 @@ public class ConsumerAPITest {
 
     @Before
     public void setup() {
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "lengfeng.consumer.group");
 
         // 设置`enable.auto.commit`,偏移量由`auto.commit.interval.ms`控制自动提交的频率。
