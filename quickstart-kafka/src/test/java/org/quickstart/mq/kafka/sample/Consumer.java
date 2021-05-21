@@ -22,21 +22,25 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
-import java.util.Map;
+import java.util.Collections;
 import java.util.Properties;
 
 public class Consumer extends ShutdownableThread {
+
+    // private static final String brokerList = "localhost:9092";
+    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+
     private final KafkaConsumer<Integer, String> consumer;
     private final String topic;
 
     public Consumer(String topic) {
         super("KafkaConsumerExample", false);
         Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaProperties.KAFKA_SERVER_URL + ":" + KafkaProperties.KAFKA_SERVER_PORT);
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "DemoConsumer");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
-        props.put(ConsumerConfig.SESSION_TIMEOUT_MS, "30000");
+        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.IntegerDeserializer");
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 
@@ -46,21 +50,12 @@ public class Consumer extends ShutdownableThread {
 
     @Override
     public void doWork() {
-        consumer.subscribe(this.topic);
+        consumer.subscribe(Collections.singletonList(this.topic));
+        ConsumerRecords<Integer, String> records = consumer.poll(1000);
 
-        Map<String, ConsumerRecords<Integer, String>> recordsMap = consumer.poll(1000);
-
-
-       /* recordsMap.entrySet().forEach(entry->{
-            System.out.println("key=" + entry.getKey());
-
-            entry.getValue().
-        });*/
-
-       /* for (ConsumerRecord<Integer, String> record :records) {
+        for (ConsumerRecord<Integer, String> record : records) {
             System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset());
-        }*/
-
+        }
     }
 
     @Override

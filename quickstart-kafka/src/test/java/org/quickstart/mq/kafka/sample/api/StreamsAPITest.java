@@ -197,7 +197,7 @@ public class StreamsAPITest {
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);//这个属性一定要有，否则不展示
 
-        // props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        // props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, OffsetResetStrategy.EARLIEST.name().toLowerCase(Locale.ROOT));
 
         final StreamsBuilder builder = new StreamsBuilder();
 
