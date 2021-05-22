@@ -1,0 +1,11 @@
+{
+  "name" : "example-source",
+  "config" : {
+    "connector.class" : "org.quickstart.mq.kafka.connect.source.ExampleSourceConnector",
+    "tasks.max" : "1",
+    "database.url" : "jdbc:mysql://kafka-mysql:3306/testkafka?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&rewriteBatchedStatements=true",
+    "database.username" : "root",
+    "database.password" : "root",
+    "database.tables" : "test_user"
+  }
+}

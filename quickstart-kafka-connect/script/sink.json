@@ -1,0 +1,12 @@
+{
+  "name" : "example-sink",
+  "config" : {
+    "connector.class" : "org.quickstart.mq.kafka.connect.sink.ExampleSinkConnector",
+    "topics" : "test_user, test_order",
+    "tasks.max" : "1",
+    "redis.host" : "kafka-redis",
+    "redis.port" : "6379",
+    "redis.password" : "",
+    "redis.database" : "0"
+  }
+}

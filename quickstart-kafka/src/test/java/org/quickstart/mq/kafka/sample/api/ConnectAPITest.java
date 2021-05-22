@@ -6,4 +6,12 @@ public class ConnectAPITest {
 
     // [Kafka Connect的用法](https://www.orchome.com/343)
 
+
+    /*外部数据 ---> Kakfa
+    或者
+    Kakfa ---> 外部数据*/
+
+    public static void main(String[] args) {
+    }
+
 }
