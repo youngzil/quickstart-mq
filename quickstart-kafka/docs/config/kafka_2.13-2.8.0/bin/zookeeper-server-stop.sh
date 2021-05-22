@@ -18,17 +18,17 @@ SIGNAL=${SIGNAL:-TERM}
 OSNAME=$(uname -s)
 if [[ "$OSNAME" == "OS/390" ]]; then
     if [ -z $JOBNAME ]; then
-        JOBNAME="KAFKSTRT"
+        JOBNAME="ZKEESTRT"
     fi
     PIDS=$(ps -A -o pid,jobname,comm | grep -i $JOBNAME | grep java | grep -v grep | awk '{print $1}')
 elif [[ "$OSNAME" == "OS400" ]]; then
-    PIDS=$(ps -af | grep -i 'kafka\.Kafka' | grep java | grep -v grep | awk '{print $2}')
+    PIDS=$(ps -Af | grep java | grep -i QuorumPeerMain | grep -v grep | awk '{print $2}')
 else
-    PIDS=$(ps ax | grep ' kafka\.Kafka ' | grep java | grep -v grep | awk '{print $1}')
+    PIDS=$(ps ax | grep java | grep -i QuorumPeerMain | grep -v grep | awk '{print $1}')
 fi
 
 if [ -z "$PIDS" ]; then
-  echo "No kafka server to stop"
+  echo "No zookeeper server to stop"
   exit 1
 else
   kill -s $SIGNAL $PIDS

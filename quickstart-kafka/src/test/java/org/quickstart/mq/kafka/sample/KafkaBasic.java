@@ -1,8 +1,8 @@
 package org.quickstart.mq.kafka.sample;
 
 import com.google.common.collect.Lists;
+import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -76,7 +76,6 @@ public class KafkaBasic {
         return producer;
     }
 
-
     public static Consumer<String, String> createConsumer() {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
@@ -88,8 +87,6 @@ public class KafkaBasic {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, OffsetResetStrategy.EARLIEST.name().toLowerCase(Locale.ROOT));
         // props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, IsolationLevel.READ_COMMITTED.name().toLowerCase(Locale.ROOT));
-
-
 
         // 配置partition分配策略，可选配置
         // props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, Collections.singletonList(SimplePartitionAssignor.class));
@@ -103,7 +100,7 @@ public class KafkaBasic {
         return consumer;
     }
 
-    public static KafkaAdminClient createAdminClient() {
+    public static Admin createAdminClient() {
 
         Properties props = new Properties();
         // 配置kafka的服务连接
@@ -114,7 +111,7 @@ public class KafkaBasic {
 
         // 创建KafkaAdminClient
         // Admin adminClient2 = Admin.create(props);
-        KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
+        Admin adminClient = Admin.create(props);
         return adminClient;
     }
 
@@ -186,7 +183,7 @@ public class KafkaBasic {
         try {
             // poll() 获取消息列表，可以传入超时时间
             while (true) {
-                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(30*1000));
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(30 * 1000));
 
                 if (records.isEmpty()) {
                     System.out.println(dateTimeFormatter.format(LocalDateTime.now()));
@@ -411,7 +408,7 @@ public class KafkaBasic {
         // 具体某个生产者的操作等
 
         // 获取KafkaAdminClient
-        KafkaAdminClient adminClient = createAdminClient();
+        Admin adminClient = createAdminClient();
     }
 
     @Test
@@ -423,7 +420,7 @@ public class KafkaBasic {
         // 具体某个生产者的操作等
 
         // 获取KafkaAdminClient
-        KafkaAdminClient adminClient = createAdminClient();
+        Admin adminClient = createAdminClient();
 
         // adminClient.deleteRecords();
 

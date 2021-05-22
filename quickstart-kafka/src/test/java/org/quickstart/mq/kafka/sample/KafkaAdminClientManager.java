@@ -1,7 +1,7 @@
 package org.quickstart.mq.kafka.sample;
 
+import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -22,18 +22,18 @@ public class KafkaAdminClientManager {
     private static final String username = "admin";
     private static final String password = "admin";
 
-    private volatile static Map<String/*brokerList*/, KafkaAdminClient> KAFKA_ADMIN_CLIENT_CONTAINER = new ConcurrentHashMap<>();
+    private volatile static Map<String/*brokerList*/, Admin> KAFKA_ADMIN_CLIENT_CONTAINER = new ConcurrentHashMap<>();
 
-    public static KafkaAdminClient getKafkaAdminClient() {
+    public static Admin getKafkaAdminClient() {
         return getKafkaAdminClient(brokerList);
     }
 
-    public static KafkaAdminClient getKafkaAdminClient(String brokerList) {
-        KafkaAdminClient kafkaAdminClient = KAFKA_ADMIN_CLIENT_CONTAINER.computeIfAbsent(brokerList, key -> createAdminClient(key));
-        return kafkaAdminClient;
+    public static Admin getKafkaAdminClient(String brokerList) {
+        Admin adminClient = KAFKA_ADMIN_CLIENT_CONTAINER.computeIfAbsent(brokerList, key -> createAdminClient(key));
+        return adminClient;
     }
 
-    public static KafkaAdminClient createAdminClient(String brokerList) {
+    public static Admin createAdminClient(String brokerList) {
 
         Properties props = new Properties();
         // 配置kafka的服务连接
@@ -42,15 +42,15 @@ public class KafkaAdminClientManager {
         props.put(AdminClientConfig.CONNECTIONS_MAX_IDLE_MS_CONFIG, 10000);
 
         // 创建KafkaAdminClient
-        KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
+        Admin adminClient = Admin.create(props);
         return adminClient;
     }
 
-    public static KafkaAdminClient createAdminClientWithScram() {
+    public static Admin createAdminClientWithScram() {
         return createAdminClientWithScram(brokerList, username, password);
     }
 
-    public static KafkaAdminClient createAdminClientWithScram(String brokerList, String username, String password) {
+    public static Admin createAdminClientWithScram(String brokerList, String username, String password) {
 
         Properties props = new Properties();
         // 配置kafka的服务连接
@@ -66,7 +66,7 @@ public class KafkaAdminClientManager {
         props.put(SaslConfigs.SASL_JAAS_CONFIG, jaasCfg);
 
         // 创建KafkaAdminClient
-        KafkaAdminClient adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
+        Admin adminClient = Admin.create(props);
         return adminClient;
     }
 

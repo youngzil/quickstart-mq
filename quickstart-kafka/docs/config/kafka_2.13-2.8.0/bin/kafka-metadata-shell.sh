@@ -13,23 +13,5 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-SIGNAL=${SIGNAL:-TERM}
 
-OSNAME=$(uname -s)
-if [[ "$OSNAME" == "OS/390" ]]; then
-    if [ -z $JOBNAME ]; then
-        JOBNAME="ZKEESTRT"
-    fi
-    PIDS=$(ps -A -o pid,jobname,comm | grep -i $JOBNAME | grep java | grep -v grep | awk '{print $1}')
-elif [[ "$OSNAME" == "OS400" ]]; then
-    PIDS=$(ps -af | grep java | grep -i QuorumPeerMain | grep -v grep | awk '{print $2}')
-else
-    PIDS=$(ps ax | grep java | grep -i QuorumPeerMain | grep -v grep | awk '{print $1}')
-fi
-
-if [ -z "$PIDS" ]; then
-  echo "No zookeeper server to stop"
-  exit 1
-else
-  kill -s $SIGNAL $PIDS
-fi
+exec $(dirname $0)/kafka-run-class.sh org.apache.kafka.shell.MetadataShell "$@"

@@ -8,6 +8,7 @@
     - [Transforms](#Transforms)
     - [Dead Letter Queue](#Dead-Letter-Queue)
 - [Kafka Connect的实战测试](../../quickstart-kafka-connect/Kafka%20Connect的实战测试.md)
+- [Kafka Connect源码](#Kafka-Connect源码)
 
 ---------------------------------------------------------------------------------------------------------------------
 
@@ -143,5 +144,13 @@ Transform 如果配置在Source 则在Task之后执行，如果配置在Sink 则
 []()  
 
 ---------------------------------------------------------------------------------------------------------------------
+## Kafka Connect源码
+
+启动脚本
+bin/connect-distributed.sh -daemon config/connect-distributed.properties
+
+
+启动main类
+org.apache.kafka.connect.cli.ConnectDistributed
 
 

@@ -10,8 +10,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.KafkaAdminClient;
+import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.NewPartitions;
 import org.apache.kafka.clients.admin.NewTopic;
 import scala.collection.mutable.HashMap;
@@ -44,7 +43,7 @@ public class KafkaAdminUtil {
 
     private static long admin_kafka_conf_properties_lastmodified;
 
-    private static AdminClient client = null;
+    private static Admin client = null;
     private static Properties p = null;
 
     private static ObjectMapper mapper = new ObjectMapper();
@@ -56,9 +55,8 @@ public class KafkaAdminUtil {
     private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     // 新建topic
-    public static boolean createTopic(String name, int numPartitions, short replicationFactor,
-        Map<String, String> configs) {
-        AdminClient client = getAdminClient();
+    public static boolean createTopic(String name, int numPartitions, short replicationFactor, Map<String, String> configs) {
+        Admin client = getAdminClient();
         if (client == null) {
             return false;
         }
@@ -91,7 +89,7 @@ public class KafkaAdminUtil {
 
     // 删除topic
     public static boolean delTopic(String name) {
-        AdminClient client = getAdminClient();
+        Admin client = getAdminClient();
         if (client == null) {
             return false;
         }
@@ -118,7 +116,7 @@ public class KafkaAdminUtil {
 
     // 增加partitions
     public static boolean increasePartitions(String name, int numPartitions) {
-        AdminClient client = getAdminClient();
+        Admin client = getAdminClient();
         if (client == null) {
             return false;
         }
@@ -126,8 +124,7 @@ public class KafkaAdminUtil {
         try {
 
             // 获取当前分区数量
-            int current =
-                getAdminClient().describeTopics(Lists.newArrayList(name)).all().get().get(name).partitions().size();
+            int current = getAdminClient().describeTopics(Lists.newArrayList(name)).all().get().get(name).partitions().size();
 
             if (numPartitions <= current) {
                 return true;
@@ -153,15 +150,13 @@ public class KafkaAdminUtil {
         String bootstrapServer = getProperties().getProperty("bootstrap.servers");
         String[] args = {"--describe", "--bootstrap-server", bootstrapServer, "--group", group};
 
-        ConsumerGroupCommand.ConsumerGroupCommandOptions options =
-            new ConsumerGroupCommand.ConsumerGroupCommandOptions(args);
+        ConsumerGroupCommand.ConsumerGroupCommandOptions options = new ConsumerGroupCommand.ConsumerGroupCommandOptions(args);
         // kafaka 2.x版本已不支持zookeeper存储offsets了
         // ConsumerGroupCommand.ConsumerGroupService service = new ConsumerGroupCommand.KafkaConsumerGroupService(options);
         ConsumerGroupCommand.ConsumerGroupService service = new ConsumerGroupCommand.ConsumerGroupService(options, new HashMap<>());
 
         try {
-            FutureTask<String> task =
-                new FutureTask<>(() -> mapper.writeValueAsString(service.collectGroupOffsets("groupId")._2.get()));
+            FutureTask<String> task = new FutureTask<>(() -> mapper.writeValueAsString(service.collectGroupOffsets("groupId")._2.get()));
             executorService.execute(task);
             rs = task.get(3, TimeUnit.SECONDS);
 
@@ -207,14 +202,14 @@ public class KafkaAdminUtil {
         return properties;
     }
 
-    private static AdminClient getAdminClient() {
+    private static Admin getAdminClient() {
         Properties p = getProperties();
         if (p == null) {
             return null;
         }
 
         if (client == null) {
-            client = KafkaAdminClient.create(p);
+            client = Admin.create(p);
         }
 
         return client;

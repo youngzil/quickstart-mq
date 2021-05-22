@@ -1,6 +1,6 @@
 package org.quickstart.mq.kafka.sample.api;
 
-import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.CreatePartitionsResult;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
@@ -22,7 +22,7 @@ public class AdminAPITest {
     // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
 
     Properties props = new Properties();
-    AdminClient adminClient = null;
+    Admin adminClient = null;
 
     @Before
     public void setup() {
@@ -37,8 +37,7 @@ public class AdminAPITest {
         // 创建KafkaAdminClient
         // Admin adminClient2 = Admin.create(props);
         // adminClient = (KafkaAdminClient)KafkaAdminClient.create(props);
-        adminClient = AdminClient.create(props);
-
+        adminClient = Admin.create(props);
     }
 
     @Test

@@ -1,10 +1,10 @@
 package org.quickstart.mq.kafka.sample;
 
+import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.AlterUserScramCredentialsResult;
 import org.apache.kafka.clients.admin.Config;
 import org.apache.kafka.clients.admin.CreateAclsResult;
 import org.apache.kafka.clients.admin.DescribeClusterResult;
-import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.admin.ScramCredentialInfo;
 import org.apache.kafka.clients.admin.ScramMechanism;
 import org.apache.kafka.clients.admin.UserScramCredentialAlteration;
@@ -51,7 +51,7 @@ public class KafkaAdminClientTest {
         // 具体某个生产者的操作等
 
         // 获取KafkaAdminClient
-        KafkaAdminClient adminClient = KafkaAdminClientManager.getKafkaAdminClient(brokerList);
+        Admin adminClient = KafkaAdminClientManager.getKafkaAdminClient(brokerList);
         // KafkaAdminClient adminClient = KafkaAdminClientManager.createAdminClientWithScram(brokerList, username, password);
 
         DescribeClusterResult clusterResult = adminClient.describeCluster();
@@ -83,7 +83,7 @@ public class KafkaAdminClientTest {
 
         // 获取KafkaAdminClient
         // KafkaAdminClient adminClient = createAdminClient();
-        KafkaAdminClient adminClient = KafkaAdminClientManager.createAdminClientWithScram(brokerList, username, password);
+        Admin adminClient = KafkaAdminClientManager.createAdminClientWithScram(brokerList, username, password);
 
         String username = "testuser";
         String password = "testpwd";
@@ -112,7 +112,7 @@ public class KafkaAdminClientTest {
 
         // 只能使用权限认证过的客户端才能操作，所以部署的时候，只能受用脚本手动创建一个admin账户，配置了，然后才能使用API
         // KafkaAdminClient adminClient = KafkaAdminClientManager.createAdminClient(brokerList);
-        KafkaAdminClient adminClient = KafkaAdminClientManager.createAdminClientWithScram(brokerList, username, password);
+        Admin adminClient = KafkaAdminClientManager.createAdminClientWithScram(brokerList, username, password);
 
         String username = "testuser";
 

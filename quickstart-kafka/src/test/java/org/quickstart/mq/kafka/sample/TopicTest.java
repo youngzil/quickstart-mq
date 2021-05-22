@@ -3,6 +3,7 @@ package org.quickstart.mq.kafka.sample;
 import kafka.admin.TopicCommand;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.AlterConfigOp;
 import org.apache.kafka.clients.admin.AlterConfigsResult;
 import org.apache.kafka.clients.admin.Config;
@@ -11,7 +12,6 @@ import org.apache.kafka.clients.admin.CreatePartitionsResult;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.DescribeConfigsResult;
 import org.apache.kafka.clients.admin.DescribeTopicsResult;
-import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.admin.ListOffsetsResult;
 import org.apache.kafka.clients.admin.ListTopicsOptions;
 import org.apache.kafka.clients.admin.ListTopicsResult;
@@ -49,7 +49,7 @@ public class TopicTest {
 
     // private static final String brokerList = "localhost:9092";
     private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
-    private KafkaAdminClient adminClient;
+    private Admin adminClient;
     private Consumer consumer;
 
     @Before

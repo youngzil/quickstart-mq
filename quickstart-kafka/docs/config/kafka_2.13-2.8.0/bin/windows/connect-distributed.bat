@@ -15,7 +15,7 @@ rem See the License for the specific language governing permissions and
 rem limitations under the License.
 
 IF [%1] EQU [] (
-	echo USAGE: %0 connect-standalone.properties
+	echo USAGE: %0 connect-distributed.properties
 	EXIT /B 1
 )
 
@@ -27,8 +27,8 @@ popd
 
 rem Log4j settings
 IF ["%KAFKA_LOG4J_OPTS%"] EQU [""] (
-	set KAFKA_LOG4J_OPTS=-Dlog4j.configuration=file:%BASE_DIR%/config/tools-log4j.properties
+	set KAFKA_LOG4J_OPTS=-Dlog4j.configuration=file:%BASE_DIR%/config/connect-log4j.properties
 )
 
-"%~dp0kafka-run-class.bat" org.apache.kafka.connect.cli.ConnectStandalone %*
+"%~dp0kafka-run-class.bat" org.apache.kafka.connect.cli.ConnectDistributed %*
 EndLocal

@@ -1,8 +1,8 @@
 package org.quickstart.mq.kafka.sample;
 
+import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.ConsumerGroupDescription;
 import org.apache.kafka.clients.admin.ConsumerGroupListing;
-import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.admin.ListConsumerGroupOffsetsResult;
 import org.apache.kafka.clients.admin.ListConsumerGroupsResult;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -23,7 +23,7 @@ public class ConsumerGroupTest {
 
     // private static final String brokerList = "localhost:9092";
     private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
-    private KafkaAdminClient adminClient;
+    private Admin adminClient;
     private Consumer consumer;
 
     @Before
