@@ -1,5 +1,16 @@
 ## Kafka Streams概述
 
+
+流式计算框架
+
+目前业界比较成熟的的框架包括： Apache Spark、Storm、Flink等。
+
+这些框架的特点是拥有强大的计算能力，例如 Spark Streaming 上已经包含 Graph Compute，MLLib 等适合迭代计算库，在特定场景中非常好用。
+
+然而，这些框架也有通用的一个缺点：使用复杂、集群资源消耗较大。
+
+
+
 Kafka Streams是一个客户端程序库，用于处理和分析存储在Kafka中的数据，并将得到的数据写回Kafka或发送到外部系统。
 
 Kafka Stream 的亮点：
@@ -62,8 +73,8 @@ final Topology builder = new Topology();
 参考  
 [KAFKA STREAMS官方文档](http://kafka.apache.org/27/documentation/streams/)  
 [Kafka Streams开发者指南](https://www.orchome.com/335)  
-[]()  
-[]()
+[流式计算之 Kafka Stream](https://juejin.cn/post/6844904087100620814)  
+[最简单流处理引擎——Kafka Streams简介](https://juejin.cn/post/6844903934557945870)  
 
 
 
