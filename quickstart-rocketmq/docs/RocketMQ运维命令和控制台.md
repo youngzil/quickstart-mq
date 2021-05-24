@@ -38,7 +38,7 @@ SubCommand接口的实现
 
 
 cluster和namesrv：
-1、获取集群中的broker信息：sh mqadmin clusterList  -n 10.11.20.102:9876
+1、获取集群中的broker信息：sh bin/mqadmin clusterList  -n 127.0.0.1:9876
 2、namesrv的配置信息：sh mqadmin getNamesrvConfig  -n 10.11.20.102:9876
 3、更新namesrv的配置信息：sh mqadmin updateNamesrvConfig  -n 10.11.20.102:9876 -k serverAsyncSemaphoreValue -v 128
 4、Create or update KV config：sh mqadmin updateKvConfig  -n 10.11.20.102:9876 -s namespace值 -k key值 -v value值

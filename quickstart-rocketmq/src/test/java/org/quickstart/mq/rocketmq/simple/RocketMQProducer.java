@@ -42,7 +42,8 @@ public class RocketMQProducer {
          * 注意：切记不可以在每次发送消息时，都调用start方法
          */
         // producer.setNamesrvAddr("10.1.243.19:9876;10.1.243.20:9876");
-        producer.setNamesrvAddr("20.26.39.58:9876");
+        // producer.setNamesrvAddr("20.26.39.58:9876");
+        producer.setNamesrvAddr("127.0.0.1:9876");
         producer.setMaxMessageSize(6 * 1024);
         try {
             producer.start();
@@ -137,7 +138,7 @@ class ProducerSend implements Runnable {
                 }
 
                 // {
-                // Message msg = new Message("TopicTestC",// topic
+                // Message msg = new Message("TopicTestC",// topicF
                 // "TagC",// tag
                 // "OrderID061",// key
                 // ("TopicTestC" + i).getBytes());// body

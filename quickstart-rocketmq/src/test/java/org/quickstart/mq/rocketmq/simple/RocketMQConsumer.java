@@ -43,7 +43,8 @@ public class RocketMQConsumer {
         // consumer.setNamesrvAddr("10.1.243.19:9876;10.1.243.20:9876");
         // consumer.setNamesrvAddr("10.21.38.150:9876");
         // consumer.setNamesrvAddr("10.1.235.102:9876;10.1.235.103:9876");
-        consumer.setNamesrvAddr("20.26.39.58:9876");
+        // consumer.setNamesrvAddr("20.26.39.58:9876");
+        consumer.setNamesrvAddr("127.0.0.1:9876");
         consumer.setConsumeThreadMin(1);
         consumer.setPullBatchSize(3);
 
