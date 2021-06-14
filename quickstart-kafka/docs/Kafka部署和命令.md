@@ -3,6 +3,7 @@
     - [二、单节点运行多broker实例](#二、单节点运行多broker实例)
     - [三、集群模式（多节点多实例）](#三、集群模式（多节点多实例）)
     - [四、Linux在线安装部署](#四、Linux在线安装部署)
+    - [使用Docker部署kafka集群](#使用Docker部署kafka集群)
 - [Kafka操作命令](#Kafka操作命令)
     - [查看kafka的zookeeper上的数据](#查看kafka的zookeeper上的数据)
 
@@ -518,4 +519,19 @@ __consumer_offsets是kafka内置的Topic，在0.9.0.0之后的Kafka，将topic�
 
 [Kafka常用命令收录](https://cloud.tencent.com/developer/article/1350788)  
 [Kafka操作命令](https://www.cnblogs.com/zcqdream/articles/6593875.html)  
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+## 使用Docker部署kafka集群
+
+[本文讲解如何使用Docker部署kafka集群](https://jasonkayzk.github.io/2020/04/26/%E4%BD%BF%E7%94%A8Docker%E9%83%A8%E7%BD%B2kafka%E9%9B%86%E7%BE%A4/)  
+[DockerCompose配置](https://github.com/JasonkayZK/docker_repo/tree/kafka-v2.4.1-cluster)  
+
+
+
+
+
+
+
 

@@ -35,7 +35,9 @@ import java.util.stream.Collectors;
 
 public class KafkaAdminClientTest {
 
-    private static final String brokerList = "localhost:9092";
+    // private static final String brokerList = "localhost:9092";
+    private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
+
     // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     private static final String username = "admin";
     private static final String password = "admin";

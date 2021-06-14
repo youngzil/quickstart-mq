@@ -49,7 +49,7 @@ public class AdminAPITest {
         ));
 
         // 阻塞直到完成
-        createTopicsResult.all().get();
+        // createTopicsResult.all().get();
 
         ListTopicsResult listTopicsResult = adminClient.listTopics();
         listTopicsResult.listings().get().forEach(System.out::println);

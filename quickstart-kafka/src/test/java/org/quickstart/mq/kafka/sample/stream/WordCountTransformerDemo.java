@@ -90,7 +90,7 @@ public final class WordCountTransformerDemo {
                             }
                         }
                     });
-                    this.kvStore = (KeyValueStore<String, Integer>) context.getStateStore("Counts");
+                    this.kvStore = (KeyValueStore<String, Integer>)context.getStateStore("Counts");
                 }
 
                 @Override
@@ -111,15 +111,16 @@ public final class WordCountTransformerDemo {
                 }
 
                 @Override
-                public void close() {}
+                public void close() {
+                }
             };
         }
 
         @Override
         public Set<StoreBuilder<?>> stores() {
-            return Collections.singleton(Stores.keyValueStoreBuilder(
-                Stores.inMemoryKeyValueStore("Counts"),
-                Serdes.String(),
+            return Collections.singleton(Stores.keyValueStoreBuilder(//
+                Stores.inMemoryKeyValueStore("Counts"),//
+                Serdes.String(),//
                 Serdes.Integer()));
         }
     }
@@ -145,14 +146,12 @@ public final class WordCountTransformerDemo {
 
         final StreamsBuilder builder = new StreamsBuilder();
 
-        builder.<String, String>stream("streams-plaintext-input")
-            .transform(new MyTransformerSupplier())
+        builder.<String, String>stream("streams-plaintext-input")//
+            .transform(new MyTransformerSupplier())//
             .to("streams-wordcount-processor-output");
-
 
         final Topology topology = builder.build();
         System.out.println(topology.describe());
-
 
         final KafkaStreams streams = new KafkaStreams(topology, props);
         final CountDownLatch latch = new CountDownLatch(1);
