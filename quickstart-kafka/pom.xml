@@ -42,6 +42,11 @@
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>1.7.30</slf4j.version>
 
+        <micrometer.version>1.7.0</micrometer.version>
+
+<!--        <kafka.scala.version>2.13</kafka.scala.version>-->
+<!--        <kafka.version>2.6.0</kafka.version>-->
+
     </properties>
 
     <dependencies>
@@ -56,6 +61,31 @@
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams</artifactId>
             <version>${kafka.version}</version>
+        </dependency>
+
+        <!-- 只能使用Kafka 2.6.0版本以下-->
+        <dependency>
+            <groupId>com.github.charithe</groupId>
+            <artifactId>kafka-junit</artifactId>
+            <version>4.1.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-influx</artifactId>
+            <version>${micrometer.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>${micrometer.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.projectreactor.netty</groupId>
+            <artifactId>reactor-netty</artifactId>
+            <version>1.0.7</version>
         </dependency>
 
         <dependency>
@@ -90,17 +120,17 @@
 
 
         <!-- log start -->
-        <dependency>
+        <!--<dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
-        </dependency>
+        </dependency>-->
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
-        </dependency>
+        </dependency>-->
 
         <!-- log end -->
 

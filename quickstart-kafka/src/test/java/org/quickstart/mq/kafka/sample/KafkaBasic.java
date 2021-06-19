@@ -44,9 +44,10 @@ import java.util.regex.Pattern;
 
 public class KafkaBasic {
 
-    // private static final String brokerList = "localhost:9092";
+    private static final String brokerList = "localhost:9092";
     // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
-    private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
+    // private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
+    // private static final String brokerList = "kafka1:9092,kafka2:9093,kafka3:9094";
 
     private static final long POLL_TIMEOUT = 100;
 
@@ -137,7 +138,7 @@ public class KafkaBasic {
                 }
             });
 
-            TimeUnit.MILLISECONDS.sleep(100);
+            // TimeUnit.MILLISECONDS.sleep(100);
         }
 
         producer.close();
@@ -193,13 +194,13 @@ public class KafkaBasic {
                             record.offset(), record.key(), record.value());
                     });
 
-                    TimeUnit.SECONDS.sleep(2);
+                    // TimeUnit.SECONDS.sleep(2);
 
                     consumer.commitSync();
                 }
             }
 
-        } catch (WakeupException | InterruptedException e) {
+        } catch (WakeupException e) {
             // 不用处理这个异常，它只是用来停止循环的
         } finally {
             consumer.close();

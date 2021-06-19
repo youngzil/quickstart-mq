@@ -1,0 +1,81 @@
+# docker compose -f docker-compose-single.yml up -d
+
+version: '3.7'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    restart: always
+    hostname: zookeeper
+    container_name: kafka-zookeeper
+    volumes:
+      #      - ./data:/data
+      - /etc/localtime:/etc/localtime
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: quickstart/kafka:2.0
+#    image: wurstmeister/kafka
+    restart: always
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - 9092:9092
+      - 7071:7071
+    environment:
+      KAFKA_BROKER_ID: 0
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CREATE_TOPICS: "netmusic"   #kafka启动后初始化一个有2个partition(分区)0个副本名叫netmusic的topic
+      KAFKA_ZOOKEEPER_CONNECT: kafka-zookeeper:2181/kafka
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://kafka:9092
+      ## JMX exporters default 9404
+      KAFKA_OPTS: -javaagent:/usr/app/jmx_prometheus_javaagent.jar=7071:/usr/app/prom-jmx-agent-config.yml
+    volumes:
+      #      - ./kafka-logs:/kafka
+      - /etc/localtime:/etc/localtime
+    depends_on:
+      - zookeeper
+
+  kafka_exporter:
+    image: danielqsj/kafka-exporter
+    restart: always
+    hostname: kafka-exporter
+    container_name: kafka-exporter
+    privileged: true
+    ports:
+      - 9308:9308
+    #    networks:
+    #      - monitoring
+    command: --kafka.server=kafka:9092
+    depends_on:
+      - kafka
+
+  prometheus:
+    image: prom/prometheus:v2.27.1
+    restart: always
+    hostname: prometheus
+    container_name: prometheus
+    privileged: true
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus-single.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - kafka_exporter
+
+  grafana:
+    image: grafana/grafana:7.5.2
+    restart: always
+    hostname: grafana
+    container_name: grafana
+    privileged: true
+    ports:
+      - 3000:3000
+    #    user: "104"
+    #    volumes:
+    #      - ./grafana:/var/lib/grafana
+    depends_on:
+      - prometheus

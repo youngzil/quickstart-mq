@@ -60,13 +60,15 @@ services:
 
 
   kafka1:
-    image: wurstmeister/kafka
+    image: quickstart/kafka:2.0
+#    image: wurstmeister/kafka
     restart: always
     hostname: kafka1
     container_name: kafka1
     privileged: true
     ports:
       - 9092:9092
+      - 7071:7071 # 镜像quickstart/kafka:2.0
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ADVERTISED_HOST_NAME: kafka1
@@ -74,6 +76,9 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://kafka1:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      # 镜像quickstart/kafka:2.0
+      # JMX exporters default 9404
+      KAFKA_OPTS: -javaagent:/usr/app/jmx_prometheus_javaagent.jar=7071:/usr/app/prom-jmx-agent-config.yml
     volumes:
       - /etc/localtime:/etc/localtime
     #      - /home/zk/workspace/volumes/kafkaCluster/kafka1/logs:/kafka
@@ -94,13 +99,15 @@ services:
   #      - zoo3
 
   kafka2:
-    image: wurstmeister/kafka
+#    image: wurstmeister/kafka
+    image: quickstart/kafka:2.0
     restart: always
     hostname: kafka2
     container_name: kafka2
     privileged: true
     ports:
       - 9093:9093
+      - 7072:7072 # 镜像quickstart/kafka:2.0
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ADVERTISED_HOST_NAME: kafka2
@@ -108,6 +115,9 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://kafka2:9093
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      # 镜像quickstart/kafka:2.0
+      # JMX exporters default 9404
+      KAFKA_OPTS: -javaagent:/usr/app/jmx_prometheus_javaagent.jar=7072:/usr/app/prom-jmx-agent-config.yml
     volumes:
       - /etc/localtime:/etc/localtime
     #      - /home/zk/workspace/volumes/kafkaCluster/kafka2/logs:/kafka
@@ -128,13 +138,15 @@ services:
   #      - zoo3
 
   kafka3:
-    image: wurstmeister/kafka
+#    image: wurstmeister/kafka
+    image: quickstart/kafka:2.0
     restart: always
     hostname: kafka3
     container_name: kafka3
     privileged: true
     ports:
       - 9094:9094
+      - 7073:7073 # 镜像quickstart/kafka:2.0
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ADVERTISED_HOST_NAME: kafka3
@@ -142,6 +154,9 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://kafka3:9094
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9094
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      # 镜像quickstart/kafka:2.0，
+      # JMX exporters default 9404
+      KAFKA_OPTS: -javaagent:/usr/app/jmx_prometheus_javaagent.jar=7073:/usr/app/prom-jmx-agent-config.yml
     volumes:
       - /etc/localtime:/etc/localtime
     #      - /home/zk/workspace/volumes/kafkaCluster/kafka3/logs:/kafka
@@ -160,6 +175,49 @@ services:
 #      - zoo1
 #      - zoo2
 #      - zoo3
+
+  kafka_exporter:
+    image: danielqsj/kafka-exporter
+    restart: always
+    hostname: kafka-exporter
+    container_name: kafka-exporter
+    privileged: true
+    ports:
+      - 9308:9308
+#    networks:
+#      - monitoring
+    command: --kafka.server=kafka1:9092 --kafka.server=kafka2:9093 --kafka.server=kafka3:9094
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+
+  prometheus:
+    image: prom/prometheus:v2.27.1
+    restart: always
+    hostname: prometheus
+    container_name: prometheus
+    privileged: true
+    ports:
+      - 9090:9090
+    volumes:
+      - ./docker/image/prometheus-cluster.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - kafka_exporter
+
+  grafana:
+    image: grafana/grafana:7.5.2
+    restart: always
+    hostname: grafana
+    container_name: grafana
+    privileged: true
+    ports:
+      - 3000:3000
+    user: "104"
+    #    volumes:
+    #      - ./grafana:/var/lib/grafana
+    depends_on:
+      - prometheus
 
 networks:
   kafka:

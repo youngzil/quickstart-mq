@@ -35,6 +35,7 @@
     <module>quickstart-jafka</module>
     <module>quickstart-kafka</module>
     <module>quickstart-kafka-connect</module>
+    <module>quickstart-kafka-exporter</module>
     <module>quickstart-kafka-old</module>
     <module>quickstart-pulsar</module>
     <module>quickstart-hornetq</module>

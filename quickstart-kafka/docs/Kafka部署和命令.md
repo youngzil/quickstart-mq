@@ -207,6 +207,7 @@ bin/kafka-topics.sh --create --zookeeper 10.10.67.102:2181,10.10.67.104:2181,10.
 bin/kafka-topics.sh --list --zookeeper 127.0.0.1:12181
 
 bin/kafka-topics.sh --list --zookeeper master:2181,node2:2181,node1:2181
+bin/kafka-topics.sh --list --zookeeper 10.1.120.6:2181,10.1.120.7:2181,10.1.120.8:2181
 ```
 
 查看主题详细信息
