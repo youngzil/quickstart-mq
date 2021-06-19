@@ -530,7 +530,7 @@ __consumer_offsets是kafka内置的Topic，在0.9.0.0之后的Kafka，将topic�
 [DockerCompose配置](https://github.com/JasonkayZK/docker_repo/tree/kafka-v2.4.1-cluster)  
 
 
-
+[Guide to Setting Up Apache Kafka Using Docker](https://www.baeldung.com/ops/kafka-docker-setup)  
 
 
 

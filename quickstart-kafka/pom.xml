@@ -44,8 +44,8 @@
 
         <micrometer.version>1.7.0</micrometer.version>
 
-<!--        <kafka.scala.version>2.13</kafka.scala.version>-->
-<!--        <kafka.version>2.6.0</kafka.version>-->
+        <!--        <kafka.scala.version>2.13</kafka.scala.version>-->
+        <!--        <kafka.version>2.6.0</kafka.version>-->
 
     </properties>
 
@@ -63,12 +63,47 @@
             <version>${kafka.version}</version>
         </dependency>
 
-        <!-- 只能使用Kafka 2.6.0版本以下-->
+
+        <!-- Kafka嵌入式服务测试-->
         <dependency>
             <groupId>com.github.charithe</groupId>
             <artifactId>kafka-junit</artifactId>
-            <version>4.1.11</version>
+            <version>4.2.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>net.mguenther.kafka</groupId>
+            <artifactId>kafka-junit</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.salesforce.kafka.test</groupId>
+            <artifactId>kafka-junit4</artifactId>
+            <version>3.2.2</version>
+            <!--            <scope>test</scope>-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.salesforce.kafka.test</groupId>
+            <artifactId>kafka-junit5</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.salesforce.kafka.test</groupId>
+            <artifactId>kafka-junit-core</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
+
+        <!-- Kafka嵌入式服务测试-->
 
         <dependency>
             <groupId>io.micrometer</groupId>

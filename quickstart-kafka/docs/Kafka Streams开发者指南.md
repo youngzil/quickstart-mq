@@ -72,6 +72,7 @@ final Topology builder = new Topology();
 
 参考  
 [KAFKA STREAMS官方文档](http://kafka.apache.org/27/documentation/streams/)  
+[KAFKA STREAMS官方文档2](https://kafka.apache.org/documentation/streams/)  
 [Kafka Streams开发者指南](https://www.orchome.com/335)  
 [流式计算之 Kafka Stream](https://juejin.cn/post/6844904087100620814)  
 [最简单流处理引擎——Kafka Streams简介](https://juejin.cn/post/6844903934557945870)  
