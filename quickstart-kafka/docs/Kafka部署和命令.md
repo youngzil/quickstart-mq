@@ -178,7 +178,7 @@ bin/kafka-server-start.sh config/server.properties &
 ```
 nohup sh bin/zookeeper-server-start.sh config/zookeeper.properties &
 
-nohup sh bin/kafka-server-start.sh -daemon config/server.properties &
+nohup sh bin/kafka-server-start.sh config/server.properties &
 ```
 
 停止：
@@ -194,34 +194,32 @@ bin/kafka-server-stop.sh
 #replication-factor 表示该topic需要在不同的broker中保存几份, partitions为几个分区
 现在我们要创建一个含有两个Partition分区和2个备份的broker：
 
-bin/kafka-create-topic.sh --zookeeper localhost:2181 --replica 2 --partition 2 --topic kafkatopic
+bin/kafka-topics.sh --create --replication-factor 1 --partitions 2 --topic k2.tomcat.log2 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-bin/kafka-topics.sh --create --zookeeper localhost:2189 --replication-factor 2 --partitions 2 --topic testTopic  
-
-bin/kafka-topics.sh --create --zookeeper 10.10.67.102:2181,10.10.67.104:2181,10.10.67.106:2181 --replication-factor 3 --partitions 3 --topic test
-
-bin/kafka-topics.sh --create --zookeeper 10.1.120.6:2181,10.1.120.7:2181,10.1.120.8:2181/kafka_log_2 --replication-factor 1 --partitions 12 --topic k2.tomcat.log
+bin/kafka-topics.sh --create --replication-factor 1 --partitions 12 --topic k2.tomcat.log --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
 
 ```
 
 列出主题列表
 ```
-bin/kafka-topics.sh --list --zookeeper 127.0.0.1:12181
+bin/kafka-topics.sh --list --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-bin/kafka-topics.sh --list --zookeeper master:2181,node2:2181,node1:2181
-bin/kafka-topics.sh --list --zookeeper 10.1.120.6:2181,10.1.120.7:2181,10.1.120.8:2181
+bin/kafka-topics.sh --list --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
+
 ```
 
 查看主题详细信息
 ```
-bin/kafka-topics.sh --describe --zookeeper 10.1.120.6:2181,10.1.120.7:2181,10.1.120.8:2181/kafka_log_2 --topic alitar.actions.register.route01
+bin/kafka-topics.sh --describe --topic topic03 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-bin/kafka-topics.sh --describe --zookeeper 10.112.56.90:2181,10.112.56.91:2181,10.112.56.94:2181 --topic event
+一次查询多个topic
+bin/kafka-topics.sh --describe --topic k2.tomcat.log,k2.tomcat.log2 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-bin/kafka-topics.sh --describe --zookeeper 10.1.243.23:52181 --topic topicTest 
 
+bin/kafka-topics.sh --describe --topic k2.tomcat.log --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
 
-[root@linux-node2 bin]# bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic dream,DreamTopic
+一次查询多个topic
+bin/kafka-topics.sh --describe --topic k2.tomcat.log,k2.tomcat.log2 --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
 Topic:dream    PartitionCount:5    ReplicationFactor:2    Configs:
     Topic: dream    Partition: 0    Leader: 1    Replicas: 1,2    Isr: 1,2
     Topic: dream    Partition: 1    Leader: 2    Replicas: 2,3    Isr: 2,3
@@ -239,29 +237,25 @@ Lsr:是正在服务中的节点.
 ```
 time为-1时表示最大值，为-2时表示最小值：
 
-kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list 127.0.0.1:9092 --topic hive-mdatabase-hostsltable --time -1 --partitions 0 
-
-
-bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list 10.1.243.23:59092,10.1.243.23:59093,10.1.243.23:59094 --topic topicTest --time -1
-
-查询offset的最小值
-bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list suna:9092 -topic test --time -2
+bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic hive-mdatabase-hostsltable --time -1 --partitions 0 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 查询offset的最大值
-bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list suna:9092 -topic test --time -1
+bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic topic03 --time -1 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
+查询offset的最小值
+bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic topic03 --time -2 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 ```
 
 
-为topic增加副本
+为topic增加副本(不支持减partition)
 
 ```
 为topic增加partition
 
-bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic test --partitions 5 
+bin/kafka-topics.sh --alter --topic topic03 --partitions 3 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-./kafka-reassign-partitions.sh -zookeeper127.0.0.1:2181-reassignment-json-file json/partitions-to-move.json -execute
+bin/kafka-topics.sh --alter --topic topic03 --partitions 6 --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
 
 
 如何增加__consumer_offsets的副本数？其他Topic主题也是一样
@@ -281,18 +275,16 @@ bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic test --partitions
     }
 
 然后执行：
-kafka-reassign-partitions.sh --zookeeper localhost:2181/kafka --reassignment-json-file reassign.json --execute
+bin/kafka-reassign-partitions.sh --reassignment-json-file reassign.json --execute --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+
 “[1,2,3]”中的数字为broker.id值。
 
 ```
 
 删除主题
 ```
-bin/kafka-topics.sh --delete --zookeeper 10.112.56.90:2181,10.112.56.91:2181,10.112.56.94:2181 --topic alarm
-
-bin/kafka-topics.sh --zookeeper localhost:2181/kafka --topic test --delete 
-
-bin/kafka-run-class.sh kafka.admin.DeleteTopicCommand --zookeeper localhost:2181 --topic test 
+bin/kafka-topics.sh --delete --topic k2.tomcat.log --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+bin/kafka-topics.sh --delete --topic alarm --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
 
 
 kafka删除topic方法
@@ -306,41 +298,32 @@ kafka删除topic方法
 
 生产者Producer发送消息
 ```
-bin/kafka-console-producer.sh --broker-list  localhost:9092 --topic kafkatopic
+bin/kafka-console-producer.sh --topic topic03 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-bin/kafka-console-producer.sh --broker-list localhost:9092,localhost:9093 --topic othertopic
-
+bin/kafka-console-producer.sh --topic kafkatopic --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 ```
 
 消费者Consumer消费主题
 ```
-bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic kafkatopic --from-beginning
-
-bin/kafka-console-consumer.sh --zookeeper 127.0.0.1:12181 --topic behavior
-
-bin/kafka-console-consumer.sh --zookeeper 10.112.56.90:2181,10.112.56.91:2181,10.112.56.94:2181 --topic alarm --from-beginning
+bin/kafka-console-consumer.sh --topic alarm --from-beginning --group test.group --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 
 1) 从头开始 
+bin/kafka-console-consumer.sh --topic test --from-beginning --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+bin/kafka-console-consumer.sh --topic test --offset earliest --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning 
-
-2) 从尾部开始 
-
-kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --offset latest 
+2) 从尾部开始(默认)
+bin/kafka-console-consumer.sh --topic test --offset latest --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 3) 指定分区 
-
-kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --offset latest --partition 1 
+bin/kafka-console-consumer.sh --topic test --offset latest --partition 1 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 4) 取指定个数 
-
-kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --offset latest --partition 1 --max-messages 1 
+bin/kafka-console-consumer.sh --topic test --offset latest --partition 1 --max-messages 1 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 5) 新消费者（ver>=0.9） 
-
-kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --new-consumer --from-beginning --consumer.config config/consumer.properties 
+bin/kafka-console-consumer.sh --topic test --new-consumer --from-beginning --consumer.config config/consumer.properties --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 
 ```
@@ -349,57 +332,52 @@ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --new-c
 
 查看有哪些消费者Group
 ```
-1) 分ZooKeeper方式（老）
-
-kafka-consumer-groups.sh --zookeeper 127.0.0.1:2181/kafka --list
-
 2) API方式（新）
+bin/kafka-consumer-groups.sh --list --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-kafka-consumer-groups.sh --new-consumer --bootstrap-server 127.0.0.1:9092 --list
+
+1) 分ZooKeeper方式（老）
+bin/kafka-consumer-groups.sh --zookeeper 127.0.0.1:2181/kafka --list
+
 ```
 
 
 查看Group详情
+查看消费者消费偏移量
 ```
-kafka-consumer-groups.sh --new-consumer --bootstrap-server 127.0.0.1:9092 --group test --describe
+bin/kafka-consumer-groups.sh --list --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+bin/kafka-consumer-groups.sh --group lengfeng.consumer.group --describe --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 ```
 
 
-获取指定Consumer Group的位移信息
+获取指定Consumer Group的位移信息(新的2.x的版本不能使用)
 ```
 需consumer.properties中设置exclude.internal.topics=false：
-
 1) 0.11.0.0版本之前： 
-
-kafka-simple-consumer-shell.sh --topic __consumer_offsets --partition 11 --broker-list localhost:9091,localhost:9092,localhost:9093 --formatter "kafka.coordinator.GroupMetadataManager\$OffsetsMessageFormatter" 
+bin/kafka-simple-consumer-shell.sh --topic __consumer_offsets --partition 11 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094 --formatter "kafka.coordinator.GroupMetadataManager\$OffsetsMessageFormatter" 
 
 2) 0.11.0.0版本以后(含)： 
-
-kafka-simple-consumer-shell.sh --topic __consumer_offsets --partition 11 --broker-list localhost:9091,localhost:9092,localhost:9093 --formatter "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageFormatter" 
+bin/kafka-simple-consumer-shell.sh --topic __consumer_offsets --partition 11 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094 --formatter "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageFormatter" 
 
 4.查看消费者消费偏移量
-sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
-sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group lengfeng.consumer.group --describe
+bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group lengfeng.consumer.group --describe
 
 ```
 
 
 修改消费组的offset
 ```
-
 设置为最初偏移量：
-sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group lengfeng.consumer.group --topic kafka_flink_mysql --reset-offsets --to-earliest --execute
+bin/kafka-consumer-groups.sh --group lengfeng.consumer.group --topic kafka_flink_mysql --reset-offsets --to-earliest --execute --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 设置最近偏移量
-sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group lengfeng.consumer.group --topic kafka_flink_mysql --reset-offsets --to-latest --execute
+bin/kafka-consumer-groups.sh --group lengfeng.consumer.group --topic kafka_flink_mysql --reset-offsets --to-latest --execute --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 设置任意偏移量：
-sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group lengfeng.consumer.group --topic kafka_flink_mysql --reset-offsets --to-offset 3 --execute
-
+bin/kafka-consumer-groups.sh --group lengfeng.consumer.group --topic kafka_flink_mysql --reset-offsets --to-offset 3 --execute --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 ```
-
-
 
 
 
@@ -410,13 +388,17 @@ sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group lengfeng.c
 需consumer.properties中设置exclude.internal.topics=false：
 
 1) 0.11.0.0之前版本 
-
-kafka-console-consumer.sh --topic __consumer_offsets --zookeeper localhost:2181 --formatter "kafka.coordinator.GroupMetadataManager\$OffsetsMessageFormatter" --consumer.config config/consumer.properties --from-beginning 
+bin/kafka-console-consumer.sh --topic __consumer_offsets --zookeeper localhost:2181 --formatter "kafka.coordinator.GroupMetadataManager\$OffsetsMessageFormatter" --consumer.config config/consumer.properties --from-beginning 
 
 2) 0.11.0.0之后版本(含) 
+bin/kafka-console-consumer.sh --topic __consumer_offsets --formatter "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageFormatter" --consumer.config config/consumer.properties --from-beginning --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-kafka-console-consumer.sh --topic __consumer_offsets --zookeeper localhost:2181 --formatter "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageFormatter" --consumer.config config/consumer.properties --from-beginning 
+老的版本使用zookeeper查询
+bin/kafka-console-consumer.sh --topic __consumer_offsets --zookeeper localhost:2181 --formatter "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageFormatter" --consumer.config config/consumer.properties --from-beginning
 ```
+
+
+
 
 
 
@@ -471,8 +453,7 @@ kafka.tools.UpdateOffsetsInZK$ [earliest | latest] consumer.properties topic
 删除Group
 ```
 老版本的ZooKeeper方式可以删除Group，新版本则自动删除，当执行：
-
-kafka-consumer-groups.sh --new-consumer --bootstrap-server 127.0.0.1:9092 --group test --delete 
+kafka-consumer-groups.sh --group test --delete --bootstrap-server 127.0.0.1:9092
 
 输出如下提示： 
 ```
