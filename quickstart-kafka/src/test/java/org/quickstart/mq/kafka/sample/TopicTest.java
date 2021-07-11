@@ -71,7 +71,7 @@ public class TopicTest {
     public void queryTopicDetail() throws ExecutionException, InterruptedException {
 
         // String topic = "lengfeng.topic.test";
-        String topic = "test";
+        String topic = "druid.service.metrics";
 
         Map<String, List<PartitionInfo>> listMap = consumer.listTopics();
         System.out.println(listMap);

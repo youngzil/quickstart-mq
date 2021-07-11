@@ -16,7 +16,7 @@
 
     <properties>
         <alibaba.rocketmq.version>3.5.8</alibaba.rocketmq.version>
-        <rocketmq.version>4.8.0</rocketmq.version>
+        <rocketmq.version>4.9.0</rocketmq.version>
     </properties>
 
     <dependencies>

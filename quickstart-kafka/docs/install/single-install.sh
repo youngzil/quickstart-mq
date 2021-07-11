@@ -15,10 +15,13 @@ cd kafka_2.13-2.5.0
 # Start the ZooKeeper service
 # Note: Soon, ZooKeeper will no longer be required by Apache Kafka.
 nohup sh bin/zookeeper-server-start.sh config/zookeeper.properties >/dev/null 2>&1 &
+#nohup sh bin/zookeeper-server-start.sh config/zookeeper.properties >logs/zookeeper.log 2>1 &
 
 
 # Start the Kafka broker service
 nohup sh bin/kafka-server-start.sh config/server.properties >/dev/null 2>&1 &
+#nohup sh bin/kafka-server-start.sh config/server.properties >logs/kafka.log 2>1 &
+
 
 #STEP 3: CREATE A TOPIC TO STORE YOUR EVENTS
 bin/kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092

@@ -44,7 +44,10 @@ import java.util.regex.Pattern;
 
 public class KafkaBasic {
 
-    private static final String brokerList = "localhost:9092";
+    // private static final String brokerList = "localhost:9092";
+    // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
+    private static final String brokerList = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094";
+    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     // private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
     // private static final String brokerList = "kafka1:9092,kafka2:9093,kafka3:9094";

@@ -200,6 +200,8 @@ bin/kafka-topics.sh --create --zookeeper localhost:2189 --replication-factor 2 -
 
 bin/kafka-topics.sh --create --zookeeper 10.10.67.102:2181,10.10.67.104:2181,10.10.67.106:2181 --replication-factor 3 --partitions 3 --topic test
 
+bin/kafka-topics.sh --create --zookeeper 10.1.120.6:2181,10.1.120.7:2181,10.1.120.8:2181/kafka_log_2 --replication-factor 1 --partitions 12 --topic k2.tomcat.log
+
 ```
 
 列出主题列表
@@ -212,6 +214,8 @@ bin/kafka-topics.sh --list --zookeeper 10.1.120.6:2181,10.1.120.7:2181,10.1.120.
 
 查看主题详细信息
 ```
+bin/kafka-topics.sh --describe --zookeeper 10.1.120.6:2181,10.1.120.7:2181,10.1.120.8:2181/kafka_log_2 --topic alitar.actions.register.route01
+
 bin/kafka-topics.sh --describe --zookeeper 10.112.56.90:2181,10.112.56.91:2181,10.112.56.94:2181 --topic event
 
 bin/kafka-topics.sh --describe --zookeeper 10.1.243.23:52181 --topic topicTest 
@@ -239,6 +243,12 @@ kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list 127.0.0.1:9092 --top
 
 
 bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list 10.1.243.23:59092,10.1.243.23:59093,10.1.243.23:59094 --topic topicTest --time -1
+
+查询offset的最小值
+bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list suna:9092 -topic test --time -2
+
+查询offset的最大值
+bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list suna:9092 -topic test --time -1
 
 
 ```
@@ -367,7 +377,31 @@ kafka-simple-consumer-shell.sh --topic __consumer_offsets --partition 11 --broke
 
 kafka-simple-consumer-shell.sh --topic __consumer_offsets --partition 11 --broker-list localhost:9091,localhost:9092,localhost:9093 --formatter "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageFormatter" 
 
+4.查看消费者消费偏移量
+sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group lengfeng.consumer.group --describe
+
 ```
+
+
+修改消费组的offset
+```
+
+设置为最初偏移量：
+sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group lengfeng.consumer.group --topic kafka_flink_mysql --reset-offsets --to-earliest --execute
+
+设置最近偏移量
+sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group lengfeng.consumer.group --topic kafka_flink_mysql --reset-offsets --to-latest --execute
+
+设置任意偏移量：
+sh kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group lengfeng.consumer.group --topic kafka_flink_mysql --reset-offsets --to-offset 3 --execute
+
+
+```
+
+
+
+
 
 
 查看内部主题__consumer_offsets（保存Consumer Group消费位移信息的Topic）

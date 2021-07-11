@@ -5,7 +5,8 @@ services:
   zookeeper:
     image: wurstmeister/zookeeper
 #    restart: unless-stopped
-#    hostname: zookeeper
+    restart: always
+    hostname: zookeeper
     container_name: kafka-zookeeper
     volumes:
 #      - ./data:/data
@@ -14,7 +15,9 @@ services:
       - 2181:2181
 
   kafka:
-    image: wurstmeister/kafka
+    image: wurstmeister/kafka:1.0.0
+    restart: always
+    hostname: kafka
     container_name: kafka
     ports:
       - 9092:9092

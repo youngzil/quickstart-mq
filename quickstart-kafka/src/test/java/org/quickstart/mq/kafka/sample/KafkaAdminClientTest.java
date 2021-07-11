@@ -10,6 +10,7 @@ import org.apache.kafka.clients.admin.ScramMechanism;
 import org.apache.kafka.clients.admin.UserScramCredentialAlteration;
 import org.apache.kafka.clients.admin.UserScramCredentialUpsertion;
 import org.apache.kafka.clients.admin.UserScramCredentialsDescription;
+import org.apache.kafka.common.Node;
 import org.apache.kafka.common.acl.AccessControlEntry;
 import org.apache.kafka.common.acl.AccessControlEntryFilter;
 import org.apache.kafka.common.acl.AclBinding;
@@ -36,7 +37,8 @@ import java.util.stream.Collectors;
 public class KafkaAdminClientTest {
 
     // private static final String brokerList = "localhost:9092";
-    private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
+    // private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
+    private static final String brokerList = "172.16.49.125:9093";
 
     // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     private static final String username = "admin";
@@ -57,6 +59,8 @@ public class KafkaAdminClientTest {
         // KafkaAdminClient adminClient = KafkaAdminClientManager.createAdminClientWithScram(brokerList, username, password);
 
         DescribeClusterResult clusterResult = adminClient.describeCluster();
+        Collection<Node> nodes = clusterResult.nodes().get();
+        System.out.println(nodes);
 
         ConfigResource resource = new ConfigResource(Type.BROKER, "0");
         Map<ConfigResource, Config> configMap = adminClient.describeConfigs(Collections.singleton(resource)).all().get();
