@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-function deploy_zookeeper()
+function deployZookeeper()
 {
   cat config/hostlist | while read line
     do

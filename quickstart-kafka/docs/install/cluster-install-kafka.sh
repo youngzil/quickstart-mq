@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-function deploy_kafka()
+function deployKafka()
 {
   cat config/hostlist | while read line
     do

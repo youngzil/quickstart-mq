@@ -133,6 +133,11 @@ zookeeper.connect=node1:2181,node2:2181
 ```
 
 
+[Kafka集群环境搭建及使用教程](http://www.lijiahong.com/?post=80)  
+
+
+
+
 ### 四、Linux在线安装部署
 1. Kafka下载：
    wget https://archive.apache.org/dist/kafka/0.8.1/kafka_2.9.2-0.8.1.tgz
@@ -194,9 +199,9 @@ bin/kafka-server-stop.sh
 #replication-factor 表示该topic需要在不同的broker中保存几份, partitions为几个分区
 现在我们要创建一个含有两个Partition分区和2个备份的broker：
 
-bin/kafka-topics.sh --create --replication-factor 1 --partitions 2 --topic k2.tomcat.log2 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+bin/kafka-topics.sh --create --replication-factor 3 --partitions 6 --topic topic03 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-bin/kafka-topics.sh --create --replication-factor 1 --partitions 12 --topic k2.tomcat.log --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
+bin/kafka-topics.sh --create --replication-factor 3 --partitions 6 --topic localhost.test.topic --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
 
 ```
 
@@ -216,7 +221,7 @@ bin/kafka-topics.sh --describe --topic topic03 --bootstrap-server 127.0.0.1:9092
 bin/kafka-topics.sh --describe --topic k2.tomcat.log,k2.tomcat.log2 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 
-bin/kafka-topics.sh --describe --topic k2.tomcat.log --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
+bin/kafka-topics.sh --describe --topic topic03 --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
 
 一次查询多个topic
 bin/kafka-topics.sh --describe --topic k2.tomcat.log,k2.tomcat.log2 --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
@@ -306,6 +311,8 @@ bin/kafka-console-producer.sh --topic kafkatopic --broker-list 127.0.0.1:9092,12
 
 消费者Consumer消费主题
 ```
+bin/kafka-console-consumer.sh --topic alarm --from-beginning --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+
 bin/kafka-console-consumer.sh --topic alarm --from-beginning --group test.group --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 
