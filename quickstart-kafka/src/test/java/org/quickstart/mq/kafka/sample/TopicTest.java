@@ -24,6 +24,7 @@ import org.apache.kafka.clients.admin.TopicListing;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.TopicPartitionInfo;
 import org.apache.kafka.common.config.ConfigResource;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +49,9 @@ import static org.apache.kafka.clients.admin.ConfigEntry.ConfigSource.DYNAMIC_TO
 public class TopicTest {
 
     // private static final String brokerList = "localhost:9092";
-    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    private static final String brokerList = "172.16.48.182:9011,172.16.48.182:9012,172.16.48.183:9011";
+    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     private Admin adminClient;
     private Consumer consumer;
 
@@ -60,10 +63,68 @@ public class TopicTest {
     }
 
     @Test
+    public void testTopicCommand() {
+
+        String[] options = new String[] {//
+            "--zookeeper", "172.16.48.183:2181/kfk1_1",
+            // "--bootstrap-server", "172.16.48.182:9011,172.16.48.182:9012,172.16.48.183:9011",//
+            "--alter",//
+            "--replication-factor", "3",//
+            "--partitions", "1",//
+            "--topic", "db.192_168_5_14_3319_wac_trinity.position"//
+        };
+        kafka.admin.TopicCommand.main(options);
+
+    }
+
+    @Test
+    public void queryReplicasEqualOne() throws ExecutionException, InterruptedException {
+
+        //查看topic列表
+        Set<String> topics = adminClient.listTopics().names().get();
+        Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(topics).all().get();
+
+        List<TopicPartitionInfo> topicPartitionInfos = topicDescriptionMap.values().stream()//
+            .map(topicDescription -> topicDescription.partitions())//
+            .flatMap(Collection::stream)//
+            .filter(topicPartitionInfo -> 1 == topicPartitionInfo.replicas().size())//副本数为1的
+            .collect(Collectors.toList());
+
+        Map<String, List<TopicPartitionInfo>> topicPartitionsMap = topicDescriptionMap.values().stream()//
+            .collect(Collectors.toMap(TopicDescription::name, topicDescription -> topicDescription.partitions().stream()//
+                .filter(topicPartitionInfo -> 1 == topicPartitionInfo.replicas().size())//副本数为1的
+                .collect(Collectors.toList())//
+            ));
+
+        // System.out.println(topicPartitionsMap);
+
+        // TopicCommand.TopicCommandOptions topicCommandOptions =
+        //     new TopicCommand.TopicCommandOptions(new String[] {"--alter", "--topic", "db.wac_loan_account.loan_app_contract", "--partitions", "2" ,"--replication-factor", "3"});
+
+        // TopicCommand.AdminClientTopicService adminClientTopicService = new TopicCommand.AdminClientTopicService(adminClient);
+
+        // Topic修改
+        // adminClientTopicService.alterTopic(topicCommandOptions);
+
+        /*String[] options = new String[] {//
+            "--zookeeper", "172.16.48.183:2181/kfk1_1",
+            // "--bootstrap-server", "172.16.48.182:9011,172.16.48.182:9012,172.16.48.183:9011",//
+            "--alter",//
+            "--replication-factor", "3",//
+            "--partitions", "1",//
+            "--topic", "db.192_168_5_14_3319_wac_trinity.position"//
+        };
+        kafka.admin.TopicCommand.main(options);*/
+
+        System.out.println(topicPartitionInfos);
+    }
+
+    @Test
     public void queryAllTopic() throws ExecutionException, InterruptedException {
 
         //查看topic列表
         Set<String> topics = adminClient.listTopics().names().get();
+        Collection<TopicListing> topicListings = adminClient.listTopics().listings().get();
         System.out.println(topics);
     }
 

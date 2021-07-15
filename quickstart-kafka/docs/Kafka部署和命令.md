@@ -252,6 +252,14 @@ bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic topic03 --time -2 --br
 
 ```
 
+修改主题配置
+
+```aidl
+bin/kafka-topics.sh --alter --topic middleware.kafka.sync.file --config max.message.bytes=102400000 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+
+bin/kafka-topics.sh --alter --topic middleware.kafka.sync.file --config max.message.bytes=102400000 --zookeeper 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183/kafka
+```
+
 
 为topic增加副本(不支持减partition)
 
@@ -537,11 +545,18 @@ __consumer_offsets是kafka内置的Topic，在0.9.0.0之后的Kafka，将topic�
  	server.properties中的配置项num.partitions和default.replication.factor对__consumer_offsets无效，而是受offsets.topic.num.partitions和offsets.topic.replication.factor两个控制。 
 
 
+kafka不支持topic修改副本数量：
+
+bin/kafka-topics.sh --alter --topic db.192_168_5_14_3319_wac_trinity.position --replication-factor 3 --partitions 1 --bootstrap-server 172.16.48.182:9011,172.16.48.182:9012,172.16.48.183:9011
+Option "[replication-factor]" can't be used with option "[alter]"
+
 
 
 
 [Kafka常用命令收录](https://cloud.tencent.com/developer/article/1350788)  
 [Kafka操作命令](https://www.cnblogs.com/zcqdream/articles/6593875.html)  
+
+
 
 ---------------------------------------------------------------------------------------------------------------------
 

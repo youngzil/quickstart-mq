@@ -163,8 +163,18 @@ installSingleNode
 
 #bin/kafka-topics.sh --list --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 #bin/kafka-topics.sh --create --replication-factor 3 --partitions 6 --topic topic03 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+#bin/kafka-topics.sh --describe --topic topic03 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+#bin/kafka-topics.sh --alter --topic middleware.kafka.sync.file --config max.message.bytes=102400000 --zookeeper 10.1.128.60:2181,10.1.128.61:2181,10.1.128.62:2181
+
+#bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic topic03 --time -1 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+#bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic topic03 --time -2 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+
+#bin/kafka-consumer-groups.sh --list --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 #bin/kafka-console-producer.sh --topic topic03 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 #bin/kafka-console-consumer.sh --topic alarm --from-beginning --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+
+#bin/kafka-consumer-groups.sh --list --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+#bin/kafka-consumer-groups.sh --group lengfeng.consumer.group --describe --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 

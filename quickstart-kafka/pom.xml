@@ -153,8 +153,6 @@
             <version>1.4</version>
         </dependency>
 
-
-
         <!--log4j2到slf4j桥梁-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
