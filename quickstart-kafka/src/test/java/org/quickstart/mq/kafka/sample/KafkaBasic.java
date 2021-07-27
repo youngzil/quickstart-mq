@@ -44,9 +44,9 @@ import java.util.regex.Pattern;
 
 public class KafkaBasic {
 
-    // private static final String brokerList = "localhost:9092";
+    private static final String brokerList = "localhost:9092";
     // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
-    private static final String brokerList = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094";
+    // private static final String brokerList = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094";
     // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     // private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
@@ -56,15 +56,15 @@ public class KafkaBasic {
 
     public static Producer<String, String> createProducer() {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);// Kafka服务端的主机名和端口号
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "DemoProducer");
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.ACKS_CONFIG, "all");
-        props.put(ProducerConfig.RETRIES_CONFIG, 0);
-        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
-        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);// key序列化
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);// value序列化
+        props.put(ProducerConfig.ACKS_CONFIG, "all");// 等待所有副本节点的应答
+        props.put(ProducerConfig.RETRIES_CONFIG, 0);// 消息发送最大尝试次数
+        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384); // 一批消息处理大小
+        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);// 请求延时
+        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432); // 发送缓存区内存大小
 
         // 配置partition选择策略，可选配置
         // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, SimplePartitioner.class.getName());
@@ -80,13 +80,13 @@ public class KafkaBasic {
 
     public static Consumer<String, String> createConsumer() {
         Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "lengfeng.consumer.group");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);// 定义kakfa 服务的地址，不需要将所有broker指定上
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "lengfeng.consumer.group");// 制定consumer group
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false"); // 是否自动提交进度
-        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000"); // 自动确认offset的时间间隔
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "3");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);// key的序列化类
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class); // value的序列化类
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, OffsetResetStrategy.EARLIEST.name().toLowerCase(Locale.ROOT));
         // props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, IsolationLevel.READ_COMMITTED.name().toLowerCase(Locale.ROOT));
 

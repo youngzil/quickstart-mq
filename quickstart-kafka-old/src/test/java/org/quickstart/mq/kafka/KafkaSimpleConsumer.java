@@ -12,6 +12,7 @@ import kafka.javaapi.TopicMetadata;
 import kafka.javaapi.TopicMetadataRequest;
 import kafka.javaapi.consumer.SimpleConsumer;
 import kafka.message.MessageAndOffset;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class KafkaSimpleConsumer {
     private List<String> m_replicaBrokers = new ArrayList<String>();
@@ -50,8 +52,7 @@ public class KafkaSimpleConsumer {
         }
     }
 
-    public void run(long a_maxReads, String a_topic, int a_partition, List<String> a_seedBrokers, int a_port)
-        throws Exception {
+    public void run(long a_maxReads, String a_topic, int a_partition, List<String> a_seedBrokers, int a_port) throws Exception {
         // 获取指定Topic partition的元数据
         PartitionMetadata metadata = findLeader(a_seedBrokers, a_port, a_topic, a_partition);
         if (metadata == null) {
@@ -68,17 +69,14 @@ public class KafkaSimpleConsumer {
         //链接leader broker
         SimpleConsumer consumer = new SimpleConsumer(leadBroker, a_port, 100000, 64 * 1024, clientName);
         //获取topic的最新偏移量
-        long readOffset =
-            getLastOffset(consumer, a_topic, a_partition, kafka.api.OffsetRequest.EarliestTime(), clientName);
+        long readOffset = getLastOffset(consumer, a_topic, a_partition, kafka.api.OffsetRequest.EarliestTime(), clientName);
         int numErrors = 0;
         while (a_maxReads > 0) {
             if (consumer == null) {
                 consumer = new SimpleConsumer(leadBroker, a_port, 100000, 64 * 1024, clientName);
             }
             //本质上就是发送FetchRequest请求
-            FetchRequest req =
-                new FetchRequestBuilder().clientId(clientName).addFetch(a_topic, a_partition, readOffset, 100000)
-                    .build();
+            FetchRequest req = new FetchRequestBuilder().clientId(clientName).addFetch(a_topic, a_partition, readOffset, 100000).build();
             FetchResponse fetchResponse = consumer.fetch(req);
             if (fetchResponse.hasError()) {
                 numErrors++;
@@ -91,8 +89,7 @@ public class KafkaSimpleConsumer {
                 if (code == ErrorMapping.OffsetOutOfRangeCode()) {
                     // We asked for an invalid offset. For simple case ask for
                     // the last element to reset
-                    readOffset =
-                        getLastOffset(consumer, a_topic, a_partition, kafka.api.OffsetRequest.LatestTime(), clientName);
+                    readOffset = getLastOffset(consumer, a_topic, a_partition, kafka.api.OffsetRequest.LatestTime(), clientName);
                     continue;
                 }
                 consumer.close();
@@ -130,23 +127,40 @@ public class KafkaSimpleConsumer {
         }
     }
 
-    public static long getLastOffset(SimpleConsumer consumer, String topic, int partition, long whichTime,
-        String clientName) {
+    public static long getLastOffset(SimpleConsumer consumer, String topic, int partition, long whichTime, String clientName) {
         TopicAndPartition topicAndPartition = new TopicAndPartition(topic, partition);
-        Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo =
-            new HashMap<TopicAndPartition, PartitionOffsetRequestInfo>();
+        Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<TopicAndPartition, PartitionOffsetRequestInfo>();
         requestInfo.put(topicAndPartition, new PartitionOffsetRequestInfo(whichTime, 1));
-        kafka.javaapi.OffsetRequest request =
-            new kafka.javaapi.OffsetRequest(requestInfo, kafka.api.OffsetRequest.CurrentVersion(), clientName);
+        kafka.javaapi.OffsetRequest request = new kafka.javaapi.OffsetRequest(requestInfo, kafka.api.OffsetRequest.CurrentVersion(), clientName);
         OffsetResponse response = consumer.getOffsetsBefore(request);
 
         if (response.hasError()) {
-            System.out
-                .println("Error fetching data Offset Data the Broker. Reason: " + response.errorCode(topic, partition));
+            System.out.println("Error fetching data Offset Data the Broker. Reason: " + response.errorCode(topic, partition));
             return 0;
         }
         long[] offsets = response.offsets(topic, partition);
         return offsets[0];
+    }
+
+    public long[] getOffsets(int partition, long time,String clientName) {
+        Properties props = new Properties();
+        KafkaConsumer<Integer, String> consumer = new KafkaConsumer<>(props);
+
+        String topic = props.getProperty("topic");
+        TopicAndPartition topicAndPartition = new TopicAndPartition(topic, partition);
+        Map<TopicAndPartition, PartitionOffsetRequestInfo> requestInfo = new HashMap<TopicAndPartition, PartitionOffsetRequestInfo>();
+        requestInfo.put(topicAndPartition, new PartitionOffsetRequestInfo(time, 1));
+        kafka.javaapi.OffsetRequest request = new kafka.javaapi.OffsetRequest(requestInfo, kafka.api.OffsetRequest.CurrentVersion(), clientName);
+
+        /*
+        // 应该是更早之前的版本才有的逻辑
+        OffsetResponse response = consumer.getOffsetsBefore(request);
+        if (response.hasError()) {
+            throw new FetchingOffsetException("Error fetching data Offset Data the Broker. Reason: " + response.errorCode(topic, partition));
+        }
+        return response.offsets(topic, partition);*/
+
+        return new long[0];
     }
 
     /**
@@ -206,9 +220,8 @@ public class KafkaSimpleConsumer {
                     }
                 }
             } catch (Exception e) {
-                System.out.println(
-                    "Error communicating with Broker [" + seed + "] to find Leader for [" + a_topic + ", " + a_partition
-                        + "] Reason: " + e);
+                System.out
+                    .println("Error communicating with Broker [" + seed + "] to find Leader for [" + a_topic + ", " + a_partition + "] Reason: " + e);
             } finally {
                 if (consumer != null) {
                     consumer.close();

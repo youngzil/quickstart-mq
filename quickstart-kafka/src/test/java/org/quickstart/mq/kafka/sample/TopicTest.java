@@ -49,9 +49,8 @@ import static org.apache.kafka.clients.admin.ConfigEntry.ConfigSource.DYNAMIC_TO
 public class TopicTest {
 
     // private static final String brokerList = "localhost:9092";
-    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
-    private static final String brokerList = "172.16.48.182:9011,172.16.48.182:9012,172.16.48.183:9011";
-    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    // private static final String brokerList = "172.16.48.182:9011,172.16.48.182:9012,172.16.48.183:9011";
+    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     private Admin adminClient;
     private Consumer consumer;
 
@@ -60,6 +59,81 @@ public class TopicTest {
         // 获取KafkaAdminClient
         adminClient = KafkaAdminClientManager.getKafkaAdminClient(brokerList);
         consumer = KafkaAdminClientManager.createConsumer(brokerList);
+    }
+
+    @Test
+    public void testMigrationTopic() throws ExecutionException, InterruptedException {
+
+        //查看topic列表
+        Set<String> topics = adminClient.listTopics().names().get();
+        Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(topics).all().get();
+
+        List<TopicDetail> topicList = topicDescriptionMap.values().stream()//
+            .map(topicDescription -> {
+                TopicDetail topicDetail = new TopicDetail();
+                topicDetail.setTopic(topicDescription.name());
+                topicDetail.setPartitions(topicDescription.partitions().size());
+                topicDetail.setReplicas(topicDescription.partitions().get(0).replicas().size());
+                return topicDetail;
+            })//
+            .collect(Collectors.toList());
+
+        topicList.stream().forEach(topicDetail -> {
+            //创建topic
+            CreateTopicsResult topicsResult = adminClient.createTopics(
+                Arrays.asList(new NewTopic(topicDetail.getTopic(), topicDetail.getPartitions(), (short)topicDetail.getReplicas())));//(名称，分区数，副本因子)
+            try {
+                topicsResult.all().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+    @Test
+    public void cleanTopic() throws ExecutionException, InterruptedException {
+
+        Set<String> topics = adminClient.listTopics().names().get();
+        Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(topics).all().get();
+
+        Map<TopicPartition, OffsetSpec> topicPartitionOffsets = topicDescriptionMap.values().stream()
+            .filter(topicDescription->{
+
+                topicDescription.partitions().stream().filter(topicPartitionInfo->{
+                    Map<TopicPartition, OffsetSpec> topicPartitionOffset = new HashMap<>();
+                    topicPartitionOffset.put(new TopicPartition(topicDescription.name(), topicPartitionInfo.partition()),new OffsetSpec.EarliestSpec());
+
+
+                    Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> ffff = adminClient.listOffsets(topicPartitionOffset).all().get();
+
+                            topicPartitionInfo.
+                })
+
+
+            })
+            // .map(topicDescription -> topicDescription.partitions())
+            // .flatMap(Collection::stream)
+            .map(topicDescription -> {
+                String topic = topicDescription.name();
+                return topicDescription.partitions().stream().map(topicPartitionInfo -> ))
+                    .collect(Collectors.toList());
+
+            })//
+            .flatMap(Collection::stream)//
+            .collect(Collectors.toMap(topicPartition -> topicPartition, value -> new OffsetSpec()));
+
+        Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> ffff = adminClient.listOffsets(topicPartitionOffsets).all().get();
+        System.out.println(ffff);
+
+        Map<TopicPartition, PartitionReassignment> partitionPartitionReassignmentMap =
+            adminClient.listPartitionReassignments(Collections.singleton(new TopicPartition("topic03", 0)))//
+                .reassignments().get();
+        System.out.println(partitionPartitionReassignmentMap);
+
+
     }
 
     @Test
@@ -146,11 +220,11 @@ public class TopicTest {
         Map<TopicPartition, Long> endOffsets = consumer.endOffsets(topicPartitions);
         Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(Collections.singleton(topic)).all().get();
 
-        Map<TopicPartition, TopicDetail> topicDetailMap =
+        Map<TopicPartition, TopicPartitionDetail> topicDetailMap =
             Stream.of(beginningOffsets, endOffsets).flatMap(map -> map.entrySet().stream()).collect(Collectors.toMap(//
                 Map.Entry::getKey,//
                 value -> {
-                    TopicDetail topicDetail = new TopicDetail();
+                    TopicPartitionDetail topicDetail = new TopicPartitionDetail();
                     topicDetail.setTopic(value.getKey().topic());
                     topicDetail.setPartition(value.getKey().partition());
                     topicDetail.setBeginningOffset(value.getValue());
@@ -367,7 +441,9 @@ public class TopicTest {
                 return topicDescription.partitions().stream().map(topicPartitionInfo -> new TopicPartition(topic, topicPartitionInfo.partition()))
                     .collect(Collectors.toList());
 
-            }).flatMap(Collection::stream).collect(Collectors.toMap(TopicPartition -> TopicPartition, value -> new OffsetSpec()));
+            })//
+            .flatMap(Collection::stream)//
+            .collect(Collectors.toMap(topicPartition -> topicPartition, value -> new OffsetSpec()));
 
         Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> ffff = adminClient.listOffsets(topicPartitionOffsets).all().get();
         System.out.println(ffff);
@@ -419,12 +495,19 @@ public class TopicTest {
     }
 
     @Data
-    public class TopicDetail {
+    public class TopicPartitionDetail {
         private String topic;
         private int partition;
         private Long beginningOffset;
         private Long endOffset;
         private Long lag;
+    }
+
+    @Data
+    public class TopicDetail {
+        private String topic;
+        private int replicas;
+        private int partitions;
     }
 
 }

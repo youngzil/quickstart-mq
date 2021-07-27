@@ -1,8 +1,15 @@
 
 
 
+## Kafka2.X服务端启动源码
+
+Kafka 服务端通过Kafka.scala的主函数main方法启动。KafkaServerStartable类提供读取配置文件、启动/停止服务的方法。而启动/停止服务最终调用的是KafkaServer的startup/shutdown方法。
 
 
+
+
+
+[Kafka2.0服务端启动源码](https://blog.csdn.net/shenmeshia/article/details/96391321)  
 
 
 

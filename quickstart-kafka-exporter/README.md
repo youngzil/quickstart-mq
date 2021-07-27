@@ -9,6 +9,12 @@ http://localhost:7979/metrics
 
 
 
+创建数据源prometheus
+
+使用主机IP
+http://172.16.113.4:9090
+
+选择模板721，选择prometheus数据源即可
 
 
 

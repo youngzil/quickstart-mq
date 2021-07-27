@@ -134,7 +134,7 @@ zookeeper.connect=node1:2181,node2:2181
 
 
 [Kafka集群环境搭建及使用教程](http://www.lijiahong.com/?post=80)  
-
+[Kafka2.8.x安装与配置](https://blog.csdn.net/Exception_sir/article/details/116229537)
 
 
 
@@ -239,10 +239,13 @@ Lsr:是正在服务中的节点.
 
 
 查看topic指定分区offset的最大值或最小值
-```
-time为-1时表示最大值，为-2时表示最小值：
+```aidl
+--time，为毫秒值，-time=-1时表示最大值latest，为-2时表示最小值earliest。该offset值是所写时间戳之后的第一条数据。结果为：
 
 bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic hive-mdatabase-hostsltable --time -1 --partitions 0 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+
+bin/kafka-run-class.sh kafka.tools.GetOffsetShell  -topic topicName --time 1585186237000 --broker-list broker1:9092,broker2:9092
+
 
 查询offset的最大值
 bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic topic03 --time -1 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
@@ -484,6 +487,11 @@ kafka-run-class.sh kafka.tools.ConsumerOffsetChecker --zkconnect localhost:2181 
 bin/kafka-run-class.sh kafka.tools.ConsumerOffsetChecker --broker-info --group CONSUMER_TOPICTEST_ALL_MSGTEST_CLUSTER_GROUP --topic topicTest --zookeeper 10.1.243.23:52181
 
 ```
+
+查看broker的配置
+bin/kafka-configs.sh --describe --all --broker 0 --bootstrap-server localhost:9092
+bin/kafka-configs.sh --alter --add-config k3=v3 --broker 0 --bootstrap-server localhost:9092
+bin/kafka-configs.sh --alter --add-config 'log.cleaner.threads.config=50' --entity-default --entity-type brokers  --bootstrap-server localhost:9092
 
 
 

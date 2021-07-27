@@ -48,7 +48,7 @@ SASL/OAUTHBEARER | 2.0.0 | 需自己实现接口实现token的创建和验证，
 
 [kafka用户认证与权限管理（SASL/PLAIN+ACL）](https://blog.csdn.net/langzitianya/article/details/103121973)  
 
-
+[kafka SASL认证介绍及自定义SASL PLAIN认证功能](https://zhuanlan.zhihu.com/p/301343840)
 
 ---------------------------------------------------------------------------------------------------------------------
 ## SASL/SCRAM认证

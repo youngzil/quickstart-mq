@@ -1,6 +1,6 @@
 - [Kafka Metrics监控](#Kafka-Metrics监控)
 - [Prometheus监控Kafka](#Prometheus监控Kafka)
-- [主流的三种kafka监控程序](#主流的三种kafka监控程序)
+- [Kafka监控程序](#Kafka监控程序)
 
 ---------------------------------------------------------------------------------------------------------------------
 ## Kafka Metrics监控
@@ -39,10 +39,17 @@
 [Kafka exporter for Prometheus](https://github.com/danielqsj/kafka_exporter)  
 [kafka-exporter docker hub](https://hub.docker.com/r/danielqsj/kafka-exporter)  
 
+[Kafka Monitoring Using Prometheus](https://www.metricfire.com/blog/kafka-monitoring-using-prometheus)  
+
+
+[prometheuns JMX配置文件](https://github.com/confluentinc/jmx-monitoring-stacks/tree/6.1.0-post/shared-assets/jmx-exporter)
+
+
+
 [Monitor Apache Kafka with Prometheus and Grafana](https://computingforgeeks.com/monitor-apache-kafka-with-prometheus-and-grafana/)  
 [Monitoring Kafka with Kafka exporter + Prometheus + Grafana](https://danielmrosa.medium.com/monitoring-kafka-b97d2d5a5434)  
 [Monitoring Your Event Streams: Integrating Confluent with Prometheus and Grafana](https://www.confluent.io/blog/monitor-kafka-clusters-with-prometheus-grafana-and-confluent/)  
-[Kafka Monitoring Using Prometheus](https://www.metricfire.com/blog/kafka-monitoring-using-prometheus)  
+
 [Kafka Monitoring via Prometheus-Grafana](https://dzone.com/articles/kafka-monitoring-via-prometheus-amp-grafana)  
 [Monitoring Kafka with Prometheus and Grafana](https://blog.knoldus.com/monitoring-kafka-with-prometheus-and-grafana/)  
 [Kafka - Monitor producer metrics using JMX, Prometheus and Grafana](https://www.linkedin.com/pulse/kafka-monitor-producer-metrics-using-jmx-prometheus-hari-ramesh/?trk=read_related_article-card_title)  
@@ -154,13 +161,41 @@ private static final String brokerList = "localhost:9092,localhost:9093,localhos
 http://172.16.113.4:9090
 
 ---------------------------------------------------------------------------------------------------------------------
-## 主流的三种kafka监控程序
+## Kafka监控程序
 
-通过研究，发现主流的三种kafka监控程序分别为：
+kafka监控程序分别为：
+
+[Cluster Manager for Apache Kafka](https://github.com/yahoo/CMAK) ：以前叫[Kafka Manager](https://github.com/yahoo/kafka-manager)  
+
+CMAK is a tool for managing Apache Kafka clusters
+
+CMAK (Cluster Manager for Apache Kafka, previously known as Kafka Manager)
+
+
+
+
+
+[Offset Explorer (formerly Kafka Tool)](https://www.kafkatool.com/index.html)  
+
+UI Tool for Apache Kafka  
+
+Offset Explorer (formerly Kafka Tool) is a GUI application for managing and using Apache Kafka ® clusters. It provides an intuitive UI that allows one to quickly view objects within a Kafka cluster as well as the messages stored in the topics of the cluster. It contains features geared towards both developers and administrators. Some of the key features include
+Offset Explorer（以前称为 Kafka Tool）是一个用于管理和使用 Apache Kafka ® 集群的 GUI 应用程序。 它提供了一个直观的 UI，允许人们快速查看 Kafka 集群中的对象以及存储在集群主题中的消息。 它包含面向开发人员和管理员的功能。 一些主要功能包括
+
+
+
+
 
 [Kafka Web Conslole](https://github.com/claudemamo/kafka-web-console)  
-[Cluster Manager for Apache Kafka](https://github.com/yahoo/CMAK) ：以前叫[Kafka Manager](https://github.com/yahoo/kafka-manager)  
+A web console for Apache Kafka (retired)
+
+
+
+
 [KafkaOffsetMonitor](https://github.com/quantifind/KafkaOffsetMonitor)  
+Github上已经404了，[其他的拷贝地址](https://github.com/Morningstar/kafka-offset-monitor)
+
+
 
 
 

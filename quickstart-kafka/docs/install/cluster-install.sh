@@ -164,6 +164,7 @@ installSingleNode
 #bin/kafka-topics.sh --list --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 #bin/kafka-topics.sh --create --replication-factor 3 --partitions 6 --topic topic03 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 #bin/kafka-topics.sh --describe --topic topic03 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+
 #bin/kafka-topics.sh --alter --topic middleware.kafka.sync.file --config max.message.bytes=102400000 --zookeeper 10.1.128.60:2181,10.1.128.61:2181,10.1.128.62:2181
 
 #bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic topic03 --time -1 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
@@ -178,3 +179,9 @@ installSingleNode
 #bin/kafka-consumer-groups.sh --list --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 #bin/kafka-consumer-groups.sh --group lengfeng.consumer.group --describe --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
+#bin/kafka-configs.sh --describe --all --broker 0 --bootstrap-server localhost:9092
+
+
+bin/kafka-consumer-groups.sh --group flink-flink-metrics --describe --bootstrap-server 172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081
+
+bin/kafka-topics.sh --describe --topic flink.metrics --bootstrap-server 172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081
