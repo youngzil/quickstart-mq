@@ -365,6 +365,10 @@ bin/kafka-consumer-groups.sh --zookeeper 127.0.0.1:2181/kafka --list
 ```
 bin/kafka-consumer-groups.sh --list --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 bin/kafka-consumer-groups.sh --group lengfeng.consumer.group --describe --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+
+bin/kafka-consumer-groups.sh --list --zookeeper 10.1.128.60:2181,10.1.128.61:2181,10.1.128.62:2181
+bin/kafka-consumer-groups.sh --group anti_job_predictor --describe --zookeeper 10.1.128.60:2181,10.1.128.61:2181,10.1.128.62:2181
+
 ```
 
 

@@ -50,7 +50,8 @@ public class TopicTest {
 
     // private static final String brokerList = "localhost:9092";
     // private static final String brokerList = "172.16.48.182:9011,172.16.48.182:9012,172.16.48.183:9011";
-    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    private static final String brokerList = "172.16.49.6:9093,172.16.49.12:9093,172.16.49.10:9093";
     private Admin adminClient;
     private Consumer consumer;
 
@@ -78,7 +79,7 @@ public class TopicTest {
             })//
             .collect(Collectors.toList());
 
-        topicList.stream().forEach(topicDetail -> {
+       /* topicList.stream().forEach(topicDetail -> {
             //创建topic
             CreateTopicsResult topicsResult = adminClient.createTopics(
                 Arrays.asList(new NewTopic(topicDetail.getTopic(), topicDetail.getPartitions(), (short)topicDetail.getReplicas())));//(名称，分区数，副本因子)
@@ -89,7 +90,7 @@ public class TopicTest {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-        });
+        });*/
 
     }
 
@@ -99,40 +100,43 @@ public class TopicTest {
         Set<String> topics = adminClient.listTopics().names().get();
         Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(topics).all().get();
 
-        Map<TopicPartition, OffsetSpec> topicPartitionOffsets = topicDescriptionMap.values().stream()
-            .filter(topicDescription->{
-
-                topicDescription.partitions().stream().filter(topicPartitionInfo->{
-                    Map<TopicPartition, OffsetSpec> topicPartitionOffset = new HashMap<>();
-                    topicPartitionOffset.put(new TopicPartition(topicDescription.name(), topicPartitionInfo.partition()),new OffsetSpec.EarliestSpec());
-
-
-                    Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> ffff = adminClient.listOffsets(topicPartitionOffset).all().get();
-
-                            topicPartitionInfo.
-                })
-
-
-            })
+        List<TopicPartition> topicPartitionList = topicDescriptionMap.values().stream()
             // .map(topicDescription -> topicDescription.partitions())
-            // .flatMap(Collection::stream)
             .map(topicDescription -> {
                 String topic = topicDescription.name();
-                return topicDescription.partitions().stream().map(topicPartitionInfo -> ))
+                return topicDescription.partitions().stream().map(topicPartitionInfo -> new TopicPartition(topic, topicPartitionInfo.partition()))
                     .collect(Collectors.toList());
 
             })//
             .flatMap(Collection::stream)//
-            .collect(Collectors.toMap(topicPartition -> topicPartition, value -> new OffsetSpec()));
+            .collect(Collectors.toList());
 
-        Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> ffff = adminClient.listOffsets(topicPartitionOffsets).all().get();
-        System.out.println(ffff);
+        Map<TopicPartition, OffsetSpec> topicPartitionOffsets = topicPartitionList.stream()//
+            .collect(Collectors.toMap(topicPartition -> topicPartition, topicPartition -> OffsetSpec.earliest(), (k1, k2) -> k1));
 
-        Map<TopicPartition, PartitionReassignment> partitionPartitionReassignmentMap =
-            adminClient.listPartitionReassignments(Collections.singleton(new TopicPartition("topic03", 0)))//
-                .reassignments().get();
-        System.out.println(partitionPartitionReassignmentMap);
+        Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> offsetsResultInfoMap =
+            adminClient.listOffsets(topicPartitionOffsets).all().get();
 
+        Map<TopicPartition, TopicPartitionDetail> offsetsMap =
+            offsetsResultInfoMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> {
+                TopicPartition topicPartition = e.getKey();
+                TopicPartitionDetail topicPartitionDetail = new TopicPartitionDetail();
+                topicPartitionDetail.setTopic(topicPartition.topic());
+                topicPartitionDetail.setPartition(topicPartition.partition());
+                topicPartitionDetail.setBeginningOffset(e.getValue().offset());
+                return topicPartitionDetail;
+            }));
+
+        topicPartitionOffsets = topicPartitionList.stream()//
+            .collect(Collectors.toMap(topicPartition -> topicPartition, topicPartition -> OffsetSpec.latest(), (k1, k2) -> k1));
+
+        offsetsResultInfoMap = adminClient.listOffsets(topicPartitionOffsets).all().get();
+        offsetsResultInfoMap.entrySet().stream().forEach(entry -> {
+            TopicPartitionDetail topicPartitionDetail = offsetsMap.get(entry.getKey());
+            topicPartitionDetail.setEndOffset(entry.getValue().offset());
+        });
+
+        System.out.println(offsetsMap);
 
     }
 

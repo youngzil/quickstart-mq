@@ -1,5 +1,6 @@
 package org.quickstart.mq.kafka.sample;
 
+import lombok.Data;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.ConsumerGroupDescription;
 import org.apache.kafka.clients.admin.ConsumerGroupListing;
@@ -12,17 +13,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class ConsumerGroupTest {
 
-    private static final String brokerList = "localhost:9092";
+    // private static final String brokerList = "localhost:9092";
     // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    private static final String brokerList = "172.16.49.6:9093,172.16.49.12:9093,172.16.49.10:9093";
+
     private Admin adminClient;
     private Consumer consumer;
 
@@ -31,6 +37,60 @@ public class ConsumerGroupTest {
         // 获取KafkaAdminClient
         adminClient = KafkaAdminClientManager.getKafkaAdminClient(brokerList);
         consumer = KafkaAdminClientManager.createConsumer(brokerList);
+    }
+
+    @Test
+    public void queryConsumerGroupAndTopic() throws ExecutionException, InterruptedException {
+
+        // 消费组信息
+        Collection<String> groups =
+            adminClient.listConsumerGroups().all().get().stream().map(ConsumerGroupListing::groupId).collect(Collectors.toList());
+        // System.out.println(groups);
+
+        // 消费组信息
+        Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap = adminClient.describeConsumerGroups(groups).all().get();
+        // System.out.println(consumerGroupDescriptionMap);
+
+        List<Map<String, List<TopicPartitionDetail>>> offsetsMapList = groups.stream().map(groupId -> {
+                // 消费组的消费进度信息
+                Map<String, List<TopicPartitionDetail>> map = new HashMap<>();
+                List<TopicPartitionDetail> list = new ArrayList<>();
+                try {
+                    Map<TopicPartition, OffsetAndMetadata> offsetAndMetadataMap =
+                        adminClient.listConsumerGroupOffsets(groupId).partitionsToOffsetAndMetadata().get();
+
+                    list = offsetAndMetadataMap.entrySet().stream().map(entry -> {
+                            TopicPartitionDetail topicPartitionDetail = new TopicPartitionDetail();
+                            topicPartitionDetail.setTopic(entry.getKey().topic());
+                            topicPartitionDetail.setPartition(entry.getKey().partition());
+                            topicPartitionDetail.setOffset(entry.getValue().offset());
+                            return topicPartitionDetail;
+                        })//
+                        .collect(Collectors.toList());
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                map.put(groupId, list);
+
+                return map;
+
+            })//
+            .filter(offsetsMap -> null != offsetsMap && offsetsMap.entrySet() != null)//
+            .collect(Collectors.toList());
+
+        Map<String, List<TopicPartitionDetail>> result = offsetsMapList.stream().map(map -> map.entrySet())//
+            .flatMap(Collection::stream)//
+            .collect(Collectors.toMap(//
+                Map.Entry::getKey,//
+                Map.Entry::getValue,//
+                (value1, value2) -> value1));
+
+        System.out.println(result);
+
     }
 
     @Test
@@ -125,8 +185,8 @@ public class ConsumerGroupTest {
 
                         Map<TopicPartition, Long> beginningOffsets = consumer.beginningOffsets(Collections.singleton(topicPartition));
                         Map<TopicPartition, Long> endOffsets = consumer.endOffsets(Collections.singleton(topicPartition));
-                        System.out
-                            .println("topicPartition=" + topicPartition + ",beginningOffsets=" + beginningOffsets + ",endOffsets=" + endOffsets);
+                        System.out.println(
+                            "topicPartition=" + topicPartition + ",beginningOffsets=" + beginningOffsets + ",endOffsets=" + endOffsets);
 
                     });
                 });
@@ -195,6 +255,13 @@ public class ConsumerGroupTest {
 
         // adminClient.removeMembersFromConsumerGroup();
 
+    }
+
+    @Data
+    public class TopicPartitionDetail {
+        private String topic;
+        private int partition;
+        private Long offset;
     }
 
 }
