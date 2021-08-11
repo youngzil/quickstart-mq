@@ -2,6 +2,7 @@ package org.quickstart.mq.kafka.sample;
 
 import lombok.Data;
 import org.apache.kafka.clients.admin.Admin;
+import org.apache.kafka.clients.admin.AlterConsumerGroupOffsetsResult;
 import org.apache.kafka.clients.admin.ConsumerGroupDescription;
 import org.apache.kafka.clients.admin.ConsumerGroupListing;
 import org.apache.kafka.clients.admin.ListConsumerGroupOffsetsResult;
@@ -26,8 +27,8 @@ import java.util.stream.Collectors;
 public class ConsumerGroupTest {
 
     // private static final String brokerList = "localhost:9092";
-    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
-    private static final String brokerList = "172.16.49.6:9093,172.16.49.12:9093,172.16.49.10:9093";
+    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    // private static final String brokerList = "172.16.49.66:9092,172.16.49.68:9092,172.16.49.72:9092";
 
     private Admin adminClient;
     private Consumer consumer;
@@ -45,7 +46,7 @@ public class ConsumerGroupTest {
         // 消费组信息
         Collection<String> groups =
             adminClient.listConsumerGroups().all().get().stream().map(ConsumerGroupListing::groupId).collect(Collectors.toList());
-        // System.out.println(groups);
+        System.out.println(groups);
 
         // 消费组信息
         Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap = adminClient.describeConsumerGroups(groups).all().get();
@@ -105,7 +106,7 @@ public class ConsumerGroupTest {
     @Test
     public void queryConsumerGroupDetail() throws ExecutionException, InterruptedException {
 
-        String groupId = "legion-object";
+        String groupId = "legion-object-direct-1";
 
         // 消费组信息
         Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap =
@@ -116,6 +117,12 @@ public class ConsumerGroupTest {
         Map<TopicPartition, OffsetAndMetadata> offsetAndMetadataMap =
             adminClient.listConsumerGroupOffsets(groupId).partitionsToOffsetAndMetadata().get();
         System.out.println(offsetAndMetadataMap);
+
+        Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();
+        offsets.put(new TopicPartition("bkk.item.tradetgt.count", 0), new OffsetAndMetadata(2000));
+        AlterConsumerGroupOffsetsResult result = adminClient.alterConsumerGroupOffsets(groupId, offsets);
+        result.all().get();
+
 
     }
 
@@ -231,7 +238,8 @@ public class ConsumerGroupTest {
 
         Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();
         offsets.put(new TopicPartition("lengfeng.test4.test", 0), new OffsetAndMetadata(2000));
-        // adminClient.alterConsumerGroupOffsets(groupId, offsets);
+        // AlterConsumerGroupOffsetsResult result = adminClient.alterConsumerGroupOffsets(groupId, offsets);
+        // result.all().get();
 
         long startTime = System.currentTimeMillis();
         boolean running = false;

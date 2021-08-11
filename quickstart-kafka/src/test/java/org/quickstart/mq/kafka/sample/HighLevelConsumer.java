@@ -6,6 +6,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
@@ -63,7 +64,7 @@ public class HighLevelConsumer {
 
         while (true) {
             //从阻塞队列中取消息，最高延迟为100ms
-            ConsumerRecords<String, String> records = consumer.poll(100);
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(200));
             //停止对此Topic的partition0消费，同理可用resume方法让该partition能够被消费
             consumer.pause(Arrays.asList(new TopicPartition(topic, 0)));
             records.forEach(record -> System.out

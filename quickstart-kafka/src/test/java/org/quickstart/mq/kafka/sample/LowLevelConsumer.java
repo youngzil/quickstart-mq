@@ -15,6 +15,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +45,7 @@ public class LowLevelConsumer {
 
         int count = 0;
         while (true) {
-            ConsumerRecords<String, String> records = consumer.poll(100);
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
             // records.forEach(record -> System.out
             //     .printf("topic: %s,partition: %f,offset: %f,key: %s,value: %s", record.topic(), record.partition(), record.offset(), record.key(),
             //         record.value()));

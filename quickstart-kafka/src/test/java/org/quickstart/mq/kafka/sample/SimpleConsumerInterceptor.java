@@ -25,6 +25,7 @@ public class SimpleConsumerInterceptor implements ConsumerInterceptor<String, St
 
     @Override
     public void configure(Map<String, ?> configs) {
-
+        System.out.println(configs);
     }
+
 }

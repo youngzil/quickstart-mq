@@ -50,8 +50,8 @@ public class TopicTest {
 
     // private static final String brokerList = "localhost:9092";
     // private static final String brokerList = "172.16.48.182:9011,172.16.48.182:9012,172.16.48.183:9011";
-    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
-    private static final String brokerList = "172.16.49.6:9093,172.16.49.12:9093,172.16.49.10:9093";
+    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    // private static final String brokerList = "172.16.49.6:9093,172.16.49.12:9093,172.16.49.10:9093";
     private Admin adminClient;
     private Consumer consumer;
 
@@ -351,9 +351,7 @@ public class TopicTest {
         ConfigResource configResource = new ConfigResource(ConfigResource.Type.TOPIC, topic);
         DescribeConfigsResult describeConfigsResult = adminClient.describeConfigs(Arrays.asList(configResource));
         Map<ConfigResource, Config> resourceConfigMap = describeConfigsResult.all().get();
-        resourceConfigMap.forEach((key, value) -> {
-            System.out.println(key + " " + value);
-        });
+        resourceConfigMap.forEach((key, value) -> System.out.println(key + " " + value));
     }
 
     /**
@@ -469,9 +467,9 @@ public class TopicTest {
 
         // 查看topic详细信息：主题的属性、主题的partition分区信息
         // name、partitions（partition、leader、replicas、isr）、authorizedOperations、internal
-        DescribeTopicsResult topic = adminClient.describeTopics(Arrays.asList("topic01", "topic02", "topic03"));
+        DescribeTopicsResult topic = adminClient.describeTopics(Arrays.asList("test.add.topic"));
         Map<String, TopicDescription> map = topic.all().get();
-        System.out.println("TopicDescription:" + map);
+        System.out.println("TopicDescription:" + map.get("test.add.topic"));
 
         // 删除topic
         // adminClient.deleteTopics(Arrays.asList("topic01", "topic02", "topic03"));

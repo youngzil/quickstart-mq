@@ -1,6 +1,8 @@
 package org.quickstart.mq.kafka.sample;
 
+import com.codahale.metrics.Meter;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -25,7 +27,6 @@ import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,13 +43,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+@Slf4j
 public class KafkaBasic {
 
-    private static final String brokerList = "localhost:9092";
+    // private static final String brokerList = "localhost:9092";
     // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
     // private static final String brokerList = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094";
-    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
-    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     // private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
     // private static final String brokerList = "kafka1:9092,kafka2:9093,kafka3:9094";
 
@@ -84,7 +85,7 @@ public class KafkaBasic {
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "lengfeng.consumer.group");// 制定consumer group
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false"); // 是否自动提交进度
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000"); // 自动确认offset的时间间隔
-        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "3");
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "300");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);// key的序列化类
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class); // value的序列化类
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, OffsetResetStrategy.EARLIEST.name().toLowerCase(Locale.ROOT));
@@ -136,8 +137,8 @@ public class KafkaBasic {
                 }
                 if (null != metadata) {
                     // 输出成功发送消息的元信息
-                    System.out
-                        .println("The offset of the record we just sent is:partition= " + metadata.partition() + ", offset=" + metadata.offset());
+                    System.out.println(
+                        "The offset of the record we just sent is:partition= " + metadata.partition() + ", offset=" + metadata.offset());
                 }
             });
 
@@ -172,35 +173,80 @@ public class KafkaBasic {
     @Test
     public void consumer() {
 
+        MetricsReporter metricsReporter = new MetricsReporter();
+        metricsReporter.init();
+        Meter mqMsgMeter = metricsReporter.getRegistry().meter("consumer_count");
+
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss:SSS");
 
         Consumer<String, String> consumer = createConsumer();
 
-        String topic = "topic03";
+        String topic = "bkk.item.tradetgt.count";
+        // String topic = "test.topic.7";
+        String topic2 = "test.topic.8";
+        String topic3 = "test.topic.9";
 
         // 使用消费者对象订阅这些主题
         consumer.subscribe(Arrays.asList(topic), new SaveOffsetOnRebalance(consumer));
+        // consumer.subscribe(Arrays.asList(topic, topic2, topic3), new SaveOffsetOnRebalance(consumer));
 
+        long startTime = System.currentTimeMillis();
+        int count = 0;
+        int allcount = 0;
         // 不断的轮询获取主题中的消息
         try {
             // poll() 获取消息列表，可以传入超时时间
             while (true) {
-                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(30 * 1000));
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(200));
 
                 if (records.isEmpty()) {
-                    System.out.println(dateTimeFormatter.format(LocalDateTime.now()));
+                    // System.out.println(dateTimeFormatter.format(LocalDateTime.now()));
                     System.out.println("no message");
                 } else {
-                    records.forEach(record -> {
+
+                    // mqMsgMeter.mark(records.count());
+                    //
+                    // count += records.count();
+                    // allcount += records.count();
+
+                    System.out.println("num=" + records.count());
+                    /*records.forEach(record -> {
                         // 处理消息的逻辑
-                        System.out.printf("topic = %s,partition = %d, offset = %d, key = %s, value = %s%n", record.topic(), record.partition(),
-                            record.offset(), record.key(), record.value());
+                        // System.out.printf("topic = %s,partition = %d, offset = %d, key = %s, value = %s%n", record.topic(), record.partition(),
+                        //     record.offset(), record.key(), record.value());
                     });
 
-                    // TimeUnit.SECONDS.sleep(2);
+                    if (allcount < 300) {
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }*/
 
                     consumer.commitSync();
                 }
+
+               /* if (System.currentTimeMillis() - startTime > 30 * 1000) {
+                    startTime = System.currentTimeMillis();
+                    Map<MetricName, ? extends Metric> metrics = consumer.metrics();
+                    metrics.values().stream()//
+                        // .filter(metric -> "records-consumed-rate".equals(metric.metricName().name()) || "records-per-request-avg".equals(metric.metricName().name()))//
+                        .forEach(metric -> {
+                            log.error("name={},value={}", metric.metricName(), metric.metricValue());
+                        });
+
+                    log.error("count=" + count);
+                    count = 0;
+                    log.error("--------------------------------------------------------------------------------------");
+                }*/
+
             }
 
         } catch (WakeupException e) {
@@ -457,9 +503,8 @@ public class KafkaBasic {
         } else {
             records.forEach(record -> {
                 // 处理消息的逻辑
-                System.out
-                    .printf("topic = %s,partition = %d, offset = %d, key = %s, value = %s%n", record.topic(), record.partition(), record.offset(),
-                        record.key(), record.value());
+                System.out.printf("topic = %s,partition = %d, offset = %d, key = %s, value = %s%n", record.topic(), record.partition(),
+                    record.offset(), record.key(), record.value());
             });
 
             consumer.commitSync();

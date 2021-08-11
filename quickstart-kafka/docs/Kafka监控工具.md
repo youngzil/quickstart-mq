@@ -199,6 +199,47 @@ Github上已经404了，[其他的拷贝地址](https://github.com/Morningstar/k
 
 
 
+[华为云连接和查看Kafka Manager](https://support.huaweicloud.com/usermanual-kafka/kafka-ug-180801002.html)
+[如何查看kafka消息](https://www.it-swarm.cn/zh/apache-kafka/%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8Bkafka%E6%B6%88%E6%81%AF/831961531/)
+
+如果您希望通过编程方式执行此操作，则可以编写包装Kafka客户端（几乎每种语言都有一个）的应用程序，或使用内置kafka-console-consumer工具或 Kafkacat 稍微灵活一些（但缺点是您必须下载单独的工具，而kafka-console-consumer与Kafka捆绑在一起）。
+
+如果只需要显示主题中最后几条消息的GUI，则可以使用 Kafdrop 或 Kafka Tool 。前者是基于Web的（springboot应用程序），而后者是基于Swing的桌面应用程序。
+
+
+如果您正在寻找一种简单直观的方式来查看和搜索Apache Kafka消息，则应尝试 KaDeck 。该社区版本是完全免费的，它支持Win，Mac OS和Linux。
+
+为了在企业环境中使用，还提供了一个企业版，其中包括一个Web服务。
+
+
+关于Kafka的以下线程，对SO工具进行了不错的讨论：
+[kafka是否具有任何默认的Web UI](https://stackoverflow.com/questions/49397126/does-kafka-have-any-default-web-ui/56333254)
+[Kafka主题查看器？](https://stackoverflow.com/questions/54236902/kafka-topic-viewer/56334673)
+
+如果您使用的是基于Web的工具，请尝试 Kafdrop （这是原始Kafdrop的复活版，现在大部分时间处于休眠状态）。它使您可以查看主题并为您提供集群配置（但这不是完整的管理工具）。这是一个简单的spring boot应用程序，并带有Docker构建。 （温和的免责声明：我是撰稿人之一，但我不是原始作者。）
+
+对于命令行工具，请尝试 Kafkacat 用于浏览主题和发布消息。在撰写本文时，它还支持打印消息标题（与Kafka的内置工具不同）。
+
+
+
+[Kafkacat](https://github.com/edenhill/kafkacat)  
+[Kafdrop](https://github.com/obsidiandynamics/Kafdrop)  
+[Kafka Tool](https://www.kafkatool.com/)  
+[KaDeck](https://www.xeotek.com/)
+
+KaDeck for Apache Kafka and Amazon Kinesis
+
+[Amazon Kinesis Streams](https://docs.amazonaws.cn/zh_cn/aws/latest/userguide/kinesis.html)
+
+Kinesis是一个流式传输数据的平台Amazon，可提供托管服务，让您能够轻松地加载和分析流数据，同时还可让您根据具体需求来构建自定义流数据应用程序。
+
+Amazon Kinesis流是一项在实时处理大规模的数据流时可弹性扩展的托管服务。该服务收集大规模的数据记录流，随后供多个可在 EC2 实例上运行的数据处理应用程序实时使用。
+
+
+
+
+
+
 
 一、Kafka Monitoring
 
@@ -244,6 +285,10 @@ http://blog.csdn.net/dabokele/article/details/52373960
 http://blog.csdn.net/chuntian_feng/article/details/51871648  
 https://www.iteblog.com/archives/1084.html  
 http://blog.csdn.net/lsshlsw/article/details/47300145  
+
+
+
+
 
 
 

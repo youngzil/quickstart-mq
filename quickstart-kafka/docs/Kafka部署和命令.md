@@ -316,13 +316,13 @@ kafka删除topic方法
 ```
 bin/kafka-console-producer.sh --topic topic03 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
-bin/kafka-console-producer.sh --topic kafkatopic --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+bin/kafka-console-producer.sh --topic topic03 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 ```
 
 消费者Consumer消费主题
 ```
-bin/kafka-console-consumer.sh --topic alarm --from-beginning --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+bin/kafka-console-consumer.sh --topic topic03 --from-beginning --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
 bin/kafka-console-consumer.sh --topic alarm --from-beginning --group test.group --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
