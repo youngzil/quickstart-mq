@@ -33,6 +33,10 @@ Kafka Go客户端
 [Kafka Golang 客户端介绍](https://my.oschina.net/zhangyangyang/blog/3147619)  
 
 
+[The Apache Kafka C/C++ library](https://github.com/edenhill/librdkafka)
+
+
+
 
 [Testing Kafka and Spring Boot](https://www.baeldung.com/spring-boot-kafka-testing)  
 

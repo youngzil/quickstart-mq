@@ -31,7 +31,7 @@ scrape_configs:
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
     static_configs:
-      - targets: ['172.16.48.183:7071']
+      - targets: ['172.16.113.4:7071']
 
 #  - job_name: 'kafka_exporter'
     # metrics_path defaults to '/metrics'

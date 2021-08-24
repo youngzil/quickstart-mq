@@ -22,6 +22,7 @@ services:
     ports:
       - 9092:9092
       - 7071:7071
+#      - 49999:49999
     environment:
       KAFKA_BROKER_ID: 0
       KAFKA_ADVERTISED_HOST_NAME: kafka
@@ -31,8 +32,10 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: kafka-zookeeper:2181/kafka
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_LISTENERS: PLAINTEXT://kafka:9092
+#      KAFKA_JMX_PORT: 49999
       ## JMX exporters default 9404
       KAFKA_OPTS: -javaagent:/usr/app/jmx_prometheus_javaagent.jar=7071:/usr/app/prom-jmx-agent-config.yml
+#      -Dcom.sun.management.jmxremote.port=49999 -Dcom.sun.management.jmxremote.rmi.port=49999 -Djava.rmi.server.hostname=127.0.0.1
     volumes:
       #      - ./kafka-logs:/kafka
       - /etc/localtime:/etc/localtime

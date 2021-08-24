@@ -163,7 +163,28 @@ http://172.16.113.4:9090
 ---------------------------------------------------------------------------------------------------------------------
 ## Kafka监控程序
 
-kafka监控程序分别为：
+- [CMAK(以前叫[Kafka Manager])](#CMAK)
+- [Offset Explorer](#Offset-Explorer)
+- [Kafka Eagle（目前使用中）](#)
+- [Kafka Center（最近才开源，没有做测试）](#)
+- [Kafka Web Conslole(retired已经退休了)](#Kafka-Web-Conslole)
+- [KafkaOffsetMonitor(Github上已经404了)](#KafkaOffsetMonitor) ：监控消费者和延迟的队列
+
+
+- [Kafka Monitoring](#)
+- [JmxTool](#)
+- [kafka-monitor](#)
+- [Cruise-control](#)
+- [Doctorkafka](#)
+- [Burrow](#)
+
+
+[Kafka监控工具汇总](https://juejin.cn/post/6844903922612568078)
+
+
+
+
+## CMAK
 
 [Cluster Manager for Apache Kafka](https://github.com/yahoo/CMAK) ：以前叫[Kafka Manager](https://github.com/yahoo/kafka-manager)  
 
@@ -171,9 +192,13 @@ CMAK is a tool for managing Apache Kafka clusters
 
 CMAK (Cluster Manager for Apache Kafka, previously known as Kafka Manager)
 
+kafka管理器kafka-manager部署安装  
+http://blog.csdn.net/lsshlsw/article/details/47300145
 
 
 
+
+## Offset Explorer
 
 [Offset Explorer (formerly Kafka Tool)](https://www.kafkatool.com/index.html)  
 
@@ -185,12 +210,13 @@ Offset Explorer（以前称为 Kafka Tool）是一个用于管理和使用 Apach
 
 
 
-
+## Kafka Web Conslole
 [Kafka Web Conslole](https://github.com/claudemamo/kafka-web-console)  
 A web console for Apache Kafka (retired)
 
 
 
+## KafkaOffsetMonitor
 
 [KafkaOffsetMonitor](https://github.com/quantifind/KafkaOffsetMonitor)  
 Github上已经404了，[其他的拷贝地址](https://github.com/Morningstar/kafka-offset-monitor)
@@ -240,44 +266,13 @@ Amazon Kinesis流是一项在实时处理大规模的数据流时可弹性扩展
 
 
 
-
-一、Kafka Monitoring
-
-二、JmxTool
-
-三、Kafka-Manager
-
-四、kafka-monitor
-
-五、Kafka Offset Monitor
-
-六、Cruise-control
-
-七、Doctorkafka
-
-八、Burrow
-
-
-[Kafka监控工具汇总](https://juejin.cn/post/6844903922612568078)  
-
-
-
-KafkaOffsetMonitor：监控消费者和延迟的队列
-
-
-
 kafka监控  
 https://www.oschina.net/p/kafka-manager  
 https://www.oschina.net/p/kafka-monitor  
 
 
-kafka管理器kafka-manager部署安装  
-http://blog.csdn.net/lsshlsw/article/details/47300145
-
-
 客户端可视化工具  
 https://blog.csdn.net/Dongguabai/article/details/86526299  
-
 
 
 相关文章：  
@@ -285,13 +280,6 @@ http://blog.csdn.net/dabokele/article/details/52373960
 http://blog.csdn.net/chuntian_feng/article/details/51871648  
 https://www.iteblog.com/archives/1084.html  
 http://blog.csdn.net/lsshlsw/article/details/47300145  
-
-
-
-
-
-
-
 
 
 

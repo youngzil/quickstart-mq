@@ -49,7 +49,8 @@
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.32'
     ```
 5. 接下来，我们修改 conf 目录下的 server.properties 文件，将修改其中的 log.dir 配置项，将其指向 kafka 源码目录下的 kafka-logs 目录
-6. 最后，我们在 IDEA 中配置 kafka.Kafka 这个入口类，启动 kafka broker，具体配置如下图所示：![kafka启动类在IDEA中的配置](images/kafka启动类.png "ReferencePicture")
+6. 最后，我们在 IDEA 中配置 kafka.Kafka 这个入口类，启动 kafka broker，具体配置如下图所示：
+   ![kafka启动类在IDEA中的配置](images/kafka启动类.png "ReferencePicture")
 7. 启动成功的话，控制台输出没有异常，且能看到如下输出：  
    [2021-07-22 14:06:56,491] INFO [KafkaServer id=0] started (kafka.server.KafkaServer)
 8. 发送、消费 message验证功能

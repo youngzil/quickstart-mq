@@ -207,6 +207,21 @@ public class TopicTest {
     }
 
     @Test
+    public void queryAllTopicPartition() throws ExecutionException, InterruptedException {
+
+        //查看topic列表
+        Set<String> topics = adminClient.listTopics().names().get();
+        Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(topics).all().get();
+
+        List<TopicPartitionInfo> topicPartitionInfos = topicDescriptionMap.values().stream()//
+            .map(topicDescription -> topicDescription.partitions())//
+            .flatMap(Collection::stream)//
+            .collect(Collectors.toList());
+
+        System.out.println(topicPartitionInfos.size());
+    }
+
+    @Test
     public void queryTopicDetail() throws ExecutionException, InterruptedException {
 
         // String topic = "lengfeng.topic.test";
@@ -241,6 +256,34 @@ public class TopicTest {
                 }));
 
         System.out.println(topicDetailMap);
+
+    }
+
+    @Test
+    public void queryAllTopic2() throws ExecutionException, InterruptedException {
+
+        Set<String> topics = adminClient.listTopics().names().get();
+        Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(topics).all().get();
+
+        Map<TopicPartition, OffsetSpec> topicPartitionOffsets = topicDescriptionMap.values().stream()
+            // .map(topicDescription -> topicDescription.partitions())
+            // .flatMap(Collection::stream)
+            .map(topicDescription -> {
+                String topic = topicDescription.name();
+                return topicDescription.partitions().stream().map(topicPartitionInfo -> new TopicPartition(topic, topicPartitionInfo.partition()))
+                    .collect(Collectors.toList());
+
+            })//
+            .flatMap(Collection::stream)//
+            .collect(Collectors.toMap(topicPartition -> topicPartition, value -> new OffsetSpec()));
+
+        Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> ffff = adminClient.listOffsets(topicPartitionOffsets).all().get();
+        System.out.println(ffff);
+
+        Map<TopicPartition, PartitionReassignment> partitionPartitionReassignmentMap =
+            adminClient.listPartitionReassignments(Collections.singleton(new TopicPartition("topic03", 0)))//
+                .reassignments().get();
+        System.out.println(partitionPartitionReassignmentMap);
 
     }
 
@@ -427,34 +470,6 @@ public class TopicTest {
         }
 
         return props;
-    }
-
-    @Test
-    public void queryAllTopic2() throws ExecutionException, InterruptedException {
-
-        Set<String> topics = adminClient.listTopics().names().get();
-        Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(topics).all().get();
-
-        Map<TopicPartition, OffsetSpec> topicPartitionOffsets = topicDescriptionMap.values().stream()
-            // .map(topicDescription -> topicDescription.partitions())
-            // .flatMap(Collection::stream)
-            .map(topicDescription -> {
-                String topic = topicDescription.name();
-                return topicDescription.partitions().stream().map(topicPartitionInfo -> new TopicPartition(topic, topicPartitionInfo.partition()))
-                    .collect(Collectors.toList());
-
-            })//
-            .flatMap(Collection::stream)//
-            .collect(Collectors.toMap(topicPartition -> topicPartition, value -> new OffsetSpec()));
-
-        Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> ffff = adminClient.listOffsets(topicPartitionOffsets).all().get();
-        System.out.println(ffff);
-
-        Map<TopicPartition, PartitionReassignment> partitionPartitionReassignmentMap =
-            adminClient.listPartitionReassignments(Collections.singleton(new TopicPartition("topic03", 0)))//
-                .reassignments().get();
-        System.out.println(partitionPartitionReassignmentMap);
-
     }
 
     @Test
