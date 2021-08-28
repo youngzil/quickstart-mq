@@ -22,6 +22,11 @@ cd kafka_exporter-1.3.1.linux-amd64
 ./kafka_exporter --kafka.server=172.16.48.179:9081 &
 
 
+./kafka_exporter --kafka.server=10.1.25.57:9092 &
+/data/program/kafka/kafka_exporter-1.3.1.linux-amd64/kafka_exporter --kafka.server=10.1.25.57:9092 &
+
+curl http://10.1.25.57:9308/metrics
+
 
 
 

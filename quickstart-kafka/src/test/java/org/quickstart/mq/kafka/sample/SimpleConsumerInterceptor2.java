@@ -7,7 +7,7 @@ import org.apache.kafka.common.TopicPartition;
 
 import java.util.Map;
 
-public class SimpleConsumerInterceptor implements ConsumerInterceptor<String, String> {
+public class SimpleConsumerInterceptor2 implements ConsumerInterceptor<String, String> {
     @Override
     public ConsumerRecords<String, String> onConsume(ConsumerRecords<String, String> records) {
         return records;
@@ -25,7 +25,7 @@ public class SimpleConsumerInterceptor implements ConsumerInterceptor<String, St
 
     @Override
     public void configure(Map<String, ?> configs) {
-        System.out.println("SimpleConsumerInterceptor=" + configs);
+        System.out.println("SimpleConsumerInterceptor2=" + configs);
     }
 
 }
