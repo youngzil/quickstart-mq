@@ -249,6 +249,7 @@ bin/kafka-run-class.sh kafka.tools.GetOffsetShell  -topic topicName --time 15851
 
 查询offset的最大值
 bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic topic03 --time -1 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic tpch.customer --time -1 --broker-list 127.0.0.1:9092
 
 查询offset的最小值
 bin/kafka-run-class.sh kafka.tools.GetOffsetShell --topic topic03 --time -2 --broker-list 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094

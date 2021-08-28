@@ -185,11 +185,11 @@ public class KafkaBasic {
         // String topic = "bkk.item.tradetgt.count";
         // String topic = "test.topic.7";
         String topic2 = "test.topic.8";
-        String topic3 = "test.topic.9";
+        String topic3 = "tpch.customer";
 
         // 使用消费者对象订阅这些主题
-        consumer.subscribe(Arrays.asList(topic), new SaveOffsetOnRebalance(consumer));
-        // consumer.subscribe(Arrays.asList(topic, topic2, topic3), new SaveOffsetOnRebalance(consumer));
+        // consumer.subscribe(Arrays.asList(topic), new SaveOffsetOnRebalance(consumer));
+        consumer.subscribe(Arrays.asList(topic, topic2, topic3), new SaveOffsetOnRebalance(consumer));
 
         long startTime = System.currentTimeMillis();
         int count = 0;
@@ -211,10 +211,10 @@ public class KafkaBasic {
                     // allcount += records.count();
 
                     System.out.println("num=" + records.count());
-                    /*records.forEach(record -> {
+                    records.forEach(record -> {
                         // 处理消息的逻辑
-                        // System.out.printf("topic = %s,partition = %d, offset = %d, key = %s, value = %s%n", record.topic(), record.partition(),
-                        //     record.offset(), record.key(), record.value());
+                        System.out.printf("topic = %s,partition = %d, offset = %d, key = %s, value = %s%n", record.topic(), record.partition(),
+                            record.offset(), record.key(), record.value());
                     });
 
                     if (allcount < 300) {
@@ -229,7 +229,7 @@ public class KafkaBasic {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    }*/
+                    }
 
                     consumer.commitSync();
                 }
