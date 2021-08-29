@@ -1,24 +1,32 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <parent>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <parent>
+        <groupId>org.quickstart</groupId>
+        <artifactId>quickstart-mq</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
     <groupId>org.quickstart</groupId>
-    <artifactId>quickstart-mq</artifactId>
+    <artifactId>quickstart-pulsar</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-  </parent>
+    <name>quickstart-mq-pulsar</name>
+    <url>http://maven.apache.org</url>
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.quickstart</groupId>
-  <artifactId>quickstart-pulsar</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>quickstart-mq-pulsar</name>
-  <url>http://maven.apache.org</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <pulsar.version>2.8.0</pulsar.version>
+    </properties>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.pulsar</groupId>
+            <artifactId>pulsar-client</artifactId>
+            <version>${pulsar.version}</version>
+        </dependency>
 
-  <dependencies>
+    </dependencies>
 
-  </dependencies>
 </project>
