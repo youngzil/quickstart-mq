@@ -21,12 +21,17 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
+import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,19 +128,30 @@ public class KafkaBasic {
 
         Producer<String, String> producer = createProducer();
 
-        String topic = "topic03";
-        long events = Long.MAX_VALUE;
+        String topic = "quickstart-events";
+        // long events = Long.MAX_VALUE;
+        long events = 1;
         Random rnd = new Random();
         for (long nEvents = 0; nEvents < events; nEvents++) {
             long runtime = new Date().getTime();
             String ip = "192.168.2." + rnd.nextInt(255);
             String msg = runtime + ",www.example.com," + ip;
-            ProducerRecord<String, String> data = new ProducerRecord<>(topic, ip, msg);
+            // ProducerRecord<String, String> data = new ProducerRecord<>(topic, ip, msg);
+
+
+            long fff = System.currentTimeMillis();
+            String result = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(fff);
+            System.out.println(fff+","+result);
+
+            ProducerRecord<String, String> data = new ProducerRecord<>( topic,  0, fff, ip, msg, null);
             producer.send(data, (metadata, exception) -> {
                 if (exception != null) {
                     exception.printStackTrace();
                 }
                 if (null != metadata) {
+
+                    String result2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(metadata.timestamp());
+                    System.out.println(metadata.timestamp()+","+result2);
                     // 输出成功发送消息的元信息
                     System.out.println(
                         "The offset of the record we just sent is:partition= " + metadata.partition() + ", offset=" + metadata.offset());
@@ -184,7 +200,7 @@ public class KafkaBasic {
         String topic = "topic03";
         // String topic = "bkk.item.tradetgt.count";
         // String topic = "test.topic.7";
-        String topic2 = "test.topic.8";
+        String topic2 = "test";
         String topic3 = "tpch.customer";
 
         // 使用消费者对象订阅这些主题
@@ -202,7 +218,7 @@ public class KafkaBasic {
 
                 if (records.isEmpty()) {
                     // System.out.println(dateTimeFormatter.format(LocalDateTime.now()));
-                    System.out.println("no message");
+                    // System.out.println("no message");
                 } else {
 
                     // mqMsgMeter.mark(records.count());
@@ -215,9 +231,13 @@ public class KafkaBasic {
                         // 处理消息的逻辑
                         System.out.printf("topic = %s,partition = %d, offset = %d, key = %s, value = %s%n", record.topic(), record.partition(),
                             record.offset(), record.key(), record.value());
+
+                        String result = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(record.timestamp());
+                        System.out.println(result);
+
                     });
 
-                    if (allcount < 300) {
+                    /*if (allcount < 300) {
                         try {
                             TimeUnit.MILLISECONDS.sleep(1000);
                         } catch (InterruptedException e) {
@@ -229,7 +249,7 @@ public class KafkaBasic {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    }
+                    }*/
 
                     consumer.commitSync();
                 }

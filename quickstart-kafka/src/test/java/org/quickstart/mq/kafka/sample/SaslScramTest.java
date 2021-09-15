@@ -51,7 +51,7 @@ public class SaslScramTest {
         String jaasCfg = String.format(jaasTemplate, username, password);
 
         props.put(AdminClientConfig.SECURITY_PROTOCOL_CONFIG, SecurityProtocol.SASL_PLAINTEXT.name());
-        props.put(SaslConfigs.SASL_MECHANISM, ScramMechanism.SCRAM_SHA_256.mechanismName());
+        props.put(SaslConfigs.SASL_MECHANISM, ScramMechanism.SCRAM_SHA_512.mechanismName());
         props.put(SaslConfigs.SASL_JAAS_CONFIG, jaasCfg);
 
         // System.setProperty("java.security.auth.login.config",jaasCfg);
@@ -83,7 +83,7 @@ public class SaslScramTest {
         String jaasCfg = String.format(jaasTemplate, username, password);
 
         props.put(AdminClientConfig.SECURITY_PROTOCOL_CONFIG, SecurityProtocol.SASL_PLAINTEXT.name());
-        props.put(SaslConfigs.SASL_MECHANISM, ScramMechanism.SCRAM_SHA_256.mechanismName());
+        props.put(SaslConfigs.SASL_MECHANISM, ScramMechanism.SCRAM_SHA_512.mechanismName());
         props.put(SaslConfigs.SASL_JAAS_CONFIG, jaasCfg);
 
         // 2 构建滤器链
@@ -105,7 +105,7 @@ public class SaslScramTest {
 
         Producer<String, String> producer = createProducer(username, password);
 
-        String topic = "topic03";
+        String topic = "quickstart-events";
         long events = 100;
         Random rnd = new Random();
         for (long nEvents = 0; nEvents < events; nEvents++) {

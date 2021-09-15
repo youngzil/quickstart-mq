@@ -11,6 +11,7 @@ package org.quickstart.mq.rocketmq.simple;
 import java.util.List;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.MessageSelector;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
@@ -63,6 +64,7 @@ public class RocketMQConsumer2 {
         // consumer.subscribe("TopicTestwwwwwwwwA", "TagA");
         // consumer.subscribe("yang3", "*");
         consumer.subscribe("nihao", "*");
+        consumer.subscribe("nihao", MessageSelector.bySql("product = 'MQ'"));
 
         /**
          * 设置Consumer第一次启动是从队列头部开始消费还是队列尾部开始消费<br>

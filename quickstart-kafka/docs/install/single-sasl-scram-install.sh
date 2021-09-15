@@ -45,11 +45,11 @@ nohup sh bin/kafka-server-start.sh config/server.properties >/dev/null 2>&1 &
 
 创建用户方式一
 
-bin/kafka-configs.sh --zookeeper localhost:2181 --alter --add-config 'SCRAM-SHA-256=[password=admin],SCRAM-SHA-512=[password=admin]' --entity-type users --entity-name admin
+bin/kafka-configs.sh --zookeeper localhost:2181 --alter --add-config 'SCRAM-SHA-512=[password=admin],SCRAM-SHA-512=[password=admin]' --entity-type users --entity-name admin
 
-bin/kafka-configs.sh --zookeeper localhost:2181 --alter --add-config 'SCRAM-SHA-256=[iterations=8192,password=writer-pwd],SCRAM-SHA-512=[password=writer-pwd]' --entity-type users --entity-name writer
+bin/kafka-configs.sh --zookeeper localhost:2181 --alter --add-config 'SCRAM-SHA-512=[iterations=8192,password=writer-pwd],SCRAM-SHA-512=[password=writer-pwd]' --entity-type users --entity-name writer
 
-bin/kafka-configs.sh --zookeeper localhost:2181 --alter --add-config 'SCRAM-SHA-256=[password=reader-pwd],SCRAM-SHA-512=[password=reader-pwd]' --entity-type users --entity-name reader
+bin/kafka-configs.sh --zookeeper localhost:2181 --alter --add-config 'SCRAM-SHA-512=[password=reader-pwd],SCRAM-SHA-512=[password=reader-pwd]' --entity-type users --entity-name reader
 
 bin/kafka-configs.sh --zookeeper localhost:2181 --describe --entity-type users --entity-name admin
 bin/kafka-configs.sh --zookeeper localhost:2181 --describe --entity-type users --entity-name writer
@@ -60,11 +60,11 @@ bin/kafka-configs.sh --zookeeper localhost:2182 --alter --delete-config 'SCRAM-S
 
 或者创建用户方式二
 
-bin/kafka-configs.sh --bootstrap-server localhost:9092 --alter --add-config 'SCRAM-SHA-256=[password=admin],SCRAM-SHA-512=[password=admin]' --entity-type users --entity-name admin
+bin/kafka-configs.sh --bootstrap-server localhost:9092 --alter --add-config 'SCRAM-SHA-512=[password=admin],SCRAM-SHA-512=[password=admin]' --entity-type users --entity-name admin
 
-bin/kafka-configs.sh --bootstrap-server localhost:9092 --alter --add-config 'SCRAM-SHA-256=[iterations=8192,password=writer-pwd],SCRAM-SHA-512=[password=writer-pwd]' --entity-type users --entity-name writer
+bin/kafka-configs.sh --bootstrap-server localhost:9092 --alter --add-config 'SCRAM-SHA-512=[iterations=8192,password=writer-pwd],SCRAM-SHA-512=[password=writer-pwd]' --entity-type users --entity-name writer
 
-bin/kafka-configs.sh --bootstrap-server localhost:9092 --alter --add-config 'SCRAM-SHA-256=[password=reader-pwd],SCRAM-SHA-512=[password=reader-pwd]' --entity-type users --entity-name reader
+bin/kafka-configs.sh --bootstrap-server localhost:9092 --alter --add-config 'SCRAM-SHA-512=[password=reader-pwd],SCRAM-SHA-512=[password=reader-pwd]' --entity-type users --entity-name reader
 
 bin/kafka-configs.sh --bootstrap-server localhost:9092 --describe --entity-type users --entity-name admin
 bin/kafka-configs.sh --bootstrap-server localhost:9092 --describe --entity-type users --entity-name writer
@@ -84,15 +84,41 @@ KafkaServer {
 配置脚本
 vi ~/.bash_profile
 
-export KAFKA_PLAIN_PARAMS="-Djava.security.auth.login.config=/Users/lengfeng/Downloads/kafka_2.13-2.7.0/config/kafka_server_jaas.conf"
+export KAFKA_PLAIN_PARAMS="-Djava.security.auth.login.config=/Users/lengfeng/kafka/kafka_2.13-2.7.0/config/kafka_server_jaas.conf"
 export KAFKA_OPTS="$KAFKA_PLAIN_PARAMS $KAFKA_OPTS"
 
 source ~/.bash_profile
+
+
+vi startKafka.sh
+
+#!/bin/bash
+KAFKA_BASE_DIR=/Users/lengfeng/kafka
+KAFKA_VERSION=kafka_2.13-2.8.0
+KAFKA_HOME=$KAFKA_BASE_DIR/$KAFKA_VERSION
+KAFKA_AGENT_HOME=$KAFKA_BASE_DIR/kafka_agent
+KAFKA_EXPORTER_VERSION=kafka_exporter-1.3.1.linux-amd64
+KAFKA_EXPORTER_HOME=$KAFKA_BASE_DIR/$KAFKA_EXPORTER_VERSION
+KAFKA_LOGS_DIR=/Users/lengfeng/logs/kafka
+
+## 指定日志路径和JDK
+export LOG_DIR=$KAFKA_LOGS_DIR
+#export JAVA_HOME=/data/program/java
+
+#export KAFKA_HEAP_OPTS="-Xmx4G -Xms4G"
+
+export KAFKA_PLAIN_PARAMS="-Djava.security.auth.login.config=/Users/lengfeng/kafka/kafka_2.13-2.8.0/config/kafka_server_jaas.conf"
+export KAFKA_OPTS="$KAFKA_PLAIN_PARAMS $KAFKA_OPTS"
+
+nohup $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties > $LOG_DIR/kafka.log 2>&1 &
+
 
 配置服务端配置文件
 vi config/server.properties
 
 # ACL配置
+#设置为true，ACL机制改为黑名单机制，只有黑名单中的用户无法访问
+#设置为false，ACL机制改为白名单机制，只有白名单中的用户可以访问，默认值为false
 allow.everyone.if.no.acl.found=false
 # 启用ACL
 authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
@@ -103,12 +129,12 @@ super.users=User:admin
 
 # 认证配置
 # 启用SCRAM机制，采用SCRAM-SHA-512算法
-sasl.enabled.mechanisms=SCRAM-SHA-256
-# sasl.enabled.mechanisms=SCRAM-SHA-512
+sasl.enabled.mechanisms=SCRAM-SHA-512
+# sasl.enabled.mechanisms=SCRAM-SHA-256
 
 # 为broker间通讯开启SCRAM机制，采用SCRAM-SHA-512算法
-sasl.mechanism.inter.broker.protocol=SCRAM-SHA-256
-# sasl.mechanism.inter.broker.protocol=SCRAM-SHA-512
+sasl.mechanism.inter.broker.protocol=SCRAM-SHA-512
+# sasl.mechanism.inter.broker.protocol=SCRAM-SHA-256
 
 # broker间通讯使用PLAINTEXT，本例中不演示SSL配置
 security.inter.broker.protocol=SASL_PLAINTEXT
@@ -137,10 +163,10 @@ KafkaClient {
 };
 
 创建config/client-sasl.properties 文件
-vim config/client-sasl.properties
+vi config/client-sasl.properties
 
 security.protocol=SASL_PLAINTEXT
-sasl.mechanism=SCRAM-SHA-256
+sasl.mechanism=SCRAM-SHA-512
 
 把KAFKA_OPTS清空
 export KAFKA_OPTS=""
@@ -151,7 +177,7 @@ export KAFKA_OPTS=""
 vi bin/kafka-topics.sh
 
 # exec $(dirname $0)/kafka-run-class.sh kafka.admin.TopicCommand "$@"
-exec $(dirname $0)/kafka-run-class.sh -Djava.security.auth.login.config=/Users/lengfeng/Downloads/kafka_2.13-2.7.0/config/kafka_client_jaas.conf kafka.admin.TopicCommand "$@"
+exec $(dirname $0)/kafka-run-class.sh -Djava.security.auth.login.config=/Users/lengfeng/kafka/kafka_2.13-2.8.0/config/kafka_client_jaas.conf kafka.admin.TopicCommand "$@"
 
 # 创建Topic
 bin/kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092 --command-config config/client-sasl.properties

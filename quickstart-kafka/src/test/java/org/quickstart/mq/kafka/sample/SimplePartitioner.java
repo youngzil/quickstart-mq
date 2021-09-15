@@ -3,6 +3,7 @@ package org.quickstart.mq.kafka.sample;
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;
 import org.apache.kafka.common.PartitionInfo;
+import org.apache.kafka.common.utils.Utils;
 
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,16 @@ public class SimplePartitioner implements Partitioner {
     public void close() {
         // TODO Auto-generated method stub
 
+    }
+
+    public static void main(String[] args) {
+        String key = "ddddd";
+        while (true) {
+            int partition = Utils.toPositive(Utils.murmur2(key.getBytes())) % 4;
+            if (2 != partition) {
+                System.out.println(partition);
+            }
+        }
     }
 
 }

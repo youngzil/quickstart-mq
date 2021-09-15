@@ -81,11 +81,14 @@ kafka_topic_partition_under_replicated_partition{partition="0",topic="topic03"} 
 
 ---------------------------------------------------------------------------------------------------------------------
 
+配置Grafana图表的时候，可以参考下面的三项
+1. broker监控数据可以知道具体的指标代表额具体含义
+2. Kafka Broker监控指标列表可以查看指标的含义
+3. prometheus采集的样本数据可以知道有哪些tag可以做查询条件
 
-
-
-
-
+[某一个Broker监控数据](http://127.0.0.1:7071/)
+[Kafka Broker监控指标列表（官网）](https://kafka.apache.org/documentation/#monitoring)
+[prometheus采集的样本数据](http://127.0.0.1:9090/graph)  
 
 
 

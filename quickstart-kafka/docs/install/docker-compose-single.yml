@@ -15,7 +15,8 @@ services:
       - 2181:2181
 
   kafka:
-    image: wurstmeister/kafka:1.0.0
+#    image: wurstmeister/kafka:1.0.0
+    image: wurstmeister/kafka
     restart: always
     hostname: kafka
     container_name: kafka
