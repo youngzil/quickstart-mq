@@ -3,12 +3,15 @@ package org.quickstart.mq.pulsar;
 import org.apache.pulsar.client.api.BatchReceivePolicy;
 import org.apache.pulsar.client.api.Consumer;
 import org.apache.pulsar.client.api.ConsumerBuilder;
+import org.apache.pulsar.client.api.DeadLetterPolicy;
 import org.apache.pulsar.client.api.Message;
 import org.apache.pulsar.client.api.MessageListener;
 import org.apache.pulsar.client.api.Messages;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
 import org.apache.pulsar.client.api.RegexSubscriptionMode;
+import org.apache.pulsar.client.api.Schema;
+import org.apache.pulsar.client.api.SubscriptionInitialPosition;
 import org.apache.pulsar.client.api.SubscriptionType;
 import org.junit.Before;
 import org.junit.Test;
@@ -175,6 +178,24 @@ public class PulsarConsumer {
             .topics(topics)//
             .subscribeAsync()//
             .thenAccept(this::receiveMessageFromConsumer);
+
+    }
+
+    @Test
+    public void testDLQ() throws PulsarClientException {
+
+        Consumer<byte[]> consumer = client.newConsumer(Schema.BYTES)//
+            .topic("my-topic")//
+            .subscriptionName("my-subscription")//
+            .subscriptionType(SubscriptionType.Shared)//
+            .ackTimeout(3, TimeUnit.SECONDS)//
+            .receiverQueueSize(100)//
+            .deadLetterPolicy(DeadLetterPolicy.builder() //启用死信队列功能
+                .maxRedeliverCount(8)//在进入死信队列之前，消息最多被重新投递的最大次数
+                .deadLetterTopic("persistent://my-property/my-ns/dead-letter-custom-topic-my-subscription-custom-DLQ")// 死信队列的topic name
+                .build())//
+            .subscriptionInitialPosition(SubscriptionInitialPosition.Earliest)//
+            .subscribe();
 
     }
 

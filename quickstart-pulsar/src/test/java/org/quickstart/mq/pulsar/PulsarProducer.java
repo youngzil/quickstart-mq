@@ -33,6 +33,7 @@ public class PulsarProducer {
         // while (true) {
         i++;
         // 然后你就可以发送消息到指定的broker 和topic上：
+
         MessageId messageId = producer.send((" My message " + i).getBytes()); // 同步发送
         System.out.println("messageId=" + messageId);
         TimeUnit.SECONDS.sleep(2);

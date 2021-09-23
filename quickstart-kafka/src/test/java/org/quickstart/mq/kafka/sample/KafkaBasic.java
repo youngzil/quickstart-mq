@@ -51,10 +51,10 @@ import java.util.regex.Pattern;
 @Slf4j
 public class KafkaBasic {
 
-    private static final String brokerList = "localhost:9092";
+    // private static final String brokerList = "localhost:9092";
     // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
     // private static final String brokerList = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094";
-    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     // private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
     // private static final String brokerList = "kafka1:9092,kafka2:9093,kafka3:9094";
 
@@ -197,11 +197,13 @@ public class KafkaBasic {
 
         Consumer<String, String> consumer = createConsumer();
 
-        String topic = "topic03";
+        // String topic = "topic03";
+        String topic = "lengfeng.order.test";
         // String topic = "bkk.item.tradetgt.count";
         // String topic = "test.topic.7";
-        String topic2 = "test";
-        String topic3 = "tpch.customer";
+        // String topic2 = "test";
+        String topic2 = "lengfeng.order.test";
+        String topic3 = "lengfeng.order.test";
 
         // 使用消费者对象订阅这些主题
         // consumer.subscribe(Arrays.asList(topic), new SaveOffsetOnRebalance(consumer));

@@ -8,6 +8,8 @@
 ---------------------------------------------------------------------------------------------------------------------
 ## Kafka权限管理
 
+[简单验证和安全层 (Simple Authentication and Security Layer, SASL) 介绍](https://docs.oracle.com/cd/E26926_01/html/E25912/sasl.intro.20.html)
+
 ## 1、Kafka的权限分类
 
 1）、身份认证（Authentication）：

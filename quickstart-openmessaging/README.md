@@ -1,7 +1,10 @@
-http://openmessaging.cloud/
-https://github.com/openmessaging
-https://github.com/openmessaging/openmessaging-java
+# OpenMessaging
 
+[OpenMessaging官网](http://openmessaging.cloud/)  
+[OpenMessaging Github](https://github.com/openmessaging)  
+[OpenMessaging Java](https://github.com/openmessaging/openmessaging-java)  
+[]()  
+[]()  
 
 
 云原生，与供应商无关的开放式规范，用于分布式消息传递
@@ -15,6 +18,11 @@ A cloud native, vendor-neutral open specification for distributed messaging
 
 
 
+
+目前已知的实现是RocketMQ，示例可以看RocketMQ的源码
+
+一个可以参考的demo实现  
+[OpenMessageShaping](https://github.com/RapidsBlink/OpenMessageShaping)
 
 
 

@@ -1,3 +1,5 @@
+# Kafka介绍
+
 [Kafka官网](http://kafka.apache.org/)  
 [Kafka文档](http://kafka.apache.org/documentation.html)  
 [Kafka Github](https://github.com/apache/kafka)  
@@ -79,8 +81,14 @@ Apache Kafka 在 Exactly-Once Semantics（EOS）上三种粒度的保证如下�
 
 
 
+## KIP
+
+KIP：Kafka Improvement Proposals（Kafka 改进建议）
 
 
+
+
+## Confluent社区
 
 [Confluent社区](https://www.confluent.io/)
 使用kafka用于云原生和容器的社区
@@ -92,6 +100,16 @@ Confluent 包含了从 kafka 集群搭建到 connector 组件部署，再到 con
 
 
 
+
+## Kafka主要模块
+
+- Kafka Broker
+- Producer
+- Consumer
+- AdminClient
+- Kafka Connect
+- Kafka Streams
+- MirrorMaker
 
 
 
