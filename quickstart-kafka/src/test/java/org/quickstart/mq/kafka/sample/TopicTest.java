@@ -1,6 +1,5 @@
 package org.quickstart.mq.kafka.sample;
 
-import kafka.admin.TopicCommand;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.Admin;
@@ -78,6 +77,7 @@ public class TopicTest {
                 return topicDetail;
             })//
             .collect(Collectors.toList());
+
 
        /* topicList.stream().forEach(topicDetail -> {
             //创建topic
@@ -370,20 +370,6 @@ public class TopicTest {
         partitionsResult.all().get();
     }
 
-    // @Test
-    public boolean alterTopicPartition(String brokerList, String topic, int partitions) {
-
-        TopicCommand.TopicCommandOptions topicCommandOptions =
-            new TopicCommand.TopicCommandOptions(new String[] {"--alter", "--topic", topic, "--partitions", "" + partitions});
-
-        TopicCommand.AdminClientTopicService adminClientTopicService = new TopicCommand.AdminClientTopicService(adminClient);
-
-        // Topic修改
-        adminClientTopicService.alterTopic(topicCommandOptions);
-
-        return true;
-    }
-
     @Test
     public void topicDescribeConfig() throws ExecutionException, InterruptedException {
 
@@ -429,27 +415,6 @@ public class TopicTest {
         configMap.put(configResource, config);
         AlterConfigsResult alterConfigsResult = adminClient.alterConfigs(configMap);
         alterConfigsResult.all().get();
-    }
-
-    // @Test
-    public void alterTopicConfigs(String brokerList, String topic, Map<String, String> paraMap) {
-
-        List<String> params = new ArrayList<>();
-        params.add("--describe");
-        params.add("--topic");
-        params.add(topic);
-        for (Map.Entry entry : paraMap.entrySet()) {
-            params.add("--config");
-            params.add(entry.getKey() + "=" + entry.getValue());
-        }
-        String[] commands = new String[params.size()];
-        params.toArray(commands);
-
-        TopicCommand.TopicCommandOptions topicCommandOptions = new TopicCommand.TopicCommandOptions(commands);
-
-        TopicCommand.AdminClientTopicService adminClientTopicService = new TopicCommand.AdminClientTopicService(adminClient);
-
-        adminClientTopicService.alterTopic(topicCommandOptions);
     }
 
     // @Test

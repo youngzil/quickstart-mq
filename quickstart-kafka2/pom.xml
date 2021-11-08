@@ -9,33 +9,15 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>quickstart-kafka</artifactId>
+    <artifactId>quickstart-kafka2</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}-${project.version}</name>
     <url>http://maven.apache.org</url>
     <description>Demo project for XXX</description>
 
     <properties>
-        <!-- 0.8.X 和之前的版本，包路径改为kafka.*、kafka.javaapi.* -->
-        <!-- 大于0.9.X and 0.10.X and 0.11.X接口都更加简便，且兼容之前的版本，包路径改为org.apache.kafka.clients -->
-
-        <kafka.scala.version>2.12</kafka.scala.version>
-        <kafka.version>0.11.0.3</kafka.version>
-
-        <kafka.scala.version>2.12</kafka.scala.version>
-        <kafka.version>1.0.0</kafka.version>
-
-        <kafka.scala.version>2.12</kafka.scala.version>
-        <kafka.version>2.2.0</kafka.version>
-
-        <kafka.scala.version>2.13</kafka.scala.version>
-        <kafka.version>2.6.0</kafka.version>
-
         <kafka.scala.version>2.13</kafka.scala.version>
         <kafka.version>2.8.1</kafka.version>
-
-        <kafka.scala.version>2.13</kafka.scala.version>
-        <kafka.version>3.0.0</kafka.version>
 
         <confluent.version>2.0.0</confluent.version>
         <avro.version>1.7.7</avro.version>
@@ -61,12 +43,6 @@
             <artifactId>kafka-streams</artifactId>
             <version>${kafka.version}</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>io.prometheus.jmx</groupId>
-            <artifactId>jmx_prometheus_javaagent</artifactId>
-            <version>0.16.1</version>
-        </dependency>-->
 
         <dependency>
             <groupId>com.izettle</groupId>
@@ -150,7 +126,6 @@
             <artifactId>commons-collections4</artifactId>
             <version>${commons-collections4.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.yammer.metrics</groupId>
