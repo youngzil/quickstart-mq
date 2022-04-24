@@ -5,6 +5,8 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.CreateTopicsResult;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -54,9 +56,13 @@ public class KafkaBasic {
     // private static final String brokerList = "localhost:9092";
     // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
     // private static final String brokerList = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094";
-    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    private static final String brokerList = "172.16.112.232:9095,172.16.112.232:9093,172.16.112.232:9094";
+    // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
     // private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
     // private static final String brokerList = "kafka1:9092,kafka2:9093,kafka3:9094";
+    // private static final String brokerList = "172.16.49.66:9092,172.16.49.68:9092,172.16.49.72:9092";
+
 
     private static final long POLL_TIMEOUT = 100;
 
@@ -128,9 +134,9 @@ public class KafkaBasic {
 
         Producer<String, String> producer = createProducer();
 
-        String topic = "quickstart-events";
+        String topic = "lengfeng.direct.test";
         // long events = Long.MAX_VALUE;
-        long events = 1;
+        long events = 10;
         Random rnd = new Random();
         for (long nEvents = 0; nEvents < events; nEvents++) {
             long runtime = new Date().getTime();
@@ -143,7 +149,7 @@ public class KafkaBasic {
             String result = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(fff);
             System.out.println(fff+","+result);
 
-            ProducerRecord<String, String> data = new ProducerRecord<>( topic,  0, fff, ip, msg, null);
+            ProducerRecord<String, String> data = new ProducerRecord<>( topic,  null, fff, ip, msg, null);
             producer.send(data, (metadata, exception) -> {
                 if (exception != null) {
                     exception.printStackTrace();
@@ -167,10 +173,17 @@ public class KafkaBasic {
     @Test
     public void syncProducer() throws InterruptedException, ExecutionException {
 
+
+        Admin  admin = createAdminClient();
+        admin.deleteTopics(Arrays.asList("topic01"));
+        //创建topic
+        CreateTopicsResult topicsResult = admin.createTopics(Arrays.asList(new NewTopic("topic01", 2, (short)1)));//(名称，分区数，副本因子)
+        topicsResult.all().get();
+
         Producer<String, String> producer = createProducer();
 
-        String topic = "topic02";
-        long events = 10000;
+        String topic = "topic01";
+        long events = 150;
         Random rnd = new Random();
 
         for (long nEvents = 0; nEvents < events; nEvents++) {

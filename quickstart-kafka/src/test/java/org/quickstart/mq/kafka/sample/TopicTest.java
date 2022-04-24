@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,8 +48,11 @@ public class TopicTest {
 
     // private static final String brokerList = "localhost:9092";
     // private static final String brokerList = "172.16.48.182:9011,172.16.48.182:9012,172.16.48.183:9011";
-    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
+    // private static final String brokerList = "172.16.112.232:9092,172.16.112.232:9093,172.16.112.232:9094";
     // private static final String brokerList = "172.16.49.6:9093,172.16.49.12:9093,172.16.49.10:9093";
+    private static final String brokerList = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094";
     private Admin adminClient;
     private Consumer consumer;
 
@@ -62,7 +64,30 @@ public class TopicTest {
     }
 
     @Test
-    public void testMigrationTopic() throws ExecutionException, InterruptedException {
+    public void queryTopic() throws ExecutionException, InterruptedException {
+
+        // 查看topic列表
+        //是否查看Internal选项
+        ListTopicsOptions options = new ListTopicsOptions();
+        options.listInternal(true);
+
+        //ListTopicsResult listTopicsResult = adminClient.listTopics();
+        ListTopicsResult listTopicsResult = adminClient.listTopics(options);
+        Set<String> names = listTopicsResult.names().get();
+
+        //打印names
+        names.stream().forEach(System.out::println);
+
+        String keyword = "test";
+        Set<String> filterNames = names.stream().filter(topicName -> topicName.contains(keyword)).collect(Collectors.toSet());
+        System.out.println("filterNames=" + filterNames);
+
+        Collection<TopicListing> topicListings = listTopicsResult.listings().get();
+        //打印TopicListing
+        topicListings.stream().forEach((topicList) -> {
+            System.out.println(topicList.toString());
+        });
+
 
         //查看topic列表
         Set<String> topics = adminClient.listTopics().names().get();
@@ -91,11 +116,10 @@ public class TopicTest {
                 e.printStackTrace();
             }
         });*/
-
     }
 
     @Test
-    public void cleanTopic() throws ExecutionException, InterruptedException {
+    public void queryTopicPartitionOffset() throws ExecutionException, InterruptedException {
 
         Set<String> topics = adminClient.listTopics().names().get();
         Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(topics).all().get();
@@ -138,6 +162,132 @@ public class TopicTest {
 
         System.out.println(offsetsMap);
 
+    }
+
+    // 获取某个Topic的所有分区以及分区最新的Offset
+    @Test
+    public void queryTopicPartitionOffset2() throws IOException {
+
+        // 脚本方式获取
+        // ./bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic test
+
+        String topic = "lengfeng.direct.test";
+
+
+        Collection<PartitionInfo> partitionInfos = consumer.partitionsFor(topic);
+        System.out.println("Get the partition info as below:");
+
+        Set<TopicPartition> tps = partitionInfos.stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition()))
+            .collect(Collectors.toSet());
+        consumer.assign(tps);
+
+        // 方法二
+        Map<TopicPartition, Long> beginningOffsets = consumer.beginningOffsets(tps);
+        Map<TopicPartition, Long> endOffsets = consumer.endOffsets(tps);
+        System.out.println("beginningOffsets=" + beginningOffsets + ",endOffsets=" + endOffsets);
+
+        // 方法三
+        consumer.seekToBeginning(tps);
+        beginningOffsets = tps.stream()
+            .collect(Collectors.toMap(topicPartition -> topicPartition, topicPartition -> consumer.position(topicPartition), (k1, k2) -> k1));
+
+        consumer.seekToEnd(tps);
+        endOffsets = tps.stream()
+            .collect(Collectors.toMap(topicPartition -> topicPartition, topicPartition -> consumer.position(topicPartition), (k1, k2) -> k1));
+        System.out.println("beginningOffsets=" + beginningOffsets + ",endOffsets=" + endOffsets);
+
+        System.in.read();
+    }
+
+    @Test
+    public void queryTopicDetail() throws ExecutionException, InterruptedException {
+
+        // String topic = "lengfeng.topic.test";
+        String topic = "druid.service.metrics";
+
+        Map<String, List<PartitionInfo>> listMap = consumer.listTopics();
+        System.out.println(listMap);
+
+        List<PartitionInfo> partitionInfos = consumer.partitionsFor(topic);
+        List<TopicPartition> topicPartitions =
+            partitionInfos.stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition()))
+                .collect(Collectors.toList());
+
+        Map<TopicPartition, Long> beginningOffsets = consumer.beginningOffsets(topicPartitions);
+        Map<TopicPartition, Long> endOffsets = consumer.endOffsets(topicPartitions);
+        Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(Collections.singleton(topic)).all().get();
+
+        Map<TopicPartition, TopicPartitionDetail> topicDetailMap =
+            Stream.of(beginningOffsets, endOffsets).flatMap(map -> map.entrySet().stream()).collect(Collectors.toMap(//
+                Map.Entry::getKey,//
+                value -> {
+                    TopicPartitionDetail topicDetail = new TopicPartitionDetail();
+                    topicDetail.setTopic(value.getKey().topic());
+                    topicDetail.setPartition(value.getKey().partition());
+                    topicDetail.setBeginningOffset(value.getValue());
+                    return topicDetail;
+                },//
+                (v1, v2) -> {
+                    v1.setEndOffset(v2.getBeginningOffset());
+                    v1.setLag(v1.getBeginningOffset() - v1.getEndOffset());
+                    return v1;
+                }));
+
+        System.out.println(topicDetailMap);
+
+    }
+
+    @Test
+    public void createTopic() throws ExecutionException, InterruptedException {
+
+        String topic = "test";
+        int partitions = 5;
+        short replicas = 3;
+
+        // 创建topic
+        CreateTopicsResult topicsResult = adminClient.createTopics(Arrays.asList(new NewTopic(topic, partitions, replicas), // (名称，分区数，副本因子)
+            new NewTopic("topic02", 2, (short)2), new NewTopic("topic03", 6, (short)3)));
+
+        //创建topic
+        // CreateTopicsResult topicsResult = adminClient.createTopics(Arrays.asList(new NewTopic(topic, partitions, replicas)));//(名称，分区数，副本因子)
+        topicsResult.all().get();
+
+    }
+
+    /**
+     * 增加partitions数量
+     *
+     * @throws Exception
+     */
+    // @Test
+    public void incrPartitions() throws Exception {
+
+        int partitions = 10;
+        String topic = "topic01";
+
+        Map<String, NewPartitions> partitionsMap = new HashMap<>();
+        NewPartitions newPartitions = NewPartitions.increaseTo(partitions);
+        partitionsMap.put(topic, newPartitions);
+        CreatePartitionsResult partitionsResult = adminClient.createPartitions(partitionsMap);
+        partitionsResult.all().get();
+    }
+
+    @Test
+    public void testTopicDetail() throws ExecutionException, InterruptedException {
+
+        //查看topic列表
+        Set<String> topics = adminClient.listTopics().names().get();
+        Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(topics).all().get();
+
+        List<TopicDetail> topicList = topicDescriptionMap.values().stream()//
+            .map(topicDescription -> {
+                TopicDetail topicDetail = new TopicDetail();
+                topicDetail.setTopic(topicDescription.name());
+                topicDetail.setPartitions(topicDescription.partitions().size());
+                topicDetail.setReplicas(topicDescription.partitions().get(0).replicas().size());
+                return topicDetail;
+            })//
+            .collect(Collectors.toList());
     }
 
     @Test
@@ -197,67 +347,7 @@ public class TopicTest {
         System.out.println(topicPartitionInfos);
     }
 
-    @Test
-    public void queryAllTopic() throws ExecutionException, InterruptedException {
 
-        //查看topic列表
-        Set<String> topics = adminClient.listTopics().names().get();
-        Collection<TopicListing> topicListings = adminClient.listTopics().listings().get();
-        System.out.println(topics);
-    }
-
-    @Test
-    public void queryAllTopicPartition() throws ExecutionException, InterruptedException {
-
-        //查看topic列表
-        Set<String> topics = adminClient.listTopics().names().get();
-        Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(topics).all().get();
-
-        List<TopicPartitionInfo> topicPartitionInfos = topicDescriptionMap.values().stream()//
-            .map(topicDescription -> topicDescription.partitions())//
-            .flatMap(Collection::stream)//
-            .collect(Collectors.toList());
-
-        System.out.println(topicPartitionInfos.size());
-    }
-
-    @Test
-    public void queryTopicDetail() throws ExecutionException, InterruptedException {
-
-        // String topic = "lengfeng.topic.test";
-        String topic = "druid.service.metrics";
-
-        Map<String, List<PartitionInfo>> listMap = consumer.listTopics();
-        System.out.println(listMap);
-
-        List<PartitionInfo> partitionInfos = consumer.partitionsFor(topic);
-        List<TopicPartition> topicPartitions =
-            partitionInfos.stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition()))
-                .collect(Collectors.toList());
-
-        Map<TopicPartition, Long> beginningOffsets = consumer.beginningOffsets(topicPartitions);
-        Map<TopicPartition, Long> endOffsets = consumer.endOffsets(topicPartitions);
-        Map<String, TopicDescription> topicDescriptionMap = adminClient.describeTopics(Collections.singleton(topic)).all().get();
-
-        Map<TopicPartition, TopicPartitionDetail> topicDetailMap =
-            Stream.of(beginningOffsets, endOffsets).flatMap(map -> map.entrySet().stream()).collect(Collectors.toMap(//
-                Map.Entry::getKey,//
-                value -> {
-                    TopicPartitionDetail topicDetail = new TopicPartitionDetail();
-                    topicDetail.setTopic(value.getKey().topic());
-                    topicDetail.setPartition(value.getKey().partition());
-                    topicDetail.setBeginningOffset(value.getValue());
-                    return topicDetail;
-                },//
-                (v1, v2) -> {
-                    v1.setEndOffset(v2.getBeginningOffset());
-                    v1.setLag(v1.getBeginningOffset() - v1.getEndOffset());
-                    return v1;
-                }));
-
-        System.out.println(topicDetailMap);
-
-    }
 
     @Test
     public void queryAllTopic2() throws ExecutionException, InterruptedException {
@@ -275,7 +365,7 @@ public class TopicTest {
 
             })//
             .flatMap(Collection::stream)//
-            .collect(Collectors.toMap(topicPartition -> topicPartition, value -> new OffsetSpec()));
+            .collect(Collectors.toMap(topicPartition -> topicPartition, key -> new OffsetSpec()));
 
         Map<TopicPartition, ListOffsetsResult.ListOffsetsResultInfo> ffff = adminClient.listOffsets(topicPartitionOffsets).all().get();
         System.out.println(ffff);
@@ -285,89 +375,6 @@ public class TopicTest {
                 .reassignments().get();
         System.out.println(partitionPartitionReassignmentMap);
 
-    }
-
-    // 获取某个Topic的所有分区以及分区最新的Offset
-    @Test
-    public void getPartitionsForTopic() throws IOException {
-
-        // 脚本方式获取
-        // ./bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic test
-
-        String topic = "lengfeng.topic.test";
-
-        Collection<PartitionInfo> partitionInfos = consumer.partitionsFor(topic);
-        System.out.println("Get the partition info as below:");
-        List<TopicPartition> tp = new ArrayList<>();
-        partitionInfos.forEach(partitionInfo -> {
-            System.out.println("Partition Info:" + partitionInfo);
-
-            TopicPartition topicPartition = new TopicPartition(partitionInfo.topic(), partitionInfo.partition());
-            tp.add(topicPartition);
-            consumer.assign(tp);
-            consumer.seekToEnd(tp);
-
-            System.out.println(topicPartition + " 's latest offset is '" + consumer.position(topicPartition));
-
-            Map<TopicPartition, Long> beginningOffsets = consumer.beginningOffsets(Collections.singleton(topicPartition));
-            Map<TopicPartition, Long> endOffsets = consumer.endOffsets(Collections.singleton(topicPartition));
-            System.out.println("topicPartition=" + topicPartition + ",beginningOffsets=" + beginningOffsets + ",endOffsets=" + endOffsets);
-
-        });
-
-        System.in.read();
-    }
-
-    @Test
-    public void topicQuery() throws ExecutionException, InterruptedException {
-
-        // 查看topic列表
-        //是否查看Internal选项
-        ListTopicsOptions options = new ListTopicsOptions();
-        options.listInternal(true);
-
-        //ListTopicsResult listTopicsResult = adminClient.listTopics();
-        ListTopicsResult listTopicsResult = adminClient.listTopics(options);
-        Set<String> names = listTopicsResult.names().get();
-
-        //打印names
-        names.stream().forEach(System.out::println);
-
-        Collection<TopicListing> topicListings = listTopicsResult.listings().get();
-        //打印TopicListing
-        topicListings.stream().forEach((topicList) -> {
-            System.out.println(topicList.toString());
-        });
-    }
-
-    // @Test
-    public void createTopic(String brokerList, String topic, int partitions, int replicas) throws ExecutionException, InterruptedException {
-
-        // 创建topic
-        adminClient.createTopics(Arrays.asList(new NewTopic("topic01", 2, (short)1), // (名称，分区数，副本因子)
-            new NewTopic("topic02", 2, (short)2), new NewTopic("topic03", 6, (short)3)));
-
-        //创建topic
-        CreateTopicsResult topicsResult = adminClient.createTopics(Arrays.asList(new NewTopic(topic, partitions, (short)replicas)));//(名称，分区数，副本因子)
-        topicsResult.all().get();
-
-    }
-
-    /**
-     * 增加partitions数量
-     *
-     * @param partitions
-     * @throws Exception
-     */
-    // @Test
-    public void incrPartitions(int partitions) throws Exception {
-        String topic = "topic01";
-
-        Map<String, NewPartitions> partitionsMap = new HashMap<>();
-        NewPartitions newPartitions = NewPartitions.increaseTo(partitions);
-        partitionsMap.put(topic, newPartitions);
-        CreatePartitionsResult partitionsResult = adminClient.createPartitions(partitionsMap);
-        partitionsResult.all().get();
     }
 
     @Test

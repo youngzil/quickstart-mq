@@ -2,7 +2,14 @@
 # docker compose -f docker-compose-cluster.yml down
 # docker-compose restart prometheus
 #  docker logs prometheus
+# 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
 
+
+#  KAFKA_ADVERTISED_HOST_NAME：广播主机名称，一般用IP指定
+#  KAFKA_ZOOKEEPER_CONNECT：Zookeeper连接地址，格式：zoo1：port1,zoo2:port2:/path
+#  KAFKA_LISTENERS：Kafka启动所使用的的协议及端口
+#  KAFKA_ADVERTISED_LISTENERS：Kafka广播地址及端口，也就是告诉客户端，使用什么地址和端口能连接到Kafka，这个很重要，如果不指定，宿主机以外的客户端将无法连接到Kafka，比如我这里因为容器与宿主机做了端口映射，所以广播地址采用的是宿主机的地址及端口，告诉客户端只要连接到宿主机的指定端口就行了
+#  KAFKA_BROKER_ID：指定BrokerId，如果不指定，将会自己生成
 
 version: '3.4'
 
@@ -13,7 +20,7 @@ services:
     hostname: zoo1
     container_name: zoo1
     ports:
-      - 2184:2181
+      - 2181:2181
     #    volumes:
     #      - "/Users/lengfeng/kafka/zkcluster/zoo1/data:/data"
     #      - "/Users/lengfeng/kafka/zkcluster/zoo1/datalog:/datalog"
@@ -30,7 +37,7 @@ services:
     hostname: zoo2
     container_name: zoo2
     ports:
-      - 2185:2181
+      - 2182:2181
     #    volumes:
     #      - "/Users/lengfeng/kafka/zkcluster/zoo2/data:/data"
     #      - "/Users/lengfeng/kafka/zkcluster/zoo2/datalog:/datalog"
@@ -47,7 +54,7 @@ services:
     hostname: zoo3
     container_name: zoo3
     ports:
-      - 2186:2181
+      - 2183:2181
     #    volumes:
     #      - "/Users/lengfeng/kafka/zkcluster/zoo3/data:/data"
     #      - "/Users/lengfeng/kafka/zkcluster/zoo3/datalog:/datalog"
@@ -161,7 +168,7 @@ services:
 #      - zoo2
 #      - zoo3
 
-networks:
-  kafka:
-    external:
-      name: kafka
+#networks:
+#  kafka:
+#    external:
+#      name: kafka

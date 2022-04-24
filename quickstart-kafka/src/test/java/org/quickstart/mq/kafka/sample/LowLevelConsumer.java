@@ -8,9 +8,11 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.clients.consumer.OffsetResetStrategy;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.Test;
 
@@ -18,32 +20,82 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 @Slf4j
 public class LowLevelConsumer {
 
-    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    private static final String brokerList = "172.16.49.66:9092,172.16.49.68:9092,172.16.49.72:9092";
 
     private static final long POLL_TIMEOUT = 100;
 
     @Test
-    public void testAssign() {
+    public void consumerMethod() {
 
         Consumer<String, String> consumer = createConsumer();
 
-        String topic = "topic03";
-        consumer.assign(Arrays.asList(new TopicPartition(topic, 0), new TopicPartition(topic, 1)));
+        String topic = "lengfeng.direct.test";
 
-        // consumer从指定的offset处理,其实是重置这个TopicPartition的offset
-        //consumer.seek(partition, seekOffset);
+        // 使用消费者对象订阅这些主题
+        consumer.subscribe(Arrays.asList(topic), new SaveOffsetOnRebalance(consumer));
 
-        int count = 0;
+        // 不断的轮询获取主题中的消息
+        try {
+            // poll() 获取消息列表，可以传入超时时间
+            // while (true) {
+                // [在consumer.poll之后assignment()返回为空的问题](https://www.cnblogs.com/huxi2b/p/10773559.html)
+                consumer.poll(0);//不能使用consumer.poll(Duration.ofMillis(0));，否则可能assignment()返回为空
+
+                consumer.assignment().forEach(topicPartition -> {
+                    System.out.println(topicPartition);
+
+                    OffsetAndMetadata offsetAndMetadata = consumer.committed(topicPartition);
+                    System.out.printf("原始的offset= %s%n", offsetAndMetadata);
+
+                    Map<TopicPartition, Long> beginningOffsets = consumer.beginningOffsets(Collections.singleton(topicPartition));
+                    Map<TopicPartition, Long> endOffsets = consumer.endOffsets(Collections.singleton(topicPartition));
+                    System.out.println("beginningOffsets=" + beginningOffsets + ",endOffsets=" + endOffsets);
+
+
+                });
+                TimeUnit.SECONDS.sleep(3);
+            // }
+        } catch (WakeupException | InterruptedException e) {
+            // 不用处理这个异常，它只是用来停止循环的
+        } finally {
+            consumer.close();
+        }
+    }
+
+    @Test
+    public void testAssign() {
+
+        try {
+            Consumer<String, String> consumer = createConsumer();
+
+            String topic = "lengfeng.bi.test2";
+            // consumer.assign(Arrays.asList(new TopicPartition(topic, 0), new TopicPartition(topic, 1)));
+
+            TopicPartition partition = new TopicPartition(topic, 0);
+            consumer.assign(Arrays.asList(partition));
+
+            // consumer从指定的offset处理,其实是重置这个TopicPartition的offset
+            long seekOffset = 10;
+            consumer.seek(partition, seekOffset);
+            consumer.poll(Duration.ofMillis(100));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        /*int count = 0;
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
             // records.forEach(record -> System.out
@@ -62,7 +114,7 @@ public class LowLevelConsumer {
             }
 
             records.forEach(System.out::println);
-        }
+        }*/
 
     }
 
@@ -152,12 +204,12 @@ public class LowLevelConsumer {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "100");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, OffsetResetStrategy.EARLIEST.name().toLowerCase(Locale.ROOT));
+        // props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, OffsetResetStrategy.EARLIEST.name().toLowerCase(Locale.ROOT));
 
         // 2 构建滤器链
-        List<String> interceptors = new ArrayList<>();
-        interceptors.add(SimpleConsumerInterceptor.class.getName());
-        props.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
+        // List<String> interceptors = new ArrayList<>();
+        // interceptors.add(SimpleConsumerInterceptor.class.getName());
+        // props.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
 
         Consumer<String, String> consumer = new KafkaConsumer<>(props);
         return consumer;

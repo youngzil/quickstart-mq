@@ -51,34 +51,37 @@ jmx_prometheus_javaagent-0.16.1.jar
 
 
 
-kafka-exporter
+kafka-exporter 9308端口
 1. 可以采集到使用者经常关注的指标
 
-1. broker数量
-   kafka_brokers 1
+2. broker数量
+   kafka_brokers 集群的broker数量
 
-2. 消费组相关
-   kafka_consumergroup_current_offset{consumergroup="lengfeng.consumer.group",partition="0",topic="topic03"} 1.574722e+06
+3. 消费组相关
+   kafka_consumergroup_current_offset{consumergroup="lengfeng.consumer.group",partition="0",topic="topic03"} 1.574722e+06  消费进度的当前offset
    kafka_consumergroup_current_offset_sum{consumergroup="lengfeng.consumer.group",topic="topic03"} 1.574722e+06
-   kafka_consumergroup_lag{consumergroup="lengfeng.consumer.group",partition="0",topic="topic03"} 1.792037e+06
+   kafka_consumergroup_lag{consumergroup="lengfeng.consumer.group",partition="0",topic="topic03"} 1.792037e+06  消费进度的LAG
    kafka_consumergroup_lag_sum{consumergroup="lengfeng.consumer.group",topic="topic03"} 1.792037e+06
-   kafka_consumergroup_members{consumergroup="lengfeng.consumer.group"} 1
+   kafka_consumergroup_members{consumergroup="lengfeng.consumer.group"} 1 消费组的消费者个数
 
-3. topic partition相关的
-   kafka_topic_partition_oldest_offset{partition="0",topic="topic03"} 0
-   kafka_topic_partition_current_offset{partition="0",topic="topic03"} 3.366759e+06
-   kafka_topic_partitions{topic="topic03"} 1
+4. topic partition相关的
+   kafka_topic_partitions{topic="topic03"} 1  topic的partition数量
+   kafka_topic_partition_oldest_offset{partition="0",topic="topic03"} 0  topic的partition的最老的offset
+   kafka_topic_partition_current_offset{partition="0",topic="topic03"} 300  topic的partition的当前offset
 
-kafka_topic_partition_in_sync_replica{partition="0",topic="topic03"} 1
-kafka_topic_partition_leader{partition="0",topic="topic03"} 0
+kafka_topic_partition_in_sync_replica{partition="0",topic="topic03"} 3  在in_sync_replica的消费者个数
+kafka_topic_partition_leader{partition="0",topic="topic03"} 0 leader的brokerId
 kafka_topic_partition_leader_is_preferred{partition="0",topic="topic03"} 1
-kafka_topic_partition_replicas{partition="0",topic="topic03"} 1
-kafka_topic_partition_under_replicated_partition{partition="0",topic="topic03"} 0
+# HELP kafka_topic_partition_replicas Number of Replicas for this Topic/Partition
+kafka_topic_partition_replicas{partition="0",topic="topic03"} 3 topic的partition的副本数
+# HELP kafka_topic_partition_under_replicated_partition 1 if Topic/Partition is under Replicated
+kafka_topic_partition_under_replicated_partition{partition="0",topic="topic03"} 0 如果是1，说明topic的partition是处于under Replicated状态
 
 
 
 
 
+kafka_topic_partition_current_offset{partition="0",topic="growth.profile.realtime.pattern"}
 ---------------------------------------------------------------------------------------------------------------------
 
 配置Grafana图表的时候，可以参考下面的三项

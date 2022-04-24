@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -40,17 +41,23 @@ public class ConsumerGroupTest {
         consumer = KafkaAdminClientManager.createConsumer(brokerList);
     }
 
+    /**
+     * 查询消费组下面的topic和Partition
+     */
     @Test
-    public void queryConsumerGroupAndTopic() throws ExecutionException, InterruptedException {
-
-        // 消费组信息
+    public void queryTopicPartitionByGroup() throws ExecutionException, InterruptedException {
+        // 查询全部的消费组
         Collection<String> groups =
             adminClient.listConsumerGroups().all().get().stream().map(ConsumerGroupListing::groupId).collect(Collectors.toList());
         System.out.println(groups);
 
         // 消费组信息
         Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap = adminClient.describeConsumerGroups(groups).all().get();
-        // System.out.println(consumerGroupDescriptionMap);
+        Map<String, Set<String>> groupMembers = consumerGroupDescriptionMap.entrySet().stream().collect(Collectors.toMap(//
+            Map.Entry::getKey,//
+            entry -> entry.getValue().members().stream().map(member -> member.host()).collect(Collectors.toSet()),//
+            (value1, value2) -> value1));
+        System.out.println(groupMembers);
 
         List<Map<String, List<TopicPartitionDetail>>> offsetsMapList = groups.stream().map(groupId -> {
                 // 消费组的消费进度信息
@@ -91,7 +98,14 @@ public class ConsumerGroupTest {
                 (value1, value2) -> value1));
 
         System.out.println(result);
+    }
 
+    /**
+     * 根据topic查询消费组和消费者
+     */
+    @Test
+    public void queryByTopic() {
+        // 不现实，要查询所有的消费组，然后再根据topic过滤
     }
 
     @Test
@@ -108,21 +122,21 @@ public class ConsumerGroupTest {
 
         String groupId = "legion-object-direct-1";
 
-        // 消费组信息
+        // 消费组信息：消费者IP等
         Map<String, ConsumerGroupDescription> consumerGroupDescriptionMap =
             adminClient.describeConsumerGroups(Collections.singleton(groupId)).all().get();
         System.out.println(consumerGroupDescriptionMap);
 
-        // 消费组的消费进度信息
+        // 查询消费组的消费进度信息
         Map<TopicPartition, OffsetAndMetadata> offsetAndMetadataMap =
             adminClient.listConsumerGroupOffsets(groupId).partitionsToOffsetAndMetadata().get();
         System.out.println(offsetAndMetadataMap);
 
+        // 修改消费进度
         Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();
         offsets.put(new TopicPartition("bkk.item.tradetgt.count", 0), new OffsetAndMetadata(2000));
         AlterConsumerGroupOffsetsResult result = adminClient.alterConsumerGroupOffsets(groupId, offsets);
         result.all().get();
-
 
     }
 
@@ -158,6 +172,7 @@ public class ConsumerGroupTest {
             }
         );*/
 
+        // 删除消费进度：消费组下面的某些TopicPartition
         // adminClient.deleteConsumerGroupOffsets("lengfeng.consumer.group",Collections.singleton(new TopicPartition(topic,0))).all().get();
 
         ListConsumerGroupsResult consumerGroupsResult = adminClient.listConsumerGroups();
@@ -202,13 +217,17 @@ public class ConsumerGroupTest {
             return null;
         });
 
+        // 消费进度
+        //        adminClient.listConsumerGroupOffsets();
         //        adminClient.alterConsumerGroupOffsets();
         //        adminClient.deleteConsumerGroupOffsets();
 
+        // 消费组
         //        adminClient.listConsumerGroups();
         //        adminClient.deleteConsumerGroups();
         //        adminClient.describeConsumerGroups();
 
+        // 消费者
         //        adminClient.removeMembersFromConsumerGroup();
 
         System.in.read();
