@@ -26,9 +26,11 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.common.utils.Utils;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
@@ -57,7 +59,9 @@ public class KafkaBasic {
     // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
     // private static final String brokerList = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094";
     // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
-    private static final String brokerList = "172.16.112.232:9095,172.16.112.232:9093,172.16.112.232:9094";
+    // private static final String brokerList = "172.16.112.232:9095,172.16.112.232:9093,172.16.112.232:9094";
+    // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
+    private static final String brokerList = "172.30.130.82:9092";
     // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
     // private static final String brokerList = "localhost:9092,localhost:9093,localhost:9094";
     // private static final String brokerList = "kafka1:9092,kafka2:9093,kafka3:9094";
@@ -73,9 +77,9 @@ public class KafkaBasic {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);// key序列化
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);// value序列化
         props.put(ProducerConfig.ACKS_CONFIG, "all");// 等待所有副本节点的应答
-        props.put(ProducerConfig.RETRIES_CONFIG, 0);// 消息发送最大尝试次数
+        props.put(ProducerConfig.RETRIES_CONFIG, 3);// 消息发送最大尝试次数
         props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384); // 一批消息处理大小
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);// 请求延时
+        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);// 生产者在发送批次之前等待更多消息加入批次的时间。
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432); // 发送缓存区内存大小
 
         // 配置partition选择策略，可选配置
@@ -132,11 +136,15 @@ public class KafkaBasic {
     @Test
     public void asyncProducer() throws InterruptedException {
 
+        int i = Utils.toPositive(Utils.murmur2("yhy_wac_loan_goblin".getBytes(StandardCharsets.UTF_8))) % 128;
+        System.out.println(i);
+
         Producer<String, String> producer = createProducer();
 
-        String topic = "lengfeng.direct.test";
+        // String topic = "lengfeng.direct.test";
+        String topic = "lengfeng.stable.test";
         // long events = Long.MAX_VALUE;
-        long events = 10;
+        long events = 100000;
         Random rnd = new Random();
         for (long nEvents = 0; nEvents < events; nEvents++) {
             long runtime = new Date().getTime();
@@ -164,11 +172,14 @@ public class KafkaBasic {
                 }
             });
 
+            System.out.println("dff");
             // TimeUnit.MILLISECONDS.sleep(100);
         }
 
         producer.close();
     }
+
+
 
     @Test
     public void syncProducer() throws InterruptedException, ExecutionException {

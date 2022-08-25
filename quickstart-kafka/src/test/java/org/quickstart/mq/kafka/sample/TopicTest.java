@@ -1,8 +1,10 @@
 package org.quickstart.mq.kafka.sample;
 
+import kafka.admin.TopicCommand;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.Admin;
+import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.AlterConfigOp;
 import org.apache.kafka.clients.admin.AlterConfigsResult;
 import org.apache.kafka.clients.admin.Config;
@@ -21,14 +23,19 @@ import org.apache.kafka.clients.admin.PartitionReassignment;
 import org.apache.kafka.clients.admin.TopicDescription;
 import org.apache.kafka.clients.admin.TopicListing;
 import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.TopicPartitionInfo;
 import org.apache.kafka.common.config.ConfigResource;
+import org.apache.kafka.common.config.TopicConfig;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -48,11 +55,11 @@ public class TopicTest {
 
     // private static final String brokerList = "localhost:9092";
     // private static final String brokerList = "172.16.48.182:9011,172.16.48.182:9012,172.16.48.183:9011";
-    // private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
+    private static final String brokerList = "172.16.48.179:9081,172.16.48.180:9081,172.16.48.181:9081";
     // private static final String brokerList = "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092";
     // private static final String brokerList = "172.16.112.232:9092,172.16.112.232:9093,172.16.112.232:9094";
     // private static final String brokerList = "172.16.49.6:9093,172.16.49.12:9093,172.16.49.10:9093";
-    private static final String brokerList = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094";
+    // private static final String brokerList = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094";
     private Admin adminClient;
     private Consumer consumer;
 
@@ -87,7 +94,6 @@ public class TopicTest {
         topicListings.stream().forEach((topicList) -> {
             System.out.println(topicList.toString());
         });
-
 
         //查看topic列表
         Set<String> topics = adminClient.listTopics().names().get();
@@ -172,7 +178,6 @@ public class TopicTest {
         // ./bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic test
 
         String topic = "lengfeng.direct.test";
-
 
         Collection<PartitionInfo> partitionInfos = consumer.partitionsFor(topic);
         System.out.println("Get the partition info as below:");
@@ -347,8 +352,6 @@ public class TopicTest {
         System.out.println(topicPartitionInfos);
     }
 
-
-
     @Test
     public void queryAllTopic2() throws ExecutionException, InterruptedException {
 
@@ -403,6 +406,7 @@ public class TopicTest {
         ConfigResource configResource = new ConfigResource(ConfigResource.Type.TOPIC, topic);
         AlterConfigOp alterConfigOp = new AlterConfigOp(new ConfigEntry("preallocate", "false"), AlterConfigOp.OpType.SET);
         configMap.put(configResource, Arrays.asList(alterConfigOp));
+        // This operation is supported by brokers with version 2.3.0 or higher.
         AlterConfigsResult alterConfigsResult = adminClient.incrementalAlterConfigs(configMap);
         alterConfigsResult.all().get();
     }
@@ -416,16 +420,142 @@ public class TopicTest {
     public void alterConfig2() throws Exception {
         String topic = "topic01";
 
+        Properties props = getTopicProperties(topic);
+
         Map<ConfigResource, Config> configMap = new HashMap<>();
         ConfigResource configResource = new ConfigResource(ConfigResource.Type.TOPIC, topic);
-        Config config = new Config(Arrays.asList(new ConfigEntry("preallocate", "true")));
+        Config config = new Config(Arrays.asList(new ConfigEntry("preallocate", "false")));
         configMap.put(configResource, config);
+        // This operation is supported by brokers with version 0.11.0.0 or higher.
         AlterConfigsResult alterConfigsResult = adminClient.alterConfigs(configMap);
         alterConfigsResult.all().get();
+
+        Properties props2 = getTopicProperties(topic);
+        System.out.println(props2);
     }
 
-    // @Test
-    public Properties getTopicProperties(String brokerList, String topic) {
+    @Test
+    public void alterTopicConfigs() {
+
+        String topic = "topic01";
+
+        Properties props = getTopicProperties(topic);
+
+        Map<String, String> paraMap = new HashMap<>();
+        paraMap.put("preallocate", "true");
+
+        List<String> params = new ArrayList<>();
+        params.add("--alert");
+        params.add("--topic");
+        params.add(topic);
+        for (Map.Entry entry : paraMap.entrySet()) {
+            params.add("--config");
+            params.add(entry.getKey() + "=" + entry.getValue());
+        }
+        String[] commands = new String[params.size()];
+        params.toArray(commands);
+
+        // 这个是错误的，要改成ConfigCommand来修改
+        // bin/kafka-configs.sh --alter --topic topic03 --add-config max.message.bytes=20480000 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+
+        TopicCommand.TopicCommandOptions topicCommandOptions = new TopicCommand.TopicCommandOptions(commands);
+        TopicCommand.TopicService adminClientTopicService = new TopicCommand.TopicService(adminClient);
+        adminClientTopicService.alterTopic(topicCommandOptions);
+
+        Properties props2 = getTopicProperties(topic);
+        System.out.println(props2);
+    }
+
+    @Test
+    public void kafkaConfigs() {
+
+        // ProducerConfig.configDef().defaultValues()
+        // ProducerConfig.configDef().groups()
+        // ProducerConfig.configDef().names()
+
+        // ProducerConfig.configDef().validate()
+        // ProducerConfig.configDef().validateAll()
+
+        Set<String> producerConfigKeys1 = ProducerConfig.configNames();
+        Set<String> consumerConfigKeys1 = ConsumerConfig.configNames();
+        Set<String> adminClientConfigKeys1 = AdminClientConfig.configNames();
+
+        Map<String, Object> map = ProducerConfig.configDef().defaultValues();
+        List<String> groups = ProducerConfig.configDef().groups();
+        Set<String> names = ProducerConfig.configDef().names();
+
+        Field[] fields = TopicConfig.class.getDeclaredFields();
+        Field[] fields2 = ProducerConfig.class.getDeclaredFields();
+        Field[] fields3 = ConsumerConfig.class.getDeclaredFields();
+        Field[] fields4 = AdminClientConfig.class.getDeclaredFields();
+
+        // 35
+        Set<String> producerConfigKeys = Arrays.stream(fields2).filter(field -> field.getName().endsWith("_CONFIG")).map(field -> {
+            try {
+                return field.get(TopicConfig.class).toString();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                return "";
+            }
+        }).filter(str -> !"".equals(str)).collect(Collectors.toSet());
+
+        // 41
+        Set<String> consumerConfigKeys = Arrays.stream(fields3).filter(field -> field.getName().endsWith("_CONFIG")).map(field -> {
+            try {
+                return field.get(TopicConfig.class).toString();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                return "";
+            }
+        }).filter(str -> !"".equals(str)).collect(Collectors.toSet());
+
+        // 21
+        Set<String> adminClientConfigKeys = Arrays.stream(fields4).filter(field -> field.getName().endsWith("_CONFIG")).map(field -> {
+            try {
+                return field.get(TopicConfig.class).toString();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                return "";
+            }
+        }).filter(str -> !"".equals(str)).collect(Collectors.toSet());
+
+        // 27
+        Set<String> topicConfigKeys = Arrays.stream(fields).filter(field -> field.getName().endsWith("_CONFIG")).map(field -> {
+            try {
+                return field.get(TopicConfig.class).toString();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                return "";
+            }
+        }).filter(str -> !"".equals(str)).collect(Collectors.toSet());
+
+    }
+
+    @Test
+    public void getTopicProperties() {
+        String topic = "topic01";
+        Properties props = getTopicProperties(topic);
+    }
+
+    @Test
+    public void getBrokerProperties() throws ExecutionException, InterruptedException {
+
+        ConfigResource resource = new ConfigResource(ConfigResource.Type.BROKER, "1");
+        DescribeConfigsResult result = adminClient.describeConfigs(Collections.singleton(resource));
+
+        Map<ConfigResource, Config> map = result.all().get();
+
+        Properties props = new Properties();
+        Config config = result.all().get().get(resource);
+
+        props = config.entries().stream()//
+            .filter(configEntry -> DYNAMIC_TOPIC_CONFIG == configEntry.source())//
+            .collect(Properties::new, (m, v) -> m.put(v.name(), v.value()), Properties::putAll);
+
+
+    }
+
+    public Properties getTopicProperties(String topic) {
 
         ConfigResource resource = new ConfigResource(ConfigResource.Type.TOPIC, topic);
         DescribeConfigsResult result = adminClient.describeConfigs(Collections.singleton(resource));
@@ -435,7 +565,7 @@ public class TopicTest {
             Config config = result.all().get().get(resource);
 
             props = config.entries().stream()//
-                .filter(configEntry -> DYNAMIC_TOPIC_CONFIG == configEntry.source())//
+                // .filter(configEntry -> DYNAMIC_TOPIC_CONFIG == configEntry.source())//
                 .collect(Properties::new, (m, v) -> m.put(v.name(), v.value()), Properties::putAll);
         } catch (InterruptedException | ExecutionException e) {
             log.warn("获取topic属性异常,topic={}", topic);

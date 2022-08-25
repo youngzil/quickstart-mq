@@ -1,28 +1,31 @@
 package org.quickstart.mq.kafka.sample;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public class HighLevelConsumer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Properties props = new Properties();
-        props.put("bootstrap.servers", "192.168.29.100:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.16.49.125:9092,172.16.49.131:9092,172.16.49.133:9092");
         props.put("group.id", "group2");
         props.put("client.id", "consumer2");
-        props.put("enable.auto.commit", "true");//
+        props.put("enable.auto.commit", "false");//
         props.put("auto.commit.interval.ms", "1000");
-        props.put("key.deserializier", StringSerializer.class.getName());
-        props.put("value.deserializier", StringSerializer.class.getName());
-        props.put("max.poll.interval.ms", "300000");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        props.put("max.poll.interval.ms", "3000");
         props.put("max.poll.records", "500");
         props.put("auto.offset.reset", "earliest");
 
@@ -66,9 +69,13 @@ public class HighLevelConsumer {
             //从阻塞队列中取消息，最高延迟为100ms
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(200));
             //停止对此Topic的partition0消费，同理可用resume方法让该partition能够被消费
-            consumer.pause(Arrays.asList(new TopicPartition(topic, 0)));
+            // consumer.pause(Arrays.asList(new TopicPartition(topic, 0)));
+
+            TimeUnit.SECONDS.sleep(1);
+            System.out.println("dddddddd");
+
             records.forEach(record -> System.out
-                .printf("client: %s,topic: %s,partition: %d,AotoCommitDemo: %d,key: %s", record.partition(),
+                .printf("client: topic: %s,partition: %d,AotoCommitDemo: %d,key: %s,value: %s",record.topic(), record.partition(),
                     record.offset(), record.key(), record.value()));
         }
 

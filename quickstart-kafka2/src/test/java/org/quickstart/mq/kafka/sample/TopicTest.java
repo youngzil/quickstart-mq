@@ -4,14 +4,20 @@ import kafka.admin.TopicCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.Config;
+import org.apache.kafka.clients.admin.DescribeConfigsResult;
 import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.common.config.ConfigResource;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 public class TopicTest {
@@ -43,7 +49,7 @@ public class TopicTest {
     }
 
 
-    @Test
+    // @Test
     public boolean alterTopicPartition(String brokerList, String topic, int partitions) {
 
         TopicCommand.TopicCommandOptions topicCommandOptions =
@@ -58,10 +64,13 @@ public class TopicTest {
     }
 
     @Test
-    public void alterTopicConfigs(String brokerList, String topic, Map<String, String> paraMap) {
+    public void alterTopicConfigs() {
+
+        String topic = "topic01";
+        Map<String, String> paraMap = new HashMap<>();
 
         List<String> params = new ArrayList<>();
-        params.add("--describe");
+        params.add("--alert");
         params.add("--topic");
         params.add(topic);
         for (Map.Entry entry : paraMap.entrySet()) {
@@ -71,10 +80,11 @@ public class TopicTest {
         String[] commands = new String[params.size()];
         params.toArray(commands);
 
+        // 这个是错误的，要改成ConfigCommand来修改
+        // bin/kafka-configs.sh --alter --topic topic03 --add-config max.message.bytes=20480000 --bootstrap-server 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094
+
         TopicCommand.TopicCommandOptions topicCommandOptions = new TopicCommand.TopicCommandOptions(commands);
-
         TopicCommand.AdminClientTopicService adminClientTopicService = new TopicCommand.AdminClientTopicService(adminClient);
-
         adminClientTopicService.alterTopic(topicCommandOptions);
     }
 

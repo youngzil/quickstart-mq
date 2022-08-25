@@ -38,16 +38,60 @@ jmx_prometheus_javaagent-0.16.1.jar
 1. topic相关：开始和结束offset、segment数量、文件字节大小
    kafka_log_log_logstartoffset{topic="topic03",partition="0",} 0.0
    kafka_log_log_logendoffset{topic="topic03",partition="0",} 2000000.0
+2. 
    kafka_log_log_numlogsegments{topic="topic03",partition="0",} 1.0
    kafka_log_log_size{topic="topic03",partition="0",} 1.26257873E8
+
+入队速率、入队流量和出队流量
+kafka_server_brokertopicmetrics_messagesinpersec_count{topic="lengfeng.edu.upgrade.test",} 43.0
+kafka_server_brokertopicmetrics_bytesinpersec_count{topic="fund.market.fof.openinfo",} 465594.0
+kafka_server_brokertopicmetrics_bytesoutpersec_count{topic="lengfeng.edu.upgrade.test",} 34428.0
+
+
+消费请求速率、发送请求速率
+kafka_server_brokertopicmetrics_totalfetchrequestspersec_count{topic="alert.metrics",} 1.1092506E7
+kafka_server_brokertopicmetrics_totalproducerequestspersec_count{topic="alert.metrics",} 2039164.0
+
+不知道是什么指标
+kafka_server_fetcherlagmetrics_consumerlag{clientId="ReplicaFetcherThread-0-0",partition="1",topic="alert.metrics",} 0.0
+kafka_server_fetcherlagmetrics_consumerlag{clientId="ReplicaFetcherThread-0-2",partition="2",topic="alert.metrics",} 0.0
+
+不知道是什么指标
+kafka_cluster_partition_laststableoffsetlag{topic="alert.metrics",partition="2",} 0.0
+kafka_cluster_partition_laststableoffsetlag{topic="alert.metrics",partition="1",} 0.0
+kafka_cluster_partition_laststableoffsetlag{topic="alert.metrics",partition="0",} 0.0
+
+ISR相关指标
+kafka_cluster_partition_replicascount{topic="alert.metrics",partition="2",} 0.0
+kafka_cluster_partition_replicascount{topic="alert.metrics",partition="0",} 3.0
+kafka_cluster_partition_replicascount{topic="alert.metrics",partition="1",} 0.0
+kafka_cluster_partition_insyncreplicascount{topic="alert.metrics",partition="1",} 0.0
+kafka_cluster_partition_insyncreplicascount{topic="alert.metrics",partition="0",} 3.0
+kafka_cluster_partition_insyncreplicascount{topic="alert.metrics",partition="2",} 0.0
+
+不知道是什么指标
+kafka_cluster_partition_underminisr{topic="alert.metrics",partition="0",} 0.0
+kafka_cluster_partition_underminisr{topic="alert.metrics",partition="1",} 0.0
+kafka_cluster_partition_underminisr{topic="alert.metrics",partition="2",} 0.0
+kafka_cluster_partition_underreplicated{topic="alert.metrics",partition="2",} 0.0
+kafka_cluster_partition_underreplicated{topic="alert.metrics",partition="1",} 0.0
+kafka_cluster_partition_underreplicated{topic="alert.metrics",partition="0",} 0.0
+kafka_cluster_partition_atminisr{topic="alert.metrics",partition="1",} 0.0
+kafka_cluster_partition_atminisr{topic="alert.metrics",partition="0",} 0.0
+kafka_cluster_partition_atminisr{topic="alert.metrics",partition="2",} 0.0
+
+
 2. broker相关：发送消息数量，生产消费字节数，生产消费请求数
    kafka_server_brokertopicmetrics_messagesin_total{topic="topic03",} 2000000.0
+3. 
    kafka_server_brokertopicmetrics_bytesout_total{topic="topic03",} 6.325713E7
    kafka_server_brokertopicmetrics_bytesin_total{topic="topic03",} 1.26257873E8
+4. 
    kafka_server_brokertopicmetrics_totalfetchrequests_total{topic="topic03",} 490.0
    kafka_server_brokertopicmetrics_totalproducerequests_total{topic="topic03",} 7726.0
 
 
+kafka_server_brokertopicmetrics_messagesin_total 1.156694289E9
 
 
 
@@ -58,13 +102,18 @@ kafka-exporter 9308端口
    kafka_brokers 集群的broker数量
 
 3. 消费组相关
-   kafka_consumergroup_current_offset{consumergroup="lengfeng.consumer.group",partition="0",topic="topic03"} 1.574722e+06  消费进度的当前offset
+4. 
+   消费进度的当前offset
+   kafka_consumergroup_current_offset{consumergroup="lengfeng.consumer.group",partition="0",topic="topic03"} 1.574722e+06
    kafka_consumergroup_current_offset_sum{consumergroup="lengfeng.consumer.group",topic="topic03"} 1.574722e+06
-   kafka_consumergroup_lag{consumergroup="lengfeng.consumer.group",partition="0",topic="topic03"} 1.792037e+06  消费进度的LAG
+   
+5. 消费进度的LAG
+   kafka_consumergroup_lag{consumergroup="lengfeng.consumer.group",partition="0",topic="topic03"} 1.792037e+06  
    kafka_consumergroup_lag_sum{consumergroup="lengfeng.consumer.group",topic="topic03"} 1.792037e+06
-   kafka_consumergroup_members{consumergroup="lengfeng.consumer.group"} 1 消费组的消费者个数
+6. 消费组的消费者个数
+   kafka_consumergroup_members{consumergroup="lengfeng.consumer.group"} 1 
 
-4. topic partition相关的
+7. topic partition相关的
    kafka_topic_partitions{topic="topic03"} 1  topic的partition数量
    kafka_topic_partition_oldest_offset{partition="0",topic="topic03"} 0  topic的partition的最老的offset
    kafka_topic_partition_current_offset{partition="0",topic="topic03"} 300  topic的partition的当前offset
@@ -79,9 +128,6 @@ kafka_topic_partition_under_replicated_partition{partition="0",topic="topic03"} 
 
 
 
-
-
-kafka_topic_partition_current_offset{partition="0",topic="growth.profile.realtime.pattern"}
 ---------------------------------------------------------------------------------------------------------------------
 
 配置Grafana图表的时候，可以参考下面的三项
