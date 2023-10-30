@@ -15,7 +15,7 @@
   <description>Demo project for XXX</description>
 
   <properties>
-    <activemq.version>5.16.0</activemq.version>
+    <activemq.version>5.16.7</activemq.version>
     <fusesource.mqtt-client.version>1.16</fusesource.mqtt-client.version>
     <eclipse.paho.client.mqttv3-version>1.2.4</eclipse.paho.client.mqttv3-version>
     <javaee-api-version>8.0.1</javaee-api-version>
